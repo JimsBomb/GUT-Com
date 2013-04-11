@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2013 4:11:19 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.entity.WeiboFollowGroup" table="weibo_follow_group" catalog="gutcom">
+        <id name="gid" type="java.lang.Integer">
+            <column name="gid" />
+            <generator class="identity" />
+        </id>
+        <property name="groupname" type="string">
+            <column name="groupname" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

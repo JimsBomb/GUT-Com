@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2013 4:11:19 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.entity.CommonFilterWord" table="common_filter_word" catalog="gutcom">
+        <id name="wid" type="java.lang.Integer">
+            <column name="wid" />
+            <generator class="identity" />
+        </id>
+        <property name="word" type="string">
+            <column name="word" not-null="true" unique="true" />
+        </property>
+        <property name="level" type="byte">
+            <column name="level" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2013 4:11:19 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.entity.ShareCategory" table="share_category" catalog="gutcom">
+        <id name="cid" type="java.lang.Integer">
+            <column name="cid" />
+            <generator class="identity" />
+        </id>
+        <property name="catename" type="string">
+            <column name="catename" not-null="true" />
+        </property>
+        <set name="shareContents" table="share_content" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cateid" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.entity.ShareContent" />
+        </set>
+    </class>
+</hibernate-mapping>

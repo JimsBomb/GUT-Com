@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2013 4:11:19 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.entity.WeiboContent" table="weibo_content" catalog="gutcom">
+        <id name="wid" type="java.lang.Long">
+            <column name="wid" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="commonUser" class="org.chingo.gutcom.entity.CommonUser" fetch="select">
+            <column name="authorid" not-null="true" />
+        </many-to-one>
+        <property name="content" type="string">
+            <column name="content" length="65535" not-null="true" />
+        </property>
+        <property name="sourceid" type="int">
+            <column name="sourceid" not-null="true" />
+        </property>
+        <property name="type" type="byte">
+            <column name="type" not-null="true" />
+        </property>
+        <property name="format" type="byte">
+            <column name="format" not-null="true" />
+        </property>
+        <property name="visibility" type="byte">
+            <column name="visibility" not-null="true" />
+        </property>
+        <property name="status" type="byte">
+            <column name="status" not-null="true" />
+        </property>
+        <property name="thumbnailPic" type="string">
+            <column name="thumbnail_pic" length="65535" not-null="true" />
+        </property>
+        <property name="middlePic" type="string">
+            <column name="middle_pic" length="65535" not-null="true" />
+        </property>
+        <property name="originalPic" type="string">
+            <column name="original_pic" length="65535" not-null="true" />
+        </property>
+        <property name="dateline" type="int">
+            <column name="dateline" not-null="true" />
+        </property>
+        <set name="weiboTopicRelations" table="weibo_topic_relation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="wid" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.entity.WeiboTopicRelation" />
+        </set>
+        <set name="weiboTopics" table="weibo_topic" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="lastpost" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.entity.WeiboTopic" />
+        </set>
+        <set name="weiboAts" table="weibo_at" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="tid" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.entity.WeiboAt" />
+        </set>
+        <set name="weiboFavs" table="weibo_fav" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="wid" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.entity.WeiboFav" />
+        </set>
+        <set name="weiboReports" table="weibo_report" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="reportweibo" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.entity.WeiboReport" />
+        </set>
+    </class>
+</hibernate-mapping>

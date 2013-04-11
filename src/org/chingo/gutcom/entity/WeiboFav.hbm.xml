@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2013 4:11:19 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.entity.WeiboFav" table="weibo_fav" catalog="gutcom">
+        <id name="fid" type="java.lang.Long">
+            <column name="fid" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="weiboContent" class="org.chingo.gutcom.entity.WeiboContent" fetch="select">
+            <column name="wid" not-null="true" />
+        </many-to-one>
+        <many-to-one name="commonUser" class="org.chingo.gutcom.entity.CommonUser" fetch="select">
+            <column name="uid" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

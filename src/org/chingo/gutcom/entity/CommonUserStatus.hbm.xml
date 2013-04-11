@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2013 4:11:19 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.entity.CommonUserStatus" table="common_user_status" catalog="gutcom">
+        <id name="uid" type="java.lang.Integer">
+            <column name="uid" />
+            <generator class="foreign">
+                <param name="property">commonUser</param>
+            </generator>
+        </id>
+        <one-to-one name="commonUser" class="org.chingo.gutcom.entity.CommonUser" constrained="true"></one-to-one>
+        <property name="regip" type="string">
+            <column name="regip" not-null="true" />
+        </property>
+        <property name="lastlogin" type="int">
+            <column name="lastlogin" not-null="true" />
+        </property>
+        <property name="lastip" type="string">
+            <column name="lastip" not-null="true" />
+        </property>
+        <property name="weibocnt" type="int">
+            <column name="weibocnt" not-null="true" />
+        </property>
+        <property name="sharecnt" type="int">
+            <column name="sharecnt" not-null="true" />
+        </property>
+        <property name="follower" type="int">
+            <column name="follower" not-null="true" />
+        </property>
+        <property name="following" type="int">
+            <column name="following" not-null="true" />
+        </property>
+        <property name="newfollower" type="int">
+            <column name="newfollower" not-null="true" />
+        </property>
+        <property name="newmsg" type="int">
+            <column name="newmsg" not-null="true" />
+        </property>
+        <property name="newat" type="int">
+            <column name="newat" not-null="true" />
+        </property>
+        <property name="newcomment" type="int">
+            <column name="newcomment" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
