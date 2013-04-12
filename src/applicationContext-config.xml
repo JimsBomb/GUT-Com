@@ -10,7 +10,7 @@
        ">
 
 	<!-- 扫描注解Bean -->
-	<context:component-scan base-package="myssh">
+	<context:component-scan base-package="org.chingo.gutcom">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
@@ -57,7 +57,31 @@
 		<property name="mappingResources">
 			<list>
 				<!-- <value>myssh/entity/User.hbm.xml</value> -->
-				<value>myssh/entity/CommonSysconf.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonFilterWord.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonMsgRecv.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonMsgSend.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonOplog.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonSysconf.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonSyslog.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonUser.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonUserProfile.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonUserStatus.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/ShareCategory.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/ShareComment.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/ShareContent.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/ShareFav.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/ShareReport.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/ShareStatus.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/ShareUrl.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboAt.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboContent.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboFav.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboFollow.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboFollowGroup.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboReport.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboTopic.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboTopicFollow.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/WeiboTopicRelation.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -91,7 +115,7 @@
 	<!-- 需要引入aop的命名空间（配置事物的切入点） -->
 	<aop:config>
 		<!-- 切入点指明了在执行Service的所有方法时产生事务拦截操作 -->
-		<aop:pointcut id="serviceMethods" expression="execution(* myssh.service.*.*(..))" />
+		<aop:pointcut id="serviceMethods" expression="execution(* org.chingo.gutcom.service.*.*(..))" />
 		<!-- 定义了将采用何种拦截操作，这里引用到 txAdvice -->
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
 	</aop:config>
