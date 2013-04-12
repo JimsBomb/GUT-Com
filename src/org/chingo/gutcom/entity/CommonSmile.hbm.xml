@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 12, 2013 10:41:19 AM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.entity.CommonSmile" table="common_smile" catalog="gutcom">
+        <id name="sid" type="java.lang.Integer">
+            <column name="sid" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="commonSmileCategory" class="org.chingo.gutcom.entity.CommonSmileCategory" fetch="select">
+            <column name="groupid" not-null="true" />
+        </many-to-one>
+        <property name="description" type="string">
+            <column name="description" not-null="true" />
+        </property>
+        <property name="imgurl" type="string">
+            <column name="imgurl" length="65535" not-null="true" />
+        </property>
+        <property name="order" type="int">
+            <column name="order" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

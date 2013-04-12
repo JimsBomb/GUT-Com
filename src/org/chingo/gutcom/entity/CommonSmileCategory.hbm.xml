@@ -3,19 +3,22 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Apr 12, 2013 10:41:19 AM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="org.chingo.gutcom.entity.WeiboFollowGroup" table="weibo_follow_group" catalog="gutcom">
+    <class name="org.chingo.gutcom.entity.CommonSmileCategory" table="common_smile_category" catalog="gutcom">
         <id name="gid" type="java.lang.Integer">
             <column name="gid" />
             <generator class="identity" />
         </id>
-        <property name="groupname" type="string">
-            <column name="groupname" not-null="true" />
+        <property name="groupName" type="string">
+            <column name="group_name" not-null="true" />
         </property>
-        <set name="weiboFollows" table="weibo_follow" inverse="true" lazy="true" fetch="select">
+        <property name="order" type="int">
+            <column name="order" not-null="true" />
+        </property>
+        <set name="commonSmiles" table="common_smile" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="groupid" not-null="true" />
             </key>
-            <one-to-many class="org.chingo.gutcom.entity.WeiboFollow" />
+            <one-to-many class="org.chingo.gutcom.entity.CommonSmile" />
         </set>
     </class>
 </hibernate-mapping>

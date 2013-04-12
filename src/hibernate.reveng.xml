@@ -6,6 +6,8 @@
   <table-filter match-catalog="gutcom" match-name="common_msg_recv"/>
   <table-filter match-catalog="gutcom" match-name="common_msg_send"/>
   <table-filter match-catalog="gutcom" match-name="common_oplog"/>
+  <table-filter match-catalog="gutcom" match-name="common_smile"/>
+  <table-filter match-catalog="gutcom" match-name="common_smile_category"/>
   <table-filter match-catalog="gutcom" match-name="common_sysconf"/>
   <table-filter match-catalog="gutcom" match-name="common_syslog"/>
   <table-filter match-catalog="gutcom" match-name="common_user"/>
