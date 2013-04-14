@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 14, 2013 10:15:08 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.domain.WeiboFollow" table="weibo_follow" catalog="gutcom">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="weiboFollowGroup" class="org.chingo.gutcom.domain.WeiboFollowGroup" fetch="select">
+            <column name="groupid" not-null="true" />
+        </many-to-one>
+        <many-to-one name="commonUserByFollowuid" class="org.chingo.gutcom.domain.CommonUser" fetch="select">
+            <column name="followuid" not-null="true" />
+        </many-to-one>
+        <many-to-one name="commonUserByUid" class="org.chingo.gutcom.domain.CommonUser" fetch="select">
+            <column name="uid" not-null="true" />
+        </many-to-one>
+        <property name="remark" type="string">
+            <column name="remark" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

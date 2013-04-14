@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 14, 2013 10:15:08 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.domain.WeiboFollowGroup" table="weibo_follow_group" catalog="gutcom">
+        <id name="gid" type="java.lang.Integer">
+            <column name="gid" />
+            <generator class="identity" />
+        </id>
+        <property name="groupname" type="string">
+            <column name="groupname" not-null="true" />
+        </property>
+        <set name="weiboFollows" table="weibo_follow" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="groupid" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.domain.WeiboFollow" />
+        </set>
+    </class>
+</hibernate-mapping>

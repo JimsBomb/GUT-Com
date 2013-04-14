@@ -3,8 +3,8 @@ package org.chingo.gutcom.service.impl;
 import java.io.Serializable;
 
 import org.chingo.gutcom.dao.TestDao;
-import org.chingo.gutcom.entity.CommonSyslog;
-import org.chingo.gutcom.entity.CommonUser;
+import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.service.TestService;
 
 public class TestServiceImpl implements TestService

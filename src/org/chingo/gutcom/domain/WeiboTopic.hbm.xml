@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 14, 2013 10:15:08 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.domain.WeiboTopic" table="weibo_topic" catalog="gutcom">
+        <id name="tid" type="java.lang.Long">
+            <column name="tid" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="commonUser" class="org.chingo.gutcom.domain.CommonUser" fetch="select">
+            <column name="sponsorid" not-null="true" />
+        </many-to-one>
+        <many-to-one name="weiboContent" class="org.chingo.gutcom.domain.WeiboContent" fetch="select">
+            <column name="lastpost" not-null="true" />
+        </many-to-one>
+        <property name="title" type="string">
+            <column name="title" not-null="true" />
+        </property>
+        <property name="count" type="int">
+            <column name="count" not-null="true" />
+        </property>
+        <property name="dateline" type="long">
+            <column name="dateline" not-null="true" />
+        </property>
+        <property name="isblock" type="byte">
+            <column name="isblock" not-null="true" />
+        </property>
+        <set name="weiboTopicRelations" table="weibo_topic_relation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="tid" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.domain.WeiboTopicRelation" />
+        </set>
+        <set name="weiboTopicFollows" table="weibo_topic_follow" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="tid" not-null="true" />
+            </key>
+            <one-to-many class="org.chingo.gutcom.domain.WeiboTopicFollow" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -2,8 +2,8 @@ package org.chingo.gutcom.action;
 
 import java.util.Date;
 
-import org.chingo.gutcom.entity.CommonSyslog;
-import org.chingo.gutcom.entity.CommonUser;
+import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.service.TestService;
 
 import com.opensymphony.xwork2.ActionSupport;

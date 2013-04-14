@@ -57,33 +57,33 @@
 		<property name="mappingResources">
 			<list>
 				<!-- <value>myssh/entity/User.hbm.xml</value> -->
-				<value>org/chingo/gutcom/entity/CommonFilterWord.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonMsgRecv.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonMsgSend.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonOplog.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonSmile.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonSmileCategory.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonSysconf.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonSyslog.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonUser.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonUserProfile.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/CommonUserStatus.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/ShareCategory.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/ShareComment.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/ShareContent.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/ShareFav.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/ShareReport.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/ShareStatus.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/ShareUrl.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboAt.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboContent.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboFav.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboFollow.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboFollowGroup.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboReport.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboTopic.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboTopicFollow.hbm.xml</value>
-				<value>org/chingo/gutcom/entity/WeiboTopicRelation.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonFilterWord.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonMsgRecv.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonMsgSend.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonOplog.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonSmile.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonSmileCategory.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonSysconf.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonSyslog.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonUser.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonUserProfile.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonUserStatus.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/ShareCategory.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/ShareComment.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/ShareContent.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/ShareFav.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/ShareReport.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/ShareStatus.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/ShareUrl.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboAt.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboContent.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboFav.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboFollow.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboFollowGroup.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboReport.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboTopic.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboTopicFollow.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/WeiboTopicRelation.hbm.xml</value>
 			</list>
 		</property>
 	</bean>

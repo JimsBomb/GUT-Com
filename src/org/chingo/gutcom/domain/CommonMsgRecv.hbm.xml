@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 14, 2013 10:15:08 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="org.chingo.gutcom.domain.CommonMsgRecv" table="common_msg_recv" catalog="gutcom">
+        <id name="mid" type="java.lang.Long">
+            <column name="mid" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="commonUserByRecvuser" class="org.chingo.gutcom.domain.CommonUser" fetch="select">
+            <column name="recvuser" not-null="true" />
+        </many-to-one>
+        <many-to-one name="commonUserBySenduser" class="org.chingo.gutcom.domain.CommonUser" fetch="select">
+            <column name="senduser" not-null="true" />
+        </many-to-one>
+        <property name="content" type="string">
+            <column name="content" length="65535" not-null="true" />
+        </property>
+        <property name="dateline" type="long">
+            <column name="dateline" not-null="true" />
+        </property>
+        <property name="isread" type="byte">
+            <column name="isread" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
