@@ -5,11 +5,11 @@
 
 <struts>
 
-    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
-    <constant name="struts.devMode" value="false" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.devMode" value="true" />
     <constant name="struts.action.extension" value="do" />
 
-    <package name="default" namespace="/" extends="json-default">
+    <package name="default" namespace="/" extends="struts-default">
 
         <!-- <default-action-ref name="index" />
 
@@ -21,59 +21,9 @@
             <exception-mapping exception="java.lang.Exception" result="error"/>
         </global-exception-mappings> -->
 
-        <!-- <action name="user_*" class="userAction" method="{1}">
-       		 <result name="success">/WEB-INF/web/rst.jsp</result>
-          	 <result name="input">/WEB-INF/web/rst.jsp</result>
-          	 <result name="query">/WEB-INF/web/rst.jsp</result>
-          	 <result name="error">/WEB-INF/web/rst.jsp</result>
-        </action> -->
-        <!-- <action name="fetchAllUser" class="userAction" method="fetchAll">
-    		<result type="json" name="success"> -->
-    			<!-- 为什么要用includeProperties或者excludeProperties参数（主要针对set和list）  -->
-    			<!-- 主要是为了过滤掉接口，pojo的set、list，其他对象等不需要的数据防止循环取其他对象或找不到。 -->
-    			<!-- 如果不配置，默认是处理action中的所有属性，如果action中有接口注入，json拦截器可能找不到返回不了结果， -->
-    			<!-- 还有如果action中有一个对象，这个对象与好多对象都有关联，json拦截器会将相关联的所有对象的属性全部转换成json格式， -->
-    			<!-- 如果其他对象有list、set，其返回结果有可能是死循环，无法返回。 -->
-    			<!-- <param name="includeProperties">
-    				jData\[\d+\]\.userid,jData\[\d+\]\.username,jData\[\d+\]\.password
-    			</param>
-    		</result>
-    		<result name="error">/WEB-INF/web/rst.jsp</result>
-    	</action> -->
-    	<action name="add" class="myAction" method="add">
-    		<result name="success">/WEB-INF/web/rst.jsp</result>
-    		<result name="error">/WEB-INF/web/rst.jsp</result>
-    	</action>
-    	<action name="fetchAll" class="myAction" method="fetchAll">
-    		<result type="json" name="success">
-    			<param name="includeProperties">
-    				list\[\d+\]\.cid,list\[\d+\]\.confname,list\[\d+\]\.confvalue
-    			</param>
-    			<!-- <param name="root">
-    				rst
-    			</param> -->
-    		</result>
-    		<result name="error">/WEB-INF/web/rst.jsp</result>
-    	</action>
-    	
-    	<action name="update" class="myAction" method="update">
-    		<result name="success">/WEB-INF/web/rst.jsp</result>
-    	</action>
+        <action name="test" class="testAction">
+       		 <result type="redirect">/index.jsp</result>
+        </action>
     </package>
-    
-    <!-- <package name="json" namespace="/test" extends="json-default">
-    	<action name="fetchAllUser" class="userAction" method="fetchAll">
-    		<result type="json" name="success">
-    			<param name="root">
-    				rst
-    			</param>
-    		</result>
-    		<result name="error">/WEB-INF/web/rst.jsp</result>
-    	</action>
-    </package> -->
-
-    <!-- <include file="example.xml"/> -->
-
-    <!-- Add packages here -->
 
 </struts>

@@ -1,6 +1,6 @@
 package org.chingo.gutcom.entity;
 
-// Generated Apr 12, 2013 10:41:18 AM by Hibernate Tools 4.0.0
+// Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ public class WeiboContent implements java.io.Serializable
 	private String thumbnailPic;
 	private String middlePic;
 	private String originalPic;
-	private int dateline;
+	private long dateline;
 	private Set<WeiboTopicRelation> weiboTopicRelations = new HashSet<WeiboTopicRelation>(
 			0);
 	private Set<WeiboTopic> weiboTopics = new HashSet<WeiboTopic>(0);
@@ -37,7 +37,7 @@ public class WeiboContent implements java.io.Serializable
 	public WeiboContent(CommonUser commonUser, String content, int sourceid,
 			byte type, byte format, byte visibility, byte status,
 			String thumbnailPic, String middlePic, String originalPic,
-			int dateline)
+			long dateline)
 	{
 		this.commonUser = commonUser;
 		this.content = content;
@@ -55,7 +55,7 @@ public class WeiboContent implements java.io.Serializable
 	public WeiboContent(CommonUser commonUser, String content, int sourceid,
 			byte type, byte format, byte visibility, byte status,
 			String thumbnailPic, String middlePic, String originalPic,
-			int dateline, Set<WeiboTopicRelation> weiboTopicRelations,
+			long dateline, Set<WeiboTopicRelation> weiboTopicRelations,
 			Set<WeiboTopic> weiboTopics, Set<WeiboAt> weiboAts,
 			Set<WeiboFav> weiboFavs, Set<WeiboReport> weiboReports)
 	{
@@ -187,12 +187,12 @@ public class WeiboContent implements java.io.Serializable
 		this.originalPic = originalPic;
 	}
 
-	public int getDateline()
+	public long getDateline()
 	{
 		return this.dateline;
 	}
 
-	public void setDateline(int dateline)
+	public void setDateline(long dateline)
 	{
 		this.dateline = dateline;
 	}

@@ -1,6 +1,6 @@
 package org.chingo.gutcom.entity;
 
-// Generated Apr 12, 2013 10:41:18 AM by Hibernate Tools 4.0.0
+// Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class WeiboTopic implements java.io.Serializable
 	private WeiboContent weiboContent;
 	private String title;
 	private int count;
-	private int dateline;
+	private long dateline;
 	private byte isblock;
 	private Set<WeiboTopicRelation> weiboTopicRelations = new HashSet<WeiboTopicRelation>(
 			0);
@@ -28,7 +28,7 @@ public class WeiboTopic implements java.io.Serializable
 	}
 
 	public WeiboTopic(CommonUser commonUser, WeiboContent weiboContent,
-			String title, int count, int dateline, byte isblock)
+			String title, int count, long dateline, byte isblock)
 	{
 		this.commonUser = commonUser;
 		this.weiboContent = weiboContent;
@@ -39,7 +39,7 @@ public class WeiboTopic implements java.io.Serializable
 	}
 
 	public WeiboTopic(CommonUser commonUser, WeiboContent weiboContent,
-			String title, int count, int dateline, byte isblock,
+			String title, int count, long dateline, byte isblock,
 			Set<WeiboTopicRelation> weiboTopicRelations,
 			Set<WeiboTopicFollow> weiboTopicFollows)
 	{
@@ -103,12 +103,12 @@ public class WeiboTopic implements java.io.Serializable
 		this.count = count;
 	}
 
-	public int getDateline()
+	public long getDateline()
 	{
 		return this.dateline;
 	}
 
-	public void setDateline(int dateline)
+	public void setDateline(long dateline)
 	{
 		this.dateline = dateline;
 	}

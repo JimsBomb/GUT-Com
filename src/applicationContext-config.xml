@@ -61,6 +61,8 @@
 				<value>org/chingo/gutcom/entity/CommonMsgRecv.hbm.xml</value>
 				<value>org/chingo/gutcom/entity/CommonMsgSend.hbm.xml</value>
 				<value>org/chingo/gutcom/entity/CommonOplog.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonSmile.hbm.xml</value>
+				<value>org/chingo/gutcom/entity/CommonSmileCategory.hbm.xml</value>
 				<value>org/chingo/gutcom/entity/CommonSysconf.hbm.xml</value>
 				<value>org/chingo/gutcom/entity/CommonSyslog.hbm.xml</value>
 				<value>org/chingo/gutcom/entity/CommonUser.hbm.xml</value>

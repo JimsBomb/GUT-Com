@@ -1,6 +1,6 @@
 package org.chingo.gutcom.entity;
 
-// Generated Apr 12, 2013 10:41:18 AM by Hibernate Tools 4.0.0
+// Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class ShareContent implements java.io.Serializable
 	private CommonUser commonUser;
 	private String introduction;
 	private byte status;
-	private int dateline;
+	private long dateline;
 	private Set<ShareUrl> shareUrls = new HashSet<ShareUrl>(0);
 	private ShareStatus shareStatus;
 	private Set<ShareFav> shareFavs = new HashSet<ShareFav>(0);
@@ -28,7 +28,7 @@ public class ShareContent implements java.io.Serializable
 	}
 
 	public ShareContent(ShareCategory shareCategory, CommonUser commonUser,
-			String introduction, byte status, int dateline)
+			String introduction, byte status, long dateline)
 	{
 		this.shareCategory = shareCategory;
 		this.commonUser = commonUser;
@@ -38,7 +38,7 @@ public class ShareContent implements java.io.Serializable
 	}
 
 	public ShareContent(ShareCategory shareCategory, CommonUser commonUser,
-			String introduction, byte status, int dateline,
+			String introduction, byte status, long dateline,
 			Set<ShareUrl> shareUrls, ShareStatus shareStatus,
 			Set<ShareFav> shareFavs, Set<ShareReport> shareReports,
 			Set<ShareComment> shareComments)
@@ -105,12 +105,12 @@ public class ShareContent implements java.io.Serializable
 		this.status = status;
 	}
 
-	public int getDateline()
+	public long getDateline()
 	{
 		return this.dateline;
 	}
 
-	public void setDateline(int dateline)
+	public void setDateline(long dateline)
 	{
 		this.dateline = dateline;
 	}

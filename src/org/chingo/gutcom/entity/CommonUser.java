@@ -1,6 +1,6 @@
 package org.chingo.gutcom.entity;
 
-// Generated Apr 12, 2013 10:41:18 AM by Hibernate Tools 4.0.0
+// Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +17,7 @@ public class CommonUser implements java.io.Serializable
 	private String studentnum;
 	private String password;
 	private byte status;
-	private int regdate;
+	private long regdate;
 	private Set<CommonMsgSend> commonMsgSendsForSenduser = new HashSet<CommonMsgSend>(
 			0);
 	private CommonUserProfile commonUserProfile;
@@ -25,12 +25,12 @@ public class CommonUser implements java.io.Serializable
 			0);
 	private Set<CommonOplog> commonOplogs = new HashSet<CommonOplog>(0);
 	private Set<WeiboContent> weiboContents = new HashSet<WeiboContent>(0);
+	private Set<CommonSyslog> commonSyslogs = new HashSet<CommonSyslog>(0);
 	private Set<WeiboFollow> weiboFollowsForFollowuid = new HashSet<WeiboFollow>(
 			0);
 	private Set<ShareReport> shareReports = new HashSet<ShareReport>(0);
 	private Set<CommonMsgRecv> commonMsgRecvsForSenduser = new HashSet<CommonMsgRecv>(
 			0);
-	private Set<CommonSyslog> commonSyslogs = new HashSet<CommonSyslog>(0);
 	private Set<WeiboTopic> weiboTopics = new HashSet<WeiboTopic>(0);
 	private Set<CommonMsgRecv> commonMsgRecvsForRecvuser = new HashSet<CommonMsgRecv>(
 			0);
@@ -50,7 +50,7 @@ public class CommonUser implements java.io.Serializable
 	}
 
 	public CommonUser(String nickname, String email, String studentnum,
-			String password, byte status, int regdate)
+			String password, byte status, long regdate)
 	{
 		this.nickname = nickname;
 		this.email = email;
@@ -61,15 +61,16 @@ public class CommonUser implements java.io.Serializable
 	}
 
 	public CommonUser(String nickname, String email, String studentnum,
-			String password, byte status, int regdate,
+			String password, byte status, long regdate,
 			Set<CommonMsgSend> commonMsgSendsForSenduser,
 			CommonUserProfile commonUserProfile,
 			Set<CommonMsgSend> commonMsgSendsForRecvuser,
 			Set<CommonOplog> commonOplogs, Set<WeiboContent> weiboContents,
+			Set<CommonSyslog> commonSyslogs,
 			Set<WeiboFollow> weiboFollowsForFollowuid,
 			Set<ShareReport> shareReports,
 			Set<CommonMsgRecv> commonMsgRecvsForSenduser,
-			Set<CommonSyslog> commonSyslogs, Set<WeiboTopic> weiboTopics,
+			Set<WeiboTopic> weiboTopics,
 			Set<CommonMsgRecv> commonMsgRecvsForRecvuser,
 			Set<ShareComment> shareComments,
 			Set<WeiboFollow> weiboFollowsForUid, Set<WeiboReport> weiboReports,
@@ -88,10 +89,10 @@ public class CommonUser implements java.io.Serializable
 		this.commonMsgSendsForRecvuser = commonMsgSendsForRecvuser;
 		this.commonOplogs = commonOplogs;
 		this.weiboContents = weiboContents;
+		this.commonSyslogs = commonSyslogs;
 		this.weiboFollowsForFollowuid = weiboFollowsForFollowuid;
 		this.shareReports = shareReports;
 		this.commonMsgRecvsForSenduser = commonMsgRecvsForSenduser;
-		this.commonSyslogs = commonSyslogs;
 		this.weiboTopics = weiboTopics;
 		this.commonMsgRecvsForRecvuser = commonMsgRecvsForRecvuser;
 		this.shareComments = shareComments;
@@ -165,12 +166,12 @@ public class CommonUser implements java.io.Serializable
 		this.status = status;
 	}
 
-	public int getRegdate()
+	public long getRegdate()
 	{
 		return this.regdate;
 	}
 
-	public void setRegdate(int regdate)
+	public void setRegdate(long regdate)
 	{
 		this.regdate = regdate;
 	}
@@ -227,6 +228,16 @@ public class CommonUser implements java.io.Serializable
 		this.weiboContents = weiboContents;
 	}
 
+	public Set<CommonSyslog> getCommonSyslogs()
+	{
+		return this.commonSyslogs;
+	}
+
+	public void setCommonSyslogs(Set<CommonSyslog> commonSyslogs)
+	{
+		this.commonSyslogs = commonSyslogs;
+	}
+
 	public Set<WeiboFollow> getWeiboFollowsForFollowuid()
 	{
 		return this.weiboFollowsForFollowuid;
@@ -257,16 +268,6 @@ public class CommonUser implements java.io.Serializable
 			Set<CommonMsgRecv> commonMsgRecvsForSenduser)
 	{
 		this.commonMsgRecvsForSenduser = commonMsgRecvsForSenduser;
-	}
-
-	public Set<CommonSyslog> getCommonSyslogs()
-	{
-		return this.commonSyslogs;
-	}
-
-	public void setCommonSyslogs(Set<CommonSyslog> commonSyslogs)
-	{
-		this.commonSyslogs = commonSyslogs;
 	}
 
 	public Set<WeiboTopic> getWeiboTopics()

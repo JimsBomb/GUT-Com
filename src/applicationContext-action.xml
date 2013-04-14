@@ -16,7 +16,7 @@
 	 	<property name="us" ref="userService"/>
 	 </bean> -->
 
-	<bean name="myAction" class="myssh.action.MyAction" scope="prototype">
-		<property name="myService" ref="myService" />
+	<bean name="testAction" class="org.chingo.gutcom.action.TestAction" scope="prototype">
+		<property name="ts" ref="testService" />
 	</bean>
 </beans>

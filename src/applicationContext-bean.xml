@@ -19,29 +19,10 @@
 		<property name="userDao" ref="userDao"></property>
 	</bean> -->
 	
-	<bean name="myDao" class="myssh.dao.impl.MyDaoImpl">
+	<bean name="testDao" class="org.chingo.gutcom.dao.impl.TestDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	<bean name="myService" class="myssh.service.impl.MyServiceImpl">
-		<property name="myDao" ref="myDao" />
-	</bean>
-
-	<bean name="testQuartz" class="myssh.schedule.TestJob" />
-	
-	<bean name="quartzDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="testQuartz" />
-		<property name="targetMethod" value="runDate" />
-	</bean>
-	
-	<bean id="cronTriggerTest" class="myssh.schedule.TestTrigger">
-		<property name="jobDetail" ref="quartzDetail" />
-	</bean>
-	
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref local="cronTriggerTest" />
-			</list>
-		</property>
+	<bean name="testService" class="org.chingo.gutcom.service.impl.TestServiceImpl">
+		<property name="td" ref="testDao" />
 	</bean>
 </beans>

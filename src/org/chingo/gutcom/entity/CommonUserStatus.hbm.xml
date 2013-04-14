@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 12, 2013 10:41:19 AM by Hibernate Tools 4.0.0 -->
+<!-- Generated Apr 14, 2013 10:15:08 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
     <class name="org.chingo.gutcom.entity.CommonUserStatus" table="common_user_status" catalog="gutcom">
         <id name="uid" type="int">
@@ -14,7 +14,7 @@
         <property name="regip" type="string">
             <column name="regip" not-null="true" />
         </property>
-        <property name="lastlogin" type="int">
+        <property name="lastlogin" type="long">
             <column name="lastlogin" not-null="true" />
         </property>
         <property name="lastip" type="string">

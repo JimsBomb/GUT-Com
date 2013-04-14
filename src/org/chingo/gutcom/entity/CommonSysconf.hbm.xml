@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 12, 2013 10:41:19 AM by Hibernate Tools 4.0.0 -->
+<!-- Generated Apr 14, 2013 10:15:08 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
     <class name="org.chingo.gutcom.entity.CommonSysconf" table="common_sysconf" catalog="gutcom">
         <id name="cid" type="java.lang.Integer">

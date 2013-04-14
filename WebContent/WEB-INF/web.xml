@@ -45,7 +45,7 @@
 		<init-param>
 			<!-- 参数actionPackages表示Struts2框架默认加载的Action包结构，多个包之间用英文逗号分隔。 -->
 			<param-name>actionPackages</param-name>
-			<param-value>myssh.action</param-value>
+			<param-value>org.chingo.gutcom.action</param-value>
 			<param-name>struts.action.extension</param-name>
 			<param-value>do</param-value>
 		</init-param>
