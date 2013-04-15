@@ -2,7 +2,7 @@ package org.chingo.gutcom.dao.impl;
 
 import java.io.Serializable;
 
-import org.chingo.gutcom.dao.HDaoSupport;
+import org.chingo.gutcom.hibernate4.support.HDaoSupport;
 import org.chingo.gutcom.dao.TestDao;
 
 public class TestDaoImpl extends HDaoSupport implements TestDao

@@ -26,7 +26,7 @@ public class TestAction extends ActionSupport
 	{
 		CommonSyslog log = new CommonSyslog();
 		log.setDetail("test log");
-		log.setDateline(3231);
+		log.setDateline(new Date().getTime());
 		ts.addLog(log);
 		return SUCCESS;
 	}

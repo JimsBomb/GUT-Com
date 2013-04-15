@@ -8,6 +8,19 @@
 <title>Insert title here</title>
 </head>
 <body>
+<% 
+String method = request.getParameter("method");
+if(method==null) {
+%>
+<jsp:forward page="/WEB-INF/web/test.jsp"/>
+<%
+} else {
+	method="/WEB-INF/web/" + method;
+%>
+<jsp:forward page="<%=method %>"/>
+<%
+}
+%>
 <s:form action="test.do" namespace="/">
 	<s:submit value="add" method="addLog" />
 	<s:submit value="del" method="delUser" />
