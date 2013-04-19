@@ -60,11 +60,11 @@
 				<value>org/chingo/gutcom/domain/CommonFilterWord.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonMsgRecv.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonMsgSend.hbm.xml</value>
-				<value>org/chingo/gutcom/domain/CommonOplog.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonSmile.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonSmileCategory.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonSysconf.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonSyslog.hbm.xml</value>
+				<value>org/chingo/gutcom/domain/CommonToken.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonUser.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonUserProfile.hbm.xml</value>
 				<value>org/chingo/gutcom/domain/CommonUserStatus.hbm.xml</value>
@@ -110,6 +110,7 @@
 			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="fetch*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="*" propagation="REQUIRED" />
 		</tx:attributes>
 	</tx:advice>

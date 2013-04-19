@@ -23,7 +23,6 @@ public class CommonUser implements java.io.Serializable
 	private CommonUserProfile commonUserProfile;
 	private Set<CommonMsgSend> commonMsgSendsForRecvuser = new HashSet<CommonMsgSend>(
 			0);
-	private Set<CommonOplog> commonOplogs = new HashSet<CommonOplog>(0);
 	private Set<WeiboContent> weiboContents = new HashSet<WeiboContent>(0);
 	private Set<CommonSyslog> commonSyslogs = new HashSet<CommonSyslog>(0);
 	private Set<WeiboFollow> weiboFollowsForFollowuid = new HashSet<WeiboFollow>(
@@ -44,6 +43,7 @@ public class CommonUser implements java.io.Serializable
 	private Set<WeiboAt> weiboAts = new HashSet<WeiboAt>(0);
 	private Set<WeiboTopicFollow> weiboTopicFollows = new HashSet<WeiboTopicFollow>(
 			0);
+	private Set<CommonToken> commonToken = new HashSet<CommonToken>(0);
 
 	public CommonUser()
 	{
@@ -65,7 +65,7 @@ public class CommonUser implements java.io.Serializable
 			Set<CommonMsgSend> commonMsgSendsForSenduser,
 			CommonUserProfile commonUserProfile,
 			Set<CommonMsgSend> commonMsgSendsForRecvuser,
-			Set<CommonOplog> commonOplogs, Set<WeiboContent> weiboContents,
+			Set<WeiboContent> weiboContents,
 			Set<CommonSyslog> commonSyslogs,
 			Set<WeiboFollow> weiboFollowsForFollowuid,
 			Set<ShareReport> shareReports,
@@ -76,7 +76,8 @@ public class CommonUser implements java.io.Serializable
 			Set<WeiboFollow> weiboFollowsForUid, Set<WeiboReport> weiboReports,
 			Set<ShareContent> shareContents, Set<ShareFav> shareFavs,
 			CommonUserStatus commonUserStatus, Set<WeiboFav> weiboFavs,
-			Set<WeiboAt> weiboAts, Set<WeiboTopicFollow> weiboTopicFollows)
+			Set<WeiboAt> weiboAts, Set<WeiboTopicFollow> weiboTopicFollows,
+			Set<CommonToken> commonToken)
 	{
 		this.nickname = nickname;
 		this.email = email;
@@ -87,7 +88,6 @@ public class CommonUser implements java.io.Serializable
 		this.commonMsgSendsForSenduser = commonMsgSendsForSenduser;
 		this.commonUserProfile = commonUserProfile;
 		this.commonMsgSendsForRecvuser = commonMsgSendsForRecvuser;
-		this.commonOplogs = commonOplogs;
 		this.weiboContents = weiboContents;
 		this.commonSyslogs = commonSyslogs;
 		this.weiboFollowsForFollowuid = weiboFollowsForFollowuid;
@@ -104,6 +104,7 @@ public class CommonUser implements java.io.Serializable
 		this.weiboFavs = weiboFavs;
 		this.weiboAts = weiboAts;
 		this.weiboTopicFollows = weiboTopicFollows;
+		this.commonToken = commonToken;
 	}
 
 	public Integer getUid()
@@ -206,16 +207,6 @@ public class CommonUser implements java.io.Serializable
 			Set<CommonMsgSend> commonMsgSendsForRecvuser)
 	{
 		this.commonMsgSendsForRecvuser = commonMsgSendsForRecvuser;
-	}
-
-	public Set<CommonOplog> getCommonOplogs()
-	{
-		return this.commonOplogs;
-	}
-
-	public void setCommonOplogs(Set<CommonOplog> commonOplogs)
-	{
-		this.commonOplogs = commonOplogs;
 	}
 
 	public Set<WeiboContent> getWeiboContents()
@@ -381,4 +372,13 @@ public class CommonUser implements java.io.Serializable
 		this.weiboTopicFollows = weiboTopicFollows;
 	}
 
+	public Set<CommonToken> getCommonToken()
+	{
+		return this.commonToken;
+	}
+	
+	public void setCommonToken(Set<CommonToken> commonToken)
+	{
+		this.commonToken = commonToken;
+	}
 }

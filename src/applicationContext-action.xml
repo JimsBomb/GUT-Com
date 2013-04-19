@@ -16,7 +16,12 @@
 	 	<property name="us" ref="userService"/>
 	 </bean> -->
 
-	<bean name="testAction" class="org.chingo.gutcom.action.TestAction" scope="prototype">
-		<property name="ts" ref="testService" />
+	
+	<bean name="syslogAction" class="org.chingo.gutcom.action.SyslogAction" scope="prototype">
+		<property name="sysMgr" ref="sysManager" />
+	</bean>
+	
+	<bean name="userAction" class="org.chingo.gutcom.action.UserAction" scope="prototype">
+		<property name="userMgr" ref="userManager" />
 	</bean>
 </beans>

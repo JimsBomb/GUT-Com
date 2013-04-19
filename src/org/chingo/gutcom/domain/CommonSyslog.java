@@ -12,16 +12,21 @@ public class CommonSyslog implements java.io.Serializable
 	private CommonUser commonUser;
 	private String detail;
 	private long dateline;
+	private String ip;
+	private byte type;
 
 	public CommonSyslog()
 	{
 	}
 
-	public CommonSyslog(CommonUser commonUser, String detail, long dateline)
+	public CommonSyslog(CommonUser commonUser, String detail,
+			long dateline, String ip, byte type)
 	{
 		this.commonUser = commonUser;
 		this.detail = detail;
 		this.dateline = dateline;
+		this.ip = ip;
+		this.type = type;
 	}
 
 	public Long getLid()
@@ -64,4 +69,23 @@ public class CommonSyslog implements java.io.Serializable
 		this.dateline = dateline;
 	}
 
+	public String getIp()
+	{
+		return this.ip;
+	}
+	
+	public void setIp(String ip)
+	{
+		this.ip = ip;
+	}
+	
+	public byte getType()
+	{
+		return this.type;
+	}
+	
+	public void setType(byte type)
+	{
+		this.type = type;
+	}
 }

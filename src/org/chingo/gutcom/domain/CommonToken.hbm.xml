@@ -3,19 +3,19 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Apr 14, 2013 10:15:08 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="org.chingo.gutcom.domain.CommonOplog" table="common_oplog" catalog="gutcom">
-        <id name="lid" type="java.lang.Long">
-            <column name="lid" />
+    <class name="org.chingo.gutcom.domain.CommonToken" table="common_token" catalog="gutcom">
+        <id name="tid" type="java.lang.Long">
+            <column name="tid" />
             <generator class="identity" />
         </id>
         <many-to-one name="commonUser" class="org.chingo.gutcom.domain.CommonUser" fetch="select">
             <column name="uid" not-null="true" />
         </many-to-one>
-        <property name="detail" type="string">
-            <column name="detail" not-null="true" />
+        <property name="accessToken" type="string">
+        	<column name="access_token" not-null="true" />
         </property>
-        <property name="dateline" type="long">
-            <column name="dateline" not-null="true" />
+        <property name="expiredTime" type="long">
+        	<column name="expired_time" not-null="true" />
         </property>
     </class>
 </hibernate-mapping>

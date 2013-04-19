@@ -3,11 +3,11 @@ package org.chingo.gutcom.dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
-import org.chingo.gutcom.dao.BasicDao;
+import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.hibernate4.support.HDaoSupport;
 
-public class CommonUserDaoImpl extends HDaoSupport implements BasicDao<CommonUser>
+public class CommonUserDaoImpl extends HDaoSupport implements BaseDao<CommonUser>
 {
 
 	@Override

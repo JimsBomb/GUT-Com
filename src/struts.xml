@@ -8,6 +8,10 @@
     <constant name="struts.enable.DynamicMethodInvocation" value="true" />
     <constant name="struts.devMode" value="true" />
     <constant name="struts.action.extension" value="do" />
+    <constant name="struts.custom.i18n.resources" value="applicationResource" />
+    <constant name="struts.ui.theme" value="simple" />
+    <constant name="struts.ui.templateDir" value="template" />
+    <constant name="struts.ui.templateSuffix" value="ftl" />
 
     <package name="default" namespace="/" extends="struts-default">
 
@@ -21,9 +25,31 @@
             <exception-mapping exception="java.lang.Exception" result="error"/>
         </global-exception-mappings> -->
 
-        <action name="test" class="testAction">
-       		 <result type="redirect">/index.jsp</result>
-        </action>
+        
+        
     </package>
 
+	<package name="admin" namespace="/admin" extends="json-default">
+		<action name="sysconfAction" class="sysconfAction">
+			<result name="mgr">/WEB-INF/web/admin/syslogmgr.jsp</result>
+        	<result name="del" type="redirectAction">syslogmgr.do</result>
+		</action>
+		<action name="sysconf*" class="sysconfAction" method="{1}">
+        	<result name="{1}">/WEB-INF/web/admin/sysconfmgr.jsp</result>
+        	<result name="{1}" type="redirectAction">sysconfmgr.do</result>
+        </action>
+	
+		<action name="syslogAction" class="syslogAction">
+			<result name="mgr">/WEB-INF/web/admin/syslogmgr.jsp</result>
+        	<result name="del" type="redirectAction">syslogmgr.do</result>
+		</action>
+		<action name="syslog*" class="syslogAction" method="{1}">
+        	<result name="{1}">/WEB-INF/web/admin/syslogmgr.jsp</result>
+        	<result name="{1}" type="redirectAction">syslogmgr.do</result>
+        </action>
+	
+		<action name="user*" class="userAction" method="{1}">
+			<result name="mgr">/WEB-INF/web/admin/usermgr.jsp</result>
+		</action>
+	</package>
 </struts>

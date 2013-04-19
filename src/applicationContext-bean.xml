@@ -19,10 +19,24 @@
 		<property name="userDao" ref="userDao"></property>
 	</bean> -->
 	
-	<bean name="testDao" class="org.chingo.gutcom.dao.impl.TestDaoImpl">
+	<bean name="sysconfDao" class="org.chingo.gutcom.dao.impl.CommonSysconfDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	<bean name="testService" class="org.chingo.gutcom.service.impl.TestServiceImpl">
-		<property name="td" ref="testDao" />
+	<bean name="syslogDao" class="org.chingo.gutcom.dao.impl.CommonSyslogDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean name="wordDao" class="org.chingo.gutcom.dao.impl.CommonFilterWordDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean name="userDao" class="org.chingo.gutcom.dao.impl.CommonUserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean name="sysManager" class="org.chingo.gutcom.service.impl.SystemManagerImpl">
+		<property name="sysconfDao" ref="sysconfDao" />
+		<property name="syslogDao" ref="syslogDao" />
+		<property name="wordDao" ref="wordDao" />
+	</bean>
+	<bean name="userManager" class="org.chingo.gutcom.service.impl.UserManagerImpl">
+		<property name="userDao" ref="userDao" />
 	</bean>
 </beans>

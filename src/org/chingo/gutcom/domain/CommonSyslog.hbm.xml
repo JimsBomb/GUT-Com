@@ -17,5 +17,11 @@
         <property name="dateline" type="long">
             <column name="dateline" not-null="true" />
         </property>
+        <property name="ip" type="string">
+        	<column name="ip" not-null="true" />
+        </property>
+        <property name="type" type="byte">
+            <column name="type" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

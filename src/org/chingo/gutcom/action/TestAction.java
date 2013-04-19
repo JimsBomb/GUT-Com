@@ -27,6 +27,7 @@ public class TestAction extends ActionSupport
 		CommonSyslog log = new CommonSyslog();
 		log.setDetail("test log");
 		log.setDateline(new Date().getTime());
+		log.setIp("127.0.0.1");
 		ts.addLog(log);
 		return SUCCESS;
 	}
