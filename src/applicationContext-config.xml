@@ -26,8 +26,9 @@
 	 <!-- 配置c3p0数据源 -->
 	 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 	 	<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/gutcom" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/gutcom?characterEncoding=utf8" />
 		<property name="user" value="root" />
+		<property name="password" value="root" />
 		<property name="maxPoolSize" value="40" />
 		<property name="minPoolSize" value="1" />
 		<property name="initialPoolSize" value="1" />

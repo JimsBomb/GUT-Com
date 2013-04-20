@@ -2,8 +2,10 @@ package org.chingo.gutcom.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonFilterWord;
@@ -42,6 +44,21 @@ public class SystemManagerImpl implements SystemManager
 	public void updateConf(CommonSysconf conf)
 	{
 		sysconfDao.update(conf);
+	}
+	
+	@Override
+	public void updateConf(Map<String, String> confs)
+	{
+		String hql = "from CommonSysconf cs where cs.confname=:confname";
+		Map<String, Object> v = new HashMap<String, Object>(1);
+		CommonSysconf conf;
+		for(Entry c : confs.entrySet())
+		{
+			v.clear();
+			v.put("confname", c.getKey());
+			conf = (CommonSysconf) sysconfDao.query(hql, v).get(0);
+			conf.setConfvalue((String) c.getValue());
+		}
 	}
 
 	@Override
@@ -129,6 +146,71 @@ public class SystemManagerImpl implements SystemManager
 	{
 		String hql = "select count(*) from CommonSyslog l";
 		return (long) syslogDao.query(hql, new Object[0]).get(0);
+	}
+
+	@Override
+	public void addFilterWord(CommonFilterWord word)
+	{
+		wordDao.save(word);
+	}
+
+	@Override
+	public void updateFilterWord(CommonFilterWord word)
+	{
+		wordDao.update(word);
+	}
+
+	@Override
+	public void delFilterWord(CommonFilterWord word)
+	{
+		wordDao.delete(word);
+	}
+
+	@Override
+	public void delFilterWord(Serializable id)
+	{
+		wordDao.delete(id);
+	}
+	
+	@Override
+	public void delFilterWord(Serializable[] ids)
+	{
+		for(Serializable id : ids)
+		{
+			wordDao.delete(id);
+		}
+	}
+
+	@Override
+	public List<CommonFilterWord> findAllFilterWord()
+	{
+		return wordDao.list();
+	}
+
+	@Override
+	public List findFilterWordByPage(Map<String, Object> values, int offset,
+			int pageSize)
+	{
+		StringBuffer hql = new StringBuffer("select cfw from CommonFilterWord cfw ");
+		StringBuffer hqlCnt = new StringBuffer("select count(cfw) from CommonFilterWord cfw ");
+		StringBuffer froms = new StringBuffer();
+		StringBuffer wheres = new StringBuffer(" where 1=1 ");
+		if(values.containsKey("word"))
+		{
+			wheres.append(" and cfw.word like :word ");
+		}
+		if(values.containsKey("level"))
+		{
+			wheres.append(" and cfw.level=:level ");
+		}
+		hql.append(froms).append(wheres);
+		hqlCnt.append(froms).append(wheres);
+		
+		List<Object> rst = new ArrayList<Object>();
+		rst.add(syslogDao.findByPage(hql.toString(), values, offset, pageSize));
+		rst.add((long) syslogDao.query(hqlCnt.toString(), values).get(0));
+		
+		return rst;
 	}
 	
 }

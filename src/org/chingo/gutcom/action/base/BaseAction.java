@@ -1,5 +1,6 @@
 package org.chingo.gutcom.action.base;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,12 @@ ParameterAware, ApplicationAware, ServletRequestAware, ServletResponseAware {
 	protected Map application;
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
+	private Map<String, String> configurations;
+	
+	public Map<String, String> getConfigurations()
+	{
+		return (Map<String, String>) application.get("sysconf");
+	}
 
 	@Override
 	public void setSession(Map<String, Object> session)
@@ -45,6 +52,7 @@ ParameterAware, ApplicationAware, ServletRequestAware, ServletResponseAware {
 	{
 		// TODO Auto-generated method stub
 		this.request = request;
+		
 	}
 
 

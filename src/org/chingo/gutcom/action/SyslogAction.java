@@ -15,8 +15,9 @@ import com.opensymphony.xwork2.ActionContext;
 public class SyslogAction extends SystemBaseAction
 {
 	private List<CommonSyslog> lstLog;
-	private long logTotalSize = 0;
-	private int logPage = 1;
+	private long totalSize = 0;
+	private int pageCount = 1;
+	private int pageSize;
 	private int searchMode = 0;
 	private String username;
 	private String startTime;
@@ -28,14 +29,29 @@ public class SyslogAction extends SystemBaseAction
 		return this.lstLog;
 	}
 	
-	public long getLogTotalSize()
+	public long getTotalSize()
 	{
-		return this.logTotalSize;
+		return this.totalSize;
 	}
 	
-	public int getLogPage()
+	public int getPageCount()
 	{
-		return this.logPage;
+		return this.pageCount;
+	}
+	
+	public int getPageSize()
+	{
+		return this.pageSize;
+	}
+	
+	public void setPageSize()
+	{
+		int sizePerPage = Integer.parseInt(getConfigurations().get("RECORDS_PER_PAGE"));
+		this.pageSize = (int) (this.totalSize / sizePerPage);
+		if(this.totalSize % sizePerPage > 0)
+		{
+			this.pageSize++;
+		}
 	}
 	
 	public int getSearchMode()
@@ -160,21 +176,24 @@ public class SyslogAction extends SystemBaseAction
 			String p = ((String[])parameters.get("p"))[0];
 			try
 			{
-				logPage = Integer.parseInt(p);
+				pageCount = Integer.parseInt(p);
 			}
 			catch (Exception ex)
 			{
 				throw new GcException("Invalid parameter : " + p);
 			}
 		}
-		List rst = sysMgr.findSyslogByPage(values, (logPage-1)*20, 20);
+		int sizePerPage = Integer.parseInt(getConfigurations().get("RECORDS_PER_PAGE"));
+		List rst = sysMgr.findSyslogByPage(values, (pageCount-1)*sizePerPage, sizePerPage);
 		lstLog = (List<CommonSyslog>) rst.get(0);
-		logTotalSize = (long) rst.get(1);
+		totalSize = (long) rst.get(1);
 //		logTotalSize = sysMgr.getSyslogTotalSize();
-		if(logTotalSize == 0)
+		if(totalSize == 0)
 		{
-			logPage = 0;
+			pageCount = 0;
 		}
+		setPageSize();
+		
 		return "mgr";
 	}
 	

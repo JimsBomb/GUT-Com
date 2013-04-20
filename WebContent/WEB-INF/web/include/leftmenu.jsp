@@ -9,6 +9,7 @@
 		<ul>
 			<li class="menuitem"><a href="admin/sysconfmgr.do" target="mainFrame">基本设置</a></li>
 			<li class="menuitem"><a href="#" target="mainFrame">计划任务</a></li>
+			<li class="menuitem"><a href="admin/filtermgr.do" target="mainFrame">内容过滤</a></li>
 			<li class="menuitem"><a href="admin/syslogmgr.do" target="mainFrame">日志管理</a></li>
 		</ul>
 	</li>

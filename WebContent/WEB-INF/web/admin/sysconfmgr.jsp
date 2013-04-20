@@ -13,7 +13,7 @@
 <body>
 	<div class="nav">当前位置：系统管理 -&gt; 基本设置</div>
 	<div class="mgrarea">
-		<s:form action="sysconfupdate" namespace="admin">
+		<s:form action="sysconfupdate.do" namespace="admin">
 			<table>
 				<tr>
 					<td>服务器状态：</td>

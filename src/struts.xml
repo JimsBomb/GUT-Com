@@ -12,6 +12,9 @@
     <constant name="struts.ui.theme" value="simple" />
     <constant name="struts.ui.templateDir" value="template" />
     <constant name="struts.ui.templateSuffix" value="ftl" />
+    <constant name="struts.i18n.reload" value="true" />
+    <constant name="struts.locale" value="zh_CN" />
+    <constant name="struts.i18n.encoding" value="UTF-8" />
 
     <package name="default" namespace="/" extends="struts-default">
 
@@ -33,7 +36,7 @@
 		
 		<action name="sysconf*" class="sysconfAction" method="{1}">
         	<result name="mgr">/WEB-INF/web/admin/sysconfmgr.jsp</result>
-        	<result name="del" type="redirectAction">sysconfmgr.do</result>
+        	<result name="update" type="redirectAction">sysconfmgr.do</result>
         </action>
 	
 		<action name="syslogAction" class="syslogAction">
@@ -43,6 +46,16 @@
 		<action name="syslog*" class="syslogAction" method="{1}">
         	<result name="mgr">/WEB-INF/web/admin/syslogmgr.jsp</result>
         	<result name="del" type="redirectAction">syslogmgr.do</result>
+        </action>
+        
+        <action name="filterAction" class="filterWordAction">
+        	<result name="mgr">/WEB-INF/web/admin/filtermgr.jsp</result>
+        	<result name="del" type="redirectAction">filtermgr.do</result>
+        </action>
+        <action name="filter*" class="filterWordAction" method="{1}">
+        	<result name="mgr">/WEB-INF/web/admin/filtermgr.jsp</result>
+        	<result name="del" type="redirectAction">filtermgr.do</result>
+        	<result name="add" type="redirectAction">filtermgr.do</result>
         </action>
 	
 		<action name="user*" class="userAction" method="{1}">

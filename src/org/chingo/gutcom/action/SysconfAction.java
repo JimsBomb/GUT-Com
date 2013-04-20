@@ -1,6 +1,12 @@
 package org.chingo.gutcom.action;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.chingo.gutcom.action.base.SystemBaseAction;
+import org.chingo.gutcom.domain.CommonSysconf;
 
 public class SysconfAction extends SystemBaseAction
 {
@@ -85,5 +91,32 @@ public class SysconfAction extends SystemBaseAction
 	public String mgr() throws Exception
 	{
 		return "mgr";
+	}
+	
+	public String update() throws Exception
+	{
+		if(recordsPerPage.isEmpty())
+		{
+			recordsPerPage = "10";
+		}
+		if(logLifecycle.isEmpty())
+		{
+			logLifecycle = "0";
+		}
+		
+		Map<String, String> mapConf = new HashMap<String, String>();
+		mapConf.put("SERVER_STATUS", serverStatus);
+		mapConf.put("USER_VERIFY", userVerify);
+		mapConf.put("WEIBO_VERIFY", weiboVerify);
+		mapConf.put("SHARE_VERIFY", shareVerify);
+		mapConf.put("SHARE_COMMENT_VERIFY", shareCommentVerify);
+		mapConf.put("RECORDS_PER_PAGE", recordsPerPage);
+		mapConf.put("LOG_LIFECYCLE", logLifecycle);
+		
+		sysMgr.updateConf(mapConf);
+		
+		application.put("sysconf", mapConf);
+		
+		return "update";
 	}
 }

@@ -7,11 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>日志管理</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/style.css" media="all">
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/admin/general.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/admin/datepicker-i18n.js"></script>
 <script type="text/javascript">
 $(function(){
 				
@@ -19,59 +16,59 @@ $(function(){
 </script>
 </head>
 <body>
-	<div class="nav">当前位置：系统管理 -&gt; 日志管理</div>
+	<div class="nav">当前位置：系统管理 -&gt; 内容过滤</div>
+	<div class="mgrarea">
+		<s:form action="filteradd.do" namespace="/admin">
+			<h3>添加关键词</h3>
+			<table>
+				<tr>
+					<td>过滤级别：<s:select list="#{'0':'屏蔽', '1':'审核', '2':'禁止发表'}"
+							name="level" listKey="key" listValue="value" value="0" /></td>
+				</tr>
+				<tr>
+					<td>关键词：<s:textfield name="word" value="" /></td>
+				</tr>
+				<tr>
+					<td><s:submit value="添加" /></td>
+				</tr>
+			</table>
+		</s:form>
+	</div>
 	<div class="search">
-		<h3>查找日志</h3>
-		<s:form cssClass="searcharea" action="syslogmgr" namespace="/admin">
+		<h3>查找关键词</h3>
+		<s:form cssClass="searcharea" action="filtermgr.do" namespace="/admin">
 			<input name="searchMode" type="hidden" value="1" />
 			<table>
 			<tr>
-			<td>日志类型：<s:select
-				list="#{'-1':'所有日志', '0':'登录日志', '1':'后台日志', '2':'微博日志'}"
-				name="type" listKey="key" listValue="value" 
-				onchange="selectChanged(this.id)" /></td>
-			<td>用户昵称：<s:textfield name="username" /></td>
-			<td>起始时间：<s:textfield name="startTime" id="startTime" /></td>
-			<td>截止时间：<s:textfield name="endTime" id="endTime" /></td>
+			<td>过滤级别：<s:select list="#{'-1':'所有级别', '0':'屏蔽', '1':'审核', '2':'禁止发表'}"
+							name="level" listKey="key" listValue="value" 
+							onchange="selectChanged(this.id)" /></td>
+			<td>关键词：<s:textfield name="word" /></td>
 			<td><s:submit value="查找" /></td>
 			</tr>
 			</table>
 		</s:form>
 	</div>
 	<div class="mgrlist">
-		<s:form id="formList" action="syslogAction.do" namespace="/admin">
+		<s:form id="formList" action="filterAction.do" namespace="/admin">
 			<table>
 				<tr>
 					<th><input id="checkAll" type="checkbox" /></th>
-					<th>类型</th>
-					<th style="width:100px;">用户</th>
-					<th style="width:300px;">描述</th>
-					<th>IP</th>
-					<th>时间</th>
+					<th>关键词</th>
+					<th>过滤级别</th>
 					<th>操作</th>
 				</tr>
-				<s:iterator var="log" value="#request.lstLog">
+				<s:iterator var="word" value="#request.lstWord">
 					<tr>
 						<td><input name="checkbox" class="checkbox" type="checkbox"
-							value='<s:property value="#log.lid" />' /></td>
-						<td><s:if test="#log.type==0">登录日志</s:if> <s:elseif
-									test="#log.type==1">后台日志</s:elseif> <s:elseif
-									test="#log.type==2">微博日志</s:elseif></td>
-						<td style="text-align: center;"><s:url action="syslogmgr"
-								id="userfilter">
-								<s:param name="searchMode">1</s:param>
-								<s:param name="username">
-									<s:property value="#log.commonUser.nickname" />
-								</s:param>
-							</s:url> <s:a href="%{userfilter}" title="只查看该用户">
-								<s:property value="#log.commonUser.nickname" />
-							</s:a></td>
-						<td><s:property value="#log.detail" /></td>
-						<td><s:property value="#log.ip" /></td>
-						<td><s:text name="format.datetime"><s:param value="#log.dateline" /></s:text></td>
-						<td><s:url action="syslogdel" id="delurl">
+							value='<s:property value="#word.wid" />' /></td>
+						<td><s:property value="#word.word" /></td>
+						<td style="text-align: center;"><s:if test="#word.level==0">屏蔽</s:if> <s:elseif
+									test="#word.level==1">审核</s:elseif> <s:elseif
+									test="#word.level==2">禁止发表</s:elseif></td>
+						<td><s:url action="filterdel" id="delurl">
 								<s:param name="id">
-									<s:property value="#log.lid" />
+									<s:property value="#word.wid" />
 								</s:param>
 							</s:url> <s:a cssClass="delete" href="%{delurl}">删除</s:a></td>
 					</tr>
@@ -80,31 +77,23 @@ $(function(){
 			选中项操作：<s:submit cssClass="delete" value="删除选中" method="del" />
 			<div class="pager">
 				<s:hidden name="searchMode" />
-				<s:hidden name="username" />
-				<s:hidden name="startTime" />
-				<s:hidden name="endTime" />
-				<s:hidden name="type" />
+				<s:hidden name="word" />
+				<s:hidden name="level" />
 				<s:if test="#request.searchMode == 1">
-					<s:url action="syslogmgr" id="mgrurl">
+					<s:url action="filtermgr" id="mgrurl">
 						<s:param name="searchMode">
 							${ attr.searchMode }
 						</s:param>
-						<s:param name="username">
-							${ attr.username }
+						<s:param name="word">
+							${ attr.word }
 						</s:param>
-						<s:param name="startTime">
-							${ attr.startTime }
-						</s:param>
-						<s:param name="endTime">
-							${ attr.endTime }
-						</s:param>
-						<s:param name="type">
-							${ attr.type }
+						<s:param name="level">
+							${ attr.level }
 						</s:param>
 					</s:url>
 				</s:if>
 				<s:else>
-					<s:url action="syslogmgr" id="mgrurl">
+					<s:url action="filtermgr" id="mgrurl">
 						<s:param name="searchMode">
 							${ attr.searchMode }
 						</s:param>
