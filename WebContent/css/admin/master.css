@@ -25,6 +25,9 @@ html,body{ height:100%;}
 			.nav { padding:5px; margin:5px;}
 			.search { border: 1px solid #CCCCCC; padding:5px; margin:5px; }
 				.search td { padding:5px; }
+			.mgrarea { border: 1px solid #CCCCCC; padding:5px; margin:5px; }
+				.mgrarea td { padding:5px; }
+				.mgrarea tr:hover { background-color:#F1F1F1; }
 			.mgrlist { padding:10px; }
 			.mgrlist table td { border: 1px solid #CCCCCC; padding:5px; }
 			.mgrlist table tr:hover { background-color:#F1F1F1; }

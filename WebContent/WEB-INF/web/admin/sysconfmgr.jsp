@@ -12,5 +12,55 @@
 </head>
 <body>
 	<div class="nav">当前位置：系统管理 -&gt; 基本设置</div>
+	<div class="mgrarea">
+		<s:form action="sysconfupdate" namespace="admin">
+			<table>
+				<tr>
+					<td>服务器状态：</td>
+					<td><s:radio list="#{'0':'关闭', '1':'开启'}" name="serverStatus"
+							listKey="key" listValue="value"
+							value="#application.sysconf.SERVER_STATUS" /></td>
+				</tr>
+				<tr>
+					<td>新用户审核：</td>
+					<td><s:radio list="#{'0':'关闭', '1':'开启'}" name="userVerify"
+							listKey="key" listValue="value"
+							value="#application.sysconf.USER_VERIFY" /></td>
+				</tr>
+				<tr>
+					<td>新微博审核：</td>
+					<td><s:radio list="#{'0':'关闭', '1':'开启'}" name="weiboVerify"
+							listKey="key" listValue="value"
+							value="#application.sysconf.WEIBO_VERIFY" /></td>
+				</tr>
+				<tr>
+					<td>新分享审核：</td>
+					<td><s:radio list="#{'0':'关闭', '1':'开启'}" name="shareVerify"
+							listKey="key" listValue="value"
+							value="#application.sysconf.SHARE_VERIFY" /></td>
+				</tr>
+				<tr>
+					<td>新分享评论审核：</td>
+					<td><s:radio list="#{'0':'关闭', '1':'开启'}"
+							name="shareCommentVerify" listKey="key" listValue="value"
+							value="#application.sysconf.SHARE_COMMENT_VERIFY" /></td>
+				</tr>
+				<tr>
+					<td>后台内容列表单页显示记录数：</td>
+					<td><s:textfield name="recordsPerPage"
+							value="%{#application.sysconf.RECORDS_PER_PAGE}" /></td>
+				</tr>
+				<tr>
+					<td>日志保留时长：</td>
+					<td><s:textfield name="logLifecycle"
+							value="%{#application.sysconf.LOG_LIFECYCLE}" />天（0为永久保存）</td>
+				</tr>
+				<tr>
+					<td><s:submit value="提交" /></td>
+					<td></td>
+				</tr>
+			</table>
+		</s:form>
+	</div>
 </body>
 </html>

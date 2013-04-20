@@ -30,13 +30,10 @@
     </package>
 
 	<package name="admin" namespace="/admin" extends="json-default">
-		<action name="sysconfAction" class="sysconfAction">
-			<result name="mgr">/WEB-INF/web/admin/syslogmgr.jsp</result>
-        	<result name="del" type="redirectAction">syslogmgr.do</result>
-		</action>
+		
 		<action name="sysconf*" class="sysconfAction" method="{1}">
-        	<result name="{1}">/WEB-INF/web/admin/sysconfmgr.jsp</result>
-        	<result name="{1}" type="redirectAction">sysconfmgr.do</result>
+        	<result name="mgr">/WEB-INF/web/admin/sysconfmgr.jsp</result>
+        	<result name="del" type="redirectAction">sysconfmgr.do</result>
         </action>
 	
 		<action name="syslogAction" class="syslogAction">
@@ -44,8 +41,8 @@
         	<result name="del" type="redirectAction">syslogmgr.do</result>
 		</action>
 		<action name="syslog*" class="syslogAction" method="{1}">
-        	<result name="{1}">/WEB-INF/web/admin/syslogmgr.jsp</result>
-        	<result name="{1}" type="redirectAction">syslogmgr.do</result>
+        	<result name="mgr">/WEB-INF/web/admin/syslogmgr.jsp</result>
+        	<result name="del" type="redirectAction">syslogmgr.do</result>
         </action>
 	
 		<action name="user*" class="userAction" method="{1}">

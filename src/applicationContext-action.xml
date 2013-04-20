@@ -20,6 +20,9 @@
 	<bean name="syslogAction" class="org.chingo.gutcom.action.SyslogAction" scope="prototype">
 		<property name="sysMgr" ref="sysManager" />
 	</bean>
+	<bean name="sysconfAction" class="org.chingo.gutcom.action.SysconfAction" scope="prototype">
+		<property name="sysMgr" ref="sysManager" />
+	</bean>
 	
 	<bean name="userAction" class="org.chingo.gutcom.action.UserAction" scope="prototype">
 		<property name="userMgr" ref="userManager" />

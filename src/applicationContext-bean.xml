@@ -39,4 +39,8 @@
 	<bean name="userManager" class="org.chingo.gutcom.service.impl.UserManagerImpl">
 		<property name="userDao" ref="userDao" />
 	</bean>
+	
+	<bean name="initServlet" class="org.chingo.gutcom.servlet.InitServlet">
+		<property name="sysMgr" ref="sysManager" />
+	</bean>
 </beans>
