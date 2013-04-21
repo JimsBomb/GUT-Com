@@ -4,105 +4,105 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Hibernate»ù±¾²Ù×÷½Ó¿Ú
+ * HibernateåŸºç¡€æ”¯æŒæ³›å‹æ¥å£
  * @author Chingo.Org
  * 
- * @param <T> ·ºĞÍÀàÃû
+ * @param <T> å…·ä½“ç±»å‹
  */
 public interface BaseDao<T>
 {
 	
 	/**
-	 * ±£´æ²¢³Ö¾Ã»¯¶ÔÏó£¬»áÁ¢¼´²åÈëÊı¾İ¿â
-	 * @param instance Òª²Ù×÷µÄ¶ÔÏó
-	 * @return ·µ»Ø²åÈë¶ÔÏóµÄÖ÷¼üÖµ
+	 * ä¿å­˜å¹¶æŒä¹…åŒ–æ–°å¯¹è±¡
+	 * @param instance è¦ä¿å­˜çš„å®ä¾‹
+	 * @return å¯¹è±¡é”®å€¼
 	 */
 	public java.io.Serializable save(T instance);
 	
 	/**
-	 * ¸üĞÂ²¢³Ö¾Ã»¯¶ÔÏó
-	 * @param instance Òª²Ù×÷µÄ¶ÔÏó
+	 * æ›´æ–°å¹¶æŒä¹…åŒ–å¯¹è±¡
+	 * @param instance è¦æ›´æ–°çš„å®ä¾‹
 	 */
 	public void update(T instance);
 	
 	/**
-	 * É¾³ı¶ÔÏó
-	 * @param instance Òª²Ù×÷µÄ¶ÔÏó
+	 * åˆ é™¤å¯¹è±¡
+	 * @param instance è¦åˆ é™¤çš„å®ä¾‹
 	 */
 	public void delete(T instance);
 	
 	/**
-	 * É¾³ı¶ÔÏó
-	 * @param id ÒªÉ¾³ıµÄ¶ÔÏóµÄID
+	 * åˆ é™¤å¯¹è±¡
+	 * @param id è¦åˆ é™¤çš„å®ä¾‹çš„é”®å€¼
 	 */
 	public void delete(java.io.Serializable id);
 	
 	/**
-	 * »ñÈ¡²¢³Ö¾Ã»¯Ö¸¶¨IDµÄ¶ÔÏó£¬»áÁ¢¼´·ÃÎÊÊı¾İ¿â
-	 * @param id Ö÷¼üÖµ
-	 * @return »ñÈ¡µ½µÄ¶ÔÏó£¬²»´æÔÚÊ±·µ»Ønull
+	 * è·å–å¹¶æŒä¹…åŒ–å¯¹è±¡
+	 * @param id è¦è·å–çš„å¯¹è±¡çš„é”®å€¼
+	 * @return
 	 */
 	public T get(java.io.Serializable id);
 	
 	/**
-	 * »ñÈ¡ËùÓĞ¶ÔÏó
-	 * @return »ñÈ¡µ½µÄ¶ÔÏóÁĞ±í
+	 * è·å–å¯¹è±¡å…¨éƒ¨é›†åˆçš„åˆ—è¡¨
+	 * @return å¯¹è±¡é›†åˆ
 	 */
 	public List<T> list();
 	
 	/**
-	 * ¸ù¾İHQLÓï¾ä½øĞĞ²éÑ¯
-	 * @param hql HQLÓï¾ä
-	 * @param values ²éÑ¯Óï¾ä²ÎÊıÖµ£¬ÎŞ²ÎÊıÔòÖÃnull
-	 * @return ²éÑ¯½á¹û
+	 * æ ¹æ®HQLæŸ¥è¯¢æ•°æ®
+	 * @param hql HQLæŸ¥è¯¢è¯­å¥
+	 * @param values æ¡ä»¶å‚æ•°é›†ï¼Œæ— åˆ™ç½®NULL
+	 * @return æŸ¥è¯¢ç»“æœé›†
 	 */
 	public List query(final String hql, final Object[] values);
 	
 	/**
-	 * ¸ù¾İHQL·ÖÒ³²éÑ¯Êı¾İ£¨ÎŞ²ÎÊı£©
-	 * @param hql ²éÑ¯Óï¾ä
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òı
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êı
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * æ ¹æ®HQLåˆ†é¡µæŸ¥è¯¢æ•°æ®
+	 * @param hql HQLæŸ¥è¯¢è¯­å¥
+	 * @param offset ç¬¬ä¸€æ¡è®°å½•çš„ç´¢å¼•
+	 * @param pageSize æ¯é¡µæ˜¾ç¤ºè®°å½•æ•°
+	 * @return æŸ¥è¯¢ç»“æœé›†
 	 */
 	public List findByPage(final String hql, final int offset, final int pageSize);
 	
 	
 	/**
-	 * ¸ù¾İHQL·ÖÒ³²éÑ¯Êı¾İ£¨µ¥¸ö²ÎÊı£©
-	 * @param hql ²éÑ¯Óï¾ä
-	 * @param value ²éÑ¯²ÎÊı
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òı
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êı
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * æ ¹æ®HQLåˆ†é¡µæŸ¥è¯¢æ•°æ®
+	 * @param hql HQLæŸ¥è¯¢è¯­å¥
+	 * @param value å•ä¸ªæ¡ä»¶å‚æ•°å€¼
+	 * @param offset ç¬¬ä¸€æ¡è®°å½•çš„ç´¢å¼•
+	 * @param pageSize æ¯é¡µæ˜¾ç¤ºè®°å½•æ•°
+	 * @return æŸ¥è¯¢ç»“æœé›†
 	 */
 	public List findByPage(final String hql, final Object value, final int offset, final int pageSize);
 	
 	/**
-	 * ¸ù¾İHQL·ÖÒ³²éÑ¯Êı¾İ£¨¶à¸ö²ÎÊı£©
-	 * @param hql ²éÑ¯Óï¾ä
-	 * @param values ²éÑ¯²ÎÊıÊı×é
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òı
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êı
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * æ ¹æ®HQLåˆ†é¡µæŸ¥è¯¢æ•°æ®
+	 * @param hql HQLè¯­å¥
+	 * @param values æ¡ä»¶å‚æ•°å€¼æ•°ç»„
+	 * @param offset ç¬¬ä¸€æ¡è®°å½•çš„ç´¢å¼•
+	 * @param pageSize æ¯é¡µæ˜¾ç¤ºè®°å½•æ•°
+	 * @return æŸ¥è¯¢ç»“æœé›†
 	 */
 	public List findByPage(final String hql, final Object[] values, final int offset, final int pageSize);
 	
 	/**
-	 * ¸ù¾İHQL·ÖÒ³²éÑ¯Êı¾İ£¨¶à¸ö²ÎÊı£©
-	 * @param hql ²éÑ¯Óï¾ä
-	 * @param values ²éÑ¯²ÎÊıÊı×é
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òı
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êı
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * æ ¹æ®HQLåˆ†é¡µæŸ¥è¯¢æ•°æ®
+	 * @param hql HQLæŸ¥è¯¢è¯­å¥
+	 * @param values æ¡ä»¶å‚æ•°å€¼é›†åˆï¼ˆMap<å‚æ•°å,å‚æ•°å€¼ >ï¼‰
+	 * @param offset ç¬¬ä¸€æ¡è®°å½•çš„ç´¢å¼•
+	 * @param pageSize æ¯é¡µæ˜¾ç¤ºè®°å½•æ•°
+	 * @return æŸ¥è¯¢ç»“æœé›†
 	 */
 	public List findByPage(final String hql, final Map<String, Object> values, final int offset, final int pageSize);
 	
 	/**
-	 * ¸ù¾İHQLÓï¾ä½øĞĞ²éÑ¯
-	 * @param hql HQLÓï¾ä
-	 * @param values ²éÑ¯Óï¾ä²ÎÊıÖµ£¬ÎŞ²ÎÊıÔòÖÃnull
-	 * @return ²éÑ¯½á¹û
+	 * æ ¹æ®HQLæŸ¥è¯¢æ•°æ®
+	 * @param hql HQLæŸ¥è¯¢è¯­å¥
+	 * @param values æ¡ä»¶å‚æ•°å€¼é›†åˆï¼ˆMap<å‚æ•°å,å‚æ•°å€¼ >ï¼‰
+	 * @return æŸ¥è¯¢ç»“æœé›†
 	 */
 	public List query(final String hql, final Map<String, Object> values);
 }
