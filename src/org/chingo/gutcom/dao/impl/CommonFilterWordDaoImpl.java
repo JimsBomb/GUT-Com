@@ -19,14 +19,14 @@ public class CommonFilterWordDaoImpl extends HDaoSupport implements BaseDao<Comm
 	@Override
 	public void update(CommonFilterWord instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(CommonFilterWord instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

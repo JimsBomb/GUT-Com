@@ -19,14 +19,14 @@ public class CommonSyslogDaoImpl extends HDaoSupport implements BaseDao<CommonSy
 	@Override
 	public void update(CommonSyslog instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(CommonSyslog instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

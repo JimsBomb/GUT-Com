@@ -1,10 +1,13 @@
 package org.chingo.gutcom.action;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.struts2.ServletActionContext;
 import org.chingo.gutcom.action.base.SystemBaseAction;
+import org.chingo.gutcom.common.util.UploadFileUtil;
 import org.chingo.gutcom.domain.CommonFilterWord;
 import org.chingo.gutcom.exception.GcException;
 
@@ -17,6 +20,10 @@ public class FilterWordAction extends SystemBaseAction
 	private int searchMode = 0;
 	private String word;
 	private byte level = -1;
+	
+	private File importFile;
+	private String importFileContentType;
+	private String importFileFileName;
 	
 	public int getPageSize()
 	{
@@ -66,6 +73,31 @@ public class FilterWordAction extends SystemBaseAction
 	public int getPageCount()
 	{
 		return pageCount;
+	}
+	
+	public File getImportFile()
+	{
+		return importFile;
+	}
+	public void setImportFile(File importFile) 
+	{
+		this.importFile = importFile;
+	}
+	public String getImportFileContentType() 
+	{
+		return importFileContentType;
+	}
+	public void setImportFileContentType(String importFileContentType) 
+	{
+		this.importFileContentType = importFileContentType;
+	}
+	public String getImportFileFileName() 
+	{
+		return importFileFileName;
+	}
+	public void setImportFileFileName(String importFileFileName) 
+	{
+		this.importFileFileName = importFileFileName;
 	}
 	
 	public String mgr() throws Exception 
@@ -147,5 +179,22 @@ public class FilterWordAction extends SystemBaseAction
 		sysMgr.delFilterWord(ids);
 		
 		return "del";
+	}
+	
+	public String upload() throws Exception
+	{
+		String uploadPath = ServletActionContext.getServletContext().getRealPath("/upload");
+		String toFile = null;
+		try
+		{
+			toFile = UploadFileUtil.upload(importFile, importFileFileName, uploadPath);
+			sysMgr.addFilterWord(toFile);
+			UploadFileUtil.delete(toFile);
+		} catch(GcException ex)
+		{
+			throw ex;
+		}
+		
+		return "upload";
 	}
 }

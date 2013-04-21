@@ -19,14 +19,14 @@ public class CommonSysconfDaoImpl extends HDaoSupport implements BaseDao<CommonS
 	@Override
 	public void update(CommonSysconf instance)
 	{
-		getSession().save(instance);
+		getSession().saveOrUpdate(instance);
 		
 	}
 
 	@Override
 	public void delete(CommonSysconf instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

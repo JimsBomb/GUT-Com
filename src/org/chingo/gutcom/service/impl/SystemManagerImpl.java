@@ -1,5 +1,9 @@
 package org.chingo.gutcom.service.impl;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +15,9 @@ import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonFilterWord;
 import org.chingo.gutcom.domain.CommonSysconf;
 import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.exception.GcException;
 import org.chingo.gutcom.service.SystemManager;
+import org.hibernate.exception.ConstraintViolationException;
 
 public class SystemManagerImpl implements SystemManager
 {
@@ -152,6 +158,75 @@ public class SystemManagerImpl implements SystemManager
 	public void addFilterWord(CommonFilterWord word)
 	{
 		wordDao.save(word);
+	}
+	
+	@Override
+	public void addFilterWord(String filePath) throws GcException
+	{
+		File file = new File(filePath);
+		BufferedReader br = null;
+		String line;
+		try
+		{
+			br = new BufferedReader(new FileReader(file));
+			String[] temp;
+			CommonFilterWord word, tmpWord;
+			Map<String, Object> value = new HashMap<String, Object>(1);
+			while((line = br.readLine()) != null)
+			{
+				temp = line.split("=");
+				value.put("word", temp[0]);
+				tmpWord = (CommonFilterWord) wordDao
+						.query("from CommonFilterWord cfw where cfw.word = :word", value).get(0);
+				if(temp.length == 1)
+				{
+					word = new CommonFilterWord(temp[0],(byte) 0);
+				}
+				else
+				{
+					switch(temp[1])
+					{
+					case "1":
+						word = new CommonFilterWord(temp[0], (byte) 1);
+						break;
+					case "2":
+						word = new CommonFilterWord(temp[0], (byte) 2);
+						break;
+					default:
+						word = new CommonFilterWord(temp[0], (byte) 0);
+					}
+				}
+				if(tmpWord == null)
+				{
+					wordDao.save(word);
+				}
+				else
+				{
+					tmpWord.setLevel(word.getLevel());
+				}
+			}
+		}
+		catch(ConstraintViolationException ex)
+		{
+			throw new GcException("导入失败。有重复内容。");
+		} 
+		catch(Exception ex)
+		{
+			throw new GcException("导入失败。路径不正确或文件不存在。");
+		} finally
+		{
+			if(br != null)
+			{
+				try
+				{
+					br.close();
+				} catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	@Override

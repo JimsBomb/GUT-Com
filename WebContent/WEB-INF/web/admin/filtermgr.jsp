@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>日志管理</title>
+<title>内容过滤</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/style.css" media="all">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/admin/general.js"></script>
@@ -29,9 +29,12 @@ $(function(){
 					<td>关键词：<s:textfield name="word" value="" /></td>
 				</tr>
 				<tr>
-					<td><s:submit value="添加" /></td>
+					<td><s:submit value="添加" />（重复添加将覆盖原有关键词）</td>
 				</tr>
 			</table>
+		</s:form>
+		<s:form action="filterupload.do" namespace="/admin" enctype="multipart/form-data">
+			批量添加<img src="${pageContext.request.contextPath}/images/helpicon.gif" />：<s:file name="importFile" /><s:submit value="导入" />
 		</s:form>
 	</div>
 	<div class="search">

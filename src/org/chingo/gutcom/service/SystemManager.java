@@ -6,126 +6,133 @@ import java.util.Map;
 import org.chingo.gutcom.domain.CommonFilterWord;
 import org.chingo.gutcom.domain.CommonSysconf;
 import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.exception.GcException;
 
 public interface SystemManager
 {
-	/********** ÏµÍ³ÉèÖÃ¹ÜÀí **********/
+	/********** ÏµÍ³ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ **********/
 	/**
-	 * ĞÂÔöÉèÖÃÏî
-	 * @param conf ÒªÌí¼ÓµÄÉèÖÃ¶ÔÏó
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param conf Òªï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½
 	 */
 	public void addConf(CommonSysconf conf);
 	
 	/**
-	 * ¸üĞÂÉèÖÃÏî
-	 * @param conf Òª¸üĞÂµÄÉèÖÃ¶ÔÏó
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param conf Òªï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½
 	 */
 	public void updateConf(CommonSysconf conf);
 	
 	/**
-	 * ÅúÁ¿¸üĞÂÉèÖÃÏî
-	 * @param confs Òª¸üĞÂµÄÉèÖÃ¶ÔÏó¼¯
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param confs Òªï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½
 	 */
 	public void updateConf(Map<String, String> confs);
 	
 	/**
-	 * É¾³ıÉèÖÃÏî
-	 * @param conf ÒªÉ¾³ıµÄÉèÖÃ¶ÔÏóµÄID
+	 * É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param conf ÒªÉ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ID
 	 */
 	public void delConf(java.io.Serializable id);
 	
 	/**
-	 * »ñÈ¡ËùÓĞÉèÖÃÏî
-	 * @return ÉèÖÃÏî¼¯ºÏ
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @return ï¿½ï¿½ï¿½ï¿½ï¿½î¼¯ï¿½ï¿½
 	 */
 	public List<CommonSysconf> findAllConf();
 	
 	
-	/********** ÏµÍ³ÈÕÖ¾¹ÜÀí **********/
+	/********** ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ **********/
 	/**
-	 * ĞÂÔöÏµÍ³ÈÕÖ¾Ïî
-	 * @param log ÒªÌí¼ÓµÄÏµÍ³ÈÕÖ¾¶ÔÏó
+	 * ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½
+	 * @param log Òªï¿½ï¿½Óµï¿½ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void addSyslog(CommonSyslog log);
 	
 	/**
-	 * ÅúÁ¿É¾³ıÏµÍ³ÈÕÖ¾Ïî
-	 * @param ids ÒªÉ¾³ıµÄÏµÍ³ÈÕÖ¾ÏîµÄIDÊı×é
+	 * ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½
+	 * @param ids ÒªÉ¾ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½
 	 */
 	public void delSyslog(java.io.Serializable[] ids);
 	
 	/**
-	 * »ñÈ¡ËùÓĞÏµÍ³ÈÕÖ¾Ïî
-	 * @return ÏµÍ³ÈÕÖ¾Ïî¼¯ºÏ
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½
+	 * @return ÏµÍ³ï¿½ï¿½Ö¾ï¿½î¼¯ï¿½ï¿½
 	 */
 	public List<CommonSyslog> findAllSyslog();
 	
 	/**
-	 * ²éÑ¯ÈÕÖ¾¼ÇÂ¼×ÜÊı
-	 * @return ÈÕÖ¾¼ÇÂ¼×ÜÊı
+	 * ï¿½ï¿½Ñ¯ï¿½ï¿½Ö¾ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
+	 * @return ï¿½ï¿½Ö¾ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 	 */
 	public long getSyslogTotalSize();
 	
 	/**
-	 * ·ÖÒ³»ñÈ¡ÏµÍ³ÈÕÖ¾Ïî
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òı
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êı
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * ï¿½ï¿½Ò³ï¿½ï¿½È¡ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½
+	 * @param offset ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param pageSize Ã¿Ò³ï¿½ï¿½Ê¾ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
+	 * @return ï¿½ï¿½Ñ¯Ò³ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
 	 */
 	public List<CommonSyslog> findSyslogByPage(int offset, int pageSize);
 	
 	/**
-	 * °´Ìõ¼ş·ÖÒ³»ñÈ¡ÏµÍ³ÈÕÖ¾Ïî
-	 * @param values Ìõ¼ş²ÎÊıÖµ
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òı
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êı
-	 * @return ListÖĞµÄµÚÒ»¸ö¶ÔÏóÎª²éÑ¯Ò³µÄ¼ÇÂ¼¼¯£¬µÚ¶ş¸ö¶ÔÏóÎª½á¹ûÊı
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½È¡ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½
+	 * @param values ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+	 * @param offset ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param pageSize Ã¿Ò³ï¿½ï¿½Ê¾ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
+	 * @return Listï¿½ĞµÄµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ñ¯Ò³ï¿½Ä¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public List findSyslogByPage(Map<String, Object> values, int offset, int pageSize);
 	
-	/********** ¹ıÂË¹Ø¼ü´Ê¹ÜÀí **********/
+	/********** ï¿½ï¿½ï¿½Ë¹Ø¼ï¿½Ê¹ï¿½ï¿½ï¿½ **********/
 	/**
-	 * ĞÂÔö¹Ø¼ü´Ê
-	 * @param word ÒªĞÂÔöµÄ¹Ø¼ü´Ê¶ÔÏó
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½
+	 * @param word Òªï¿½ï¿½ï¿½ï¿½ï¿½Ä¹Ø¼ï¿½Ê¶ï¿½ï¿½ï¿½
 	 */
 	public void addFilterWord(CommonFilterWord word);
 	
 	/**
-	 * ¸üĞÂ¹Ø¼ü´Ê
-	 * @param word Òª¸üĞÂµÄ¹Ø¼ü´Ê¶ÔÏó
+	 * é€šè¿‡æ–‡ä»¶æ‰¹é‡å¯¼å…¥è¿‡æ»¤å…³é”®è¯
+	 * @param filePath å¯¼å…¥æ–‡ä»¶çš„ç»å¯¹è·¯å¾„
+	 */
+	public void addFilterWord(String filePath) throws GcException;
+	
+	/**
+	 * ï¿½ï¿½ï¿½Â¹Ø¼ï¿½ï¿½
+	 * @param word Òªï¿½ï¿½ï¿½ÂµÄ¹Ø¼ï¿½Ê¶ï¿½ï¿½ï¿½
 	 */
 	public void updateFilterWord(CommonFilterWord word);
 	
 	/**
-	 * É¾³ı¹Ø¼ü´Ê
-	 * @param word ÒªÉ¾³ıµÄ¹Ø¼ü´Ê¶ÔÏó
+	 * É¾ï¿½ï¿½Ø¼ï¿½ï¿½
+	 * @param word ÒªÉ¾ï¿½ï¿½Ä¹Ø¼ï¿½Ê¶ï¿½ï¿½ï¿½
 	 */
 	public void delFilterWord(CommonFilterWord word);
 	
 	/**
-	 * ¸ù¾İIDÉ¾³ı¹Ø¼ü´Ê
-	 * @param id ÒªÉ¾³ıµÄ¹Ø¼ü´ÊµÄID
+	 * ï¿½ï¿½ï¿½IDÉ¾ï¿½ï¿½Ø¼ï¿½ï¿½
+	 * @param id ÒªÉ¾ï¿½ï¿½Ä¹Ø¼ï¿½Êµï¿½ID
 	 */
 	public void delFilterWord(java.io.Serializable id);
 	
 	/**
-	 * ¸ù¾İIDÅúÁ¿É¾³ı¹Ø¼ü´Ê
-	 * @param ids ÒªÉ¾³ıµÄ¹Ø¼ü´ÊµÄIDÊı×é
+	 * ï¿½ï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½Ø¼ï¿½ï¿½
+	 * @param ids ÒªÉ¾ï¿½ï¿½Ä¹Ø¼ï¿½Êµï¿½IDï¿½ï¿½ï¿½ï¿½
 	 */
 	public void delFilterWord(java.io.Serializable[] ids);
 	
 	/**
-	 * »ñÈ¡ËùÓĞ¹Ø¼ü´Ê
-	 * @return È«²¿¹Ø¼ü´ÊÁĞ±í
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ğ¹Ø¼ï¿½ï¿½
+	 * @return È«ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½Ğ±ï¿½
 	 */
 	public List<CommonFilterWord> findAllFilterWord();
 	
 	/**
-	 * °´Ìõ¼ş·ÖÒ³²éÑ¯¹Ø¼ü´Ê
-	 * @param values Ìõ¼ş¼¯ºÏ
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òı
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êı
-	 * @return ListÖĞµÄµÚÒ»¸ö¶ÔÏóÎª²éÑ¯Ò³µÄ¼ÇÂ¼¼¯£¬µÚ¶ş¸ö¶ÔÏóÎª½á¹ûÊı
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½Ñ¯ï¿½Ø¼ï¿½ï¿½
+	 * @param values ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param offset ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param pageSize Ã¿Ò³ï¿½ï¿½Ê¾ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
+	 * @return Listï¿½ĞµÄµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ñ¯Ò³ï¿½Ä¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public List findFilterWordByPage(Map<String, Object> values, int offset, int pageSize);
 	

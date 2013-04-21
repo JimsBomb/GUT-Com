@@ -56,6 +56,7 @@
         	<result name="mgr">/WEB-INF/web/admin/filtermgr.jsp</result>
         	<result name="del" type="redirectAction">filtermgr.do</result>
         	<result name="add" type="redirectAction">filtermgr.do</result>
+        	<result name="upload" type="redirectAction">filtermgr.do</result>
         </action>
 	
 		<action name="user*" class="userAction" method="{1}">
