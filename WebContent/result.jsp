@@ -30,7 +30,7 @@ function remainTime()
 </head>
 <body onload="remainTime()">
 <div class="opresult">
-	<s:property value="#request.resultMsg" />
+	<p><s:property value="#request.resultMsg" /></p>
 	<a id="backto" href='<s:property value="#request.backTo" />'><span id="timer">3</span>秒后返回操作前页面，若没有自动跳转，请点击这里</a>
 </div>
 </body>

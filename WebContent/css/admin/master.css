@@ -33,5 +33,6 @@ html,body{ height:100%;}
 			.mgrlist table tr:hover { background-color:#F1F1F1; }
 			.mgrlist table th { border: 1px solid #CCCCCC; padding:5px; background-color:#DDDDDD; }
 				.pager { float:right; }
+			.opresult { margin: 0 auto; text-align:center; }
 /*footer*/
 #footer{position:relative; height:35px; clear:both; background:#f1f1f1;border:1px solid #ddd; border-width:1px 0 1px 0; }

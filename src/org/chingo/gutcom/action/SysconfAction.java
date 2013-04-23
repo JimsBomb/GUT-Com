@@ -1,22 +1,29 @@
 package org.chingo.gutcom.action;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.chingo.gutcom.action.base.SystemBaseAction;
-import org.chingo.gutcom.domain.CommonSysconf;
+import org.chingo.gutcom.common.CommonConst;
+import org.chingo.gutcom.common.constant.SysconfConst;
 
+/**
+ * 系统设置操作ACTION
+ * @author Chingo.Org
+ *
+ */
 public class SysconfAction extends SystemBaseAction
 {
-	private String serverStatus;
-	private String userVerify;
-	private String weiboVerify;
-	private String shareVerify;
-	private String shareCommentVerify;
-	private String recordsPerPage;
-	private String logLifecycle;
+	private String serverStatus; // 服务器状态
+	private String userVerify; // 用户审核开关
+	private String weiboVerify; // 微博审核开关
+	private String shareVerify; // 分享审核开关
+	private String shareCommentVerify; // 分享评论审核开关
+	private String recordsPerPage; // 后台内容列表单页显示记录数
+	private String logLifecycle; //日志保留时间
+	
+	private String resultMsg; // 操作结果信息
+	private String backTo; // 返回页面
 
 	public String getServerStatus()
 	{
@@ -88,35 +95,54 @@ public class SysconfAction extends SystemBaseAction
 		this.logLifecycle = logLifecycle;
 	}
 	
+	public String getResultMsg()
+	{
+		return resultMsg;
+	}
+
+	public String getBackTo()
+	{
+		return backTo;
+	}
+
 	public String mgr() throws Exception
 	{
 		return "mgr";
 	}
 	
+	/**
+	 * 更新系统设置
+	 * @return Action Result
+	 * @throws Exception
+	 */
 	public String update() throws Exception
 	{
-		if(recordsPerPage.isEmpty())
+		if(recordsPerPage.isEmpty()) // 单页显示数留空则默认设置为10
 		{
 			recordsPerPage = "10";
 		}
-		if(logLifecycle.isEmpty())
+		if(logLifecycle.isEmpty()) // 日志保留时间留空则默认设置为0
 		{
 			logLifecycle = "0";
 		}
 		
+		/* 将更新的设置值放到Map中 */
 		Map<String, String> mapConf = new HashMap<String, String>();
-		mapConf.put("SERVER_STATUS", serverStatus);
-		mapConf.put("USER_VERIFY", userVerify);
-		mapConf.put("WEIBO_VERIFY", weiboVerify);
-		mapConf.put("SHARE_VERIFY", shareVerify);
-		mapConf.put("SHARE_COMMENT_VERIFY", shareCommentVerify);
-		mapConf.put("RECORDS_PER_PAGE", recordsPerPage);
-		mapConf.put("LOG_LIFECYCLE", logLifecycle);
+		mapConf.put(SysconfConst.SERVER_STATUS, serverStatus);
+		mapConf.put(SysconfConst.USER_VERIFY, userVerify);
+		mapConf.put(SysconfConst.WEIBO_VERIFY, weiboVerify);
+		mapConf.put(SysconfConst.SHARE_VERIFY, shareVerify);
+		mapConf.put(SysconfConst.SHARE_COMMENT_VERIFY, shareCommentVerify);
+		mapConf.put(SysconfConst.RECORDS_PER_PAGE, recordsPerPage);
+		mapConf.put(SysconfConst.LOG_LIFECYCLE, logLifecycle);
 		
-		sysMgr.updateConf(mapConf);
+		sysMgr.updateConf(mapConf); // 提交更新
 		
-		application.put("sysconf", mapConf);
+		application.put("sysconf", mapConf); // 更新application中的设置值
 		
-		return "update";
+		this.resultMsg = "系统设置已成功更新。"; // 设置操作结果信息
+		this.backTo = "sysconfmgr.do"; // 设置返回页面
+		
+		return SUCCESS;
 	}
 }

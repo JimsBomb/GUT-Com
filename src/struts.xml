@@ -37,6 +37,7 @@
 		<action name="sysconf*" class="sysconfAction" method="{1}">
         	<result name="mgr">/WEB-INF/web/admin/sysconfmgr.jsp</result>
         	<result name="update" type="redirectAction">sysconfmgr.do</result>
+        	<result name="success">/result.jsp</result>
         </action>
 	
 		<action name="syslogAction" class="syslogAction">
@@ -50,13 +51,11 @@
         
         <action name="filterAction" class="filterWordAction">
         	<result name="mgr">/WEB-INF/web/admin/filtermgr.jsp</result>
-        	<result name="del" type="redirectAction">filtermgr.do</result>
+        	<result name="success">/result.jsp</result>
         </action>
         <action name="filter*" class="filterWordAction" method="{1}">
         	<result name="mgr">/WEB-INF/web/admin/filtermgr.jsp</result>
-        	<result name="del" type="redirectAction">filtermgr.do</result>
-        	<result name="add" type="redirectAction">filtermgr.do</result>
-        	<result name="upload" type="redirectAction">filtermgr.do</result>
+        	<result name="success">/result.jsp</result>
         </action>
 	
 		<action name="user*" class="userAction" method="{1}">
