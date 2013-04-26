@@ -58,8 +58,16 @@
         	<result name="success">/result.jsp</result>
         </action>
 	
+        <action name="userAction" class="userAction">
+            <result name="success">/result.jsp</result>
+        </action>
 		<action name="user*" class="userAction" method="{1}">
 			<result name="mgr">/WEB-INF/web/admin/usermgr.jsp</result>
+			<result name="auditmgr">/WEB-INF/web/admin/useraudit.jsp</result>
+			<result name="show">/WEB-INF/web/admin/usershow.jsp</result>
+			<result name="pwd">/WEB-INF/web/admin/userchangepwd.jsp</result>
+			<result name="create">/WEB-INF/web/admin/useradd.jsp</result>
+			<result name="success">/result.jsp</result>
 		</action>
 	</package>
 </struts>

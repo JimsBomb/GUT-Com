@@ -36,6 +36,16 @@ $(document).ready(function() {
 		return confirm("确认要删除选定的记录？删除后将无法恢复。");
 	});
 	
+	$("#createTime").datepicker({
+		defaultDate: "+1w",
+		showOn: "both",
+		buttonImage: "../images/calendar.gif",
+	    buttonImageOnly: true,
+		showAnim: "show",
+		showButtonPanel: true,
+		changeMonth: true,
+		changeYear: true
+	});
 	$( "#startTime" ).datepicker({
 		defaultDate: "+1w",
 		showOn: "both",

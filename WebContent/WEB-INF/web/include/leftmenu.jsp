@@ -20,8 +20,9 @@
 			<a href="javascript:void(0);" title="折叠/展开">用户管理</a>
 		</h3>
 		<ul>
-			<li class="menuitem"><a href="#" target="mainFrame">添加用户</a></li>
+			<li class="menuitem"><a href="admin/usercreate.do" target="mainFrame">添加用户</a></li>
 			<li class="menuitem"><a href="admin/usermgr.do" target="mainFrame">用户管理</a></li>
+			<li class="menuitem"><a href="admin/userauditmgr.do" target="mainFrame">用户审核</a></li>
 		</ul>
 	</li>
 </ul>
@@ -34,6 +35,7 @@
 			<li class="menuitem"><a href="#" target="mainFrame">微博管理</a></li>
 			<li class="menuitem"><a href="#" target="mainFrame">审核微博</a></li>
 			<li class="menuitem"><a href="#" target="mainFrame">话题管理</a></li>
+			<li class="menuitem"><a href="#" target="mainFrame">举报管理</a></li>
 		</ul>
 	</li>
 </ul>

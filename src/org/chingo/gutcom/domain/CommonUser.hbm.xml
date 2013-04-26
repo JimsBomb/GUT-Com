@@ -15,7 +15,7 @@
    <column name="email" not-null="true" unique="true"/>
   </property>
   <property generated="never" lazy="false" name="studentnum" type="string">
-   <column name="studentnum" not-null="true" unique="true"/>
+   <column name="studentnum" not-null="true" />
   </property>
   <property generated="never" lazy="false" name="password" type="string">
    <column length="32" name="password" not-null="true"/>
