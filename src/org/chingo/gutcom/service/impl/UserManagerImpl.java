@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.chingo.gutcom.common.constant.UserConst;
+import org.chingo.gutcom.common.util.SecurityUtil;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.domain.CommonUserProfile;
 import org.chingo.gutcom.domain.CommonUserStatus;
 import org.chingo.gutcom.service.UserManager;
-import org.chingo.gutcom.util.SecurityUtil;
 
 public class UserManagerImpl implements UserManager
 {
@@ -116,7 +116,7 @@ public class UserManagerImpl implements UserManager
 		}
 		if(values.containsKey("regdate"))
 		{
-			wheres.append(" and cu.regdate like :regdate ");
+			wheres.append(" and cu.regdate = :regdate ");
 		}
 		hql.append(froms).append(wheres);
 		hqlCnt.append(froms).append(wheres);

@@ -53,7 +53,7 @@
 						<td style="text-align: center;"><s:property
 								value="#u.nickname" /></td>
 						<td><s:if test="#u.commonUserProfile.gender==0">保密</s:if>
-							<s:elseif test="#u.status==1">男</s:elseif> <s:elseif
+							<s:elseif test="#u.commonUserProfile.gender==1">男</s:elseif> <s:elseif
 								test="#u.commonUserProfile.gender==2">女</s:elseif></td>
 						<td><s:text name="format.datetime">
 								<s:param value="#u.regdate" />

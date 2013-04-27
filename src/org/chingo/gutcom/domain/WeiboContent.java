@@ -14,7 +14,7 @@ public class WeiboContent implements java.io.Serializable
 	private Long wid;
 	private CommonUser commonUser;
 	private String content;
-	private int sourceid;
+	private long sourceid;
 	private byte type;
 	private byte format;
 	private byte visibility;
@@ -107,12 +107,12 @@ public class WeiboContent implements java.io.Serializable
 		this.content = content;
 	}
 
-	public int getSourceid()
+	public long getSourceid()
 	{
 		return this.sourceid;
 	}
 
-	public void setSourceid(int sourceid)
+	public void setSourceid(long sourceid)
 	{
 		this.sourceid = sourceid;
 	}

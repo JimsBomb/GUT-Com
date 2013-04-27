@@ -1,18 +1,18 @@
-package org.chingo.gutcom.util;
+package org.chingo.gutcom.common.util;
 
 import java.security.MessageDigest;
 
 /**
- * °²È«¹¤¾ßÀà
+ * ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * @author TNT
  * 
  */
 public class SecurityUtil
 {
 	/**
-	 * ½øÐÐMD5¼ÓÃÜ
-	 * @param string Òª¼ÓÃÜµÄ×Ö·û´®
-	 * @return ¼ÓÃÜºóµÄ×Ö·û´®
+	 * ï¿½ï¿½ï¿½ï¿½MD5ï¿½ï¿½ï¿½ï¿½
+	 * @param string Òªï¿½ï¿½ï¿½Üµï¿½ï¿½Ö·ï¿½
+	 * @return ï¿½ï¿½ï¿½Üºï¿½ï¿½ï¿½Ö·ï¿½
 	 */
 	public final static String md5(String string) {
         try {

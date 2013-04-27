@@ -37,6 +37,12 @@
 	<bean name="userStatusDao" class="org.chingo.gutcom.dao.impl.CommonUserStatusDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	<bean name="weiboDao" class="org.chingo.gutcom.dao.impl.WeiboContentDaoImpl">
+	    <property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean name="topicDao" class="org.chingo.gutcom.dao.impl.WeiboTopicDaoImpl">
+	    <property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 	
 	<bean name="sysManager" class="org.chingo.gutcom.service.impl.SystemManagerImpl">
 		<property name="sysconfDao" ref="sysconfDao" />
@@ -47,6 +53,11 @@
 		<property name="userDao" ref="userDao" />
 		<property name="upDao" ref="userProfileDao" />
 		<property name="usDao" ref="userStatusDao" />
+	</bean>
+	<bean name="weiboManager" class="org.chingo.gutcom.service.impl.WeiboManagerImpl">
+	    <property name="weiboDao" ref="weiboDao" />
+	    <property name="topicDao" ref="topicDao" />
+	    <property name="userDao" ref="userDao" />
 	</bean>
 	
 	<bean name="initServlet" class="org.chingo.gutcom.servlet.InitServlet">

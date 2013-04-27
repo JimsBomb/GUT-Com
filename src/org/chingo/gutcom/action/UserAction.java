@@ -292,7 +292,7 @@ public class UserAction extends UserBaseAction
 	{
 		// 存放请求参数
 		Map<String, Object> values = new HashMap<String, Object>();
-		values.put("status", (byte)1); // 只查询未审核的用户
+		values.put("status", UserConst.STATUS_FORBIT); // 只查询未审核的用户
 		/* 处理分页 */
 		if (parameters.containsKey("p"))
 		{

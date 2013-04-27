@@ -21,4 +21,10 @@ public class ResultMsg
 	public static final String USER_AUDIT = "用户审核已成功。";
 	public static final String USER_ADD ="用户已成功添加。";
 	public static final String USER_PWD_UPDATE = "用户密码已成功更新。";
+	
+	/* 微博管理操作信息 */
+	public static final String WEIBO_DEL = "微博已成功删除。";
+	public static final String WEIBO_AUDIT = "微博审核已成功。";
+	public static final String TOPIC_DEL = "话题已成功删除。";
+	public static final String TOPIC_STATUS_UPDATE = "话题状态已成功更新。";
 }

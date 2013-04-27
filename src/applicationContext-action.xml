@@ -30,4 +30,11 @@
 	<bean name="userAction" class="org.chingo.gutcom.action.UserAction" scope="prototype">
 		<property name="userMgr" ref="userManager" />
 	</bean>
+	
+	<bean name="weiboAction" class="org.chingo.gutcom.action.WeiboAction" scope="prototype">
+	    <property name="weiboMgr" ref="weiboManager" />
+	</bean>
+	<bean name="topicAction" class="org.chingo.gutcom.action.TopicAction" scope="prototype">
+	    <property name="weiboMgr" ref="weiboManager" />
+	</bean>
 </beans>

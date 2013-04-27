@@ -33,13 +33,14 @@
     </package>
 
 	<package name="admin" namespace="/admin" extends="json-default">
-		
+		<!-- 系统设置Action -->
 		<action name="sysconf*" class="sysconfAction" method="{1}">
         	<result name="mgr">/WEB-INF/web/admin/sysconfmgr.jsp</result>
         	<result name="update" type="redirectAction">sysconfmgr.do</result>
         	<result name="success">/result.jsp</result>
         </action>
 	
+		<!-- 系统日志Action -->
 		<action name="syslogAction" class="syslogAction">
 			<result name="mgr">/WEB-INF/web/admin/syslogmgr.jsp</result>
         	<result name="del" type="redirectAction">syslogmgr.do</result>
@@ -49,6 +50,7 @@
         	<result name="del" type="redirectAction">syslogmgr.do</result>
         </action>
         
+		<!-- 内容过滤Action -->
         <action name="filterAction" class="filterWordAction">
         	<result name="mgr">/WEB-INF/web/admin/filtermgr.jsp</result>
         	<result name="success">/result.jsp</result>
@@ -58,6 +60,7 @@
         	<result name="success">/result.jsp</result>
         </action>
 	
+        <!-- 用户管理Action -->
         <action name="userAction" class="userAction">
             <result name="success">/result.jsp</result>
         </action>
@@ -67,6 +70,26 @@
 			<result name="show">/WEB-INF/web/admin/usershow.jsp</result>
 			<result name="pwd">/WEB-INF/web/admin/userchangepwd.jsp</result>
 			<result name="create">/WEB-INF/web/admin/useradd.jsp</result>
+			<result name="success">/result.jsp</result>
+		</action>
+		
+		<!-- 微博管理Action -->
+		<action name="weiboAction" class="weiboAction">
+            <result name="success">/result.jsp</result>
+        </action>
+		<action name="weibo*" class="weiboAction" method="{1}">
+			<result name="mgr">/WEB-INF/web/admin/weibomgr.jsp</result>
+			<result name="auditmgr">/WEB-INF/web/admin/weiboaudit.jsp</result>
+			<result name="show">/WEB-INF/web/admin/weiboshow.jsp</result>
+			<result name="success">/result.jsp</result>
+		</action>
+		
+		<!-- 话题管理Action -->
+		<action name="topicAction" class="topicAction">
+            <result name="success">/result.jsp</result>
+        </action>
+		<action name="topic*" class="topicAction" method="{1}">
+			<result name="mgr">/WEB-INF/web/admin/topicmgr.jsp</result>
 			<result name="success">/result.jsp</result>
 		</action>
 	</package>
