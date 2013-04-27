@@ -8,6 +8,7 @@ import java.util.Map;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.domain.WeiboContent;
+import org.chingo.gutcom.domain.WeiboReport;
 import org.chingo.gutcom.domain.WeiboTopic;
 import org.chingo.gutcom.service.WeiboManager;
 
@@ -16,6 +17,7 @@ public class WeiboManagerImpl implements WeiboManager
 	private BaseDao<WeiboContent> weiboDao;
 	private BaseDao<WeiboTopic> topicDao;
 	private BaseDao<CommonUser> userDao;
+	private BaseDao<WeiboReport> reportDao;
 	
 	public void setWeiboDao(BaseDao<WeiboContent> weiboDao)
 	{
@@ -30,6 +32,11 @@ public class WeiboManagerImpl implements WeiboManager
 	public void setUserDao(BaseDao<CommonUser> userDao)
 	{
 		this.userDao = userDao;
+	}
+	
+	public void setReportDao(BaseDao<WeiboReport> reportDao)
+	{
+		this.reportDao = reportDao;
 	}
 
 	@Override
@@ -182,6 +189,39 @@ public class WeiboManagerImpl implements WeiboManager
 		List<Object> rst = new ArrayList<Object>();
 		rst.add(topicDao.findByPage(hql.toString(), values, offset, pageSize));
 		rst.add((long) topicDao.query(hqlCnt.toString(), values).get(0));
+		
+		return rst;
+	}
+
+	@Override
+	public void delWeiboReport(Serializable[] ids, Map<String, Object> logParams)
+	{
+		for(Serializable id : ids)
+		{
+			reportDao.delete(id);
+		}
+	}
+
+	@Override
+	public WeiboReport getWeiboReport(Serializable id)
+	{
+		return reportDao.get(id);
+	}
+
+	@Override
+	public List findWeiboReportByPage(Map<String, Object> values, int offset,
+			int pageSize)
+	{
+		StringBuffer hql = new StringBuffer("select wr from WeiboReport wr ");
+		StringBuffer hqlCnt = new StringBuffer("select count(wr) from WeiboReport wr ");
+		StringBuffer froms = new StringBuffer();
+		StringBuffer wheres = new StringBuffer(" where 1=1 ");
+		hql.append(froms).append(wheres);
+		hqlCnt.append(froms).append(wheres);
+		
+		List<Object> rst = new ArrayList<Object>();
+		rst.add(reportDao.findByPage(hql.toString(), values, offset, pageSize));
+		rst.add((long) reportDao.query(hqlCnt.toString(), values).get(0));
 		
 		return rst;
 	}

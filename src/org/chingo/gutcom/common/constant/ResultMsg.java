@@ -27,4 +27,5 @@ public class ResultMsg
 	public static final String WEIBO_AUDIT = "微博审核已成功。";
 	public static final String TOPIC_DEL = "话题已成功删除。";
 	public static final String TOPIC_STATUS_UPDATE = "话题状态已成功更新。";
+	public static final String WEIBO_REPORT_DEL = "微博举报信息已成功删除。";
 }

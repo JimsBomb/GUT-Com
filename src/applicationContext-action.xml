@@ -37,4 +37,7 @@
 	<bean name="topicAction" class="org.chingo.gutcom.action.TopicAction" scope="prototype">
 	    <property name="weiboMgr" ref="weiboManager" />
 	</bean>
+	<bean name="weiboReportAction" class="org.chingo.gutcom.action.WeiboReportAction" scope="prototype">
+	    <property name="weiboMgr" ref="weiboManager" />
+	</bean>
 </beans>

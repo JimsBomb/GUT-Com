@@ -92,5 +92,15 @@
 			<result name="mgr">/WEB-INF/web/admin/topicmgr.jsp</result>
 			<result name="success">/result.jsp</result>
 		</action>
+		
+		<!-- 微博举报管理Action -->
+		<action name="weiboReportAction" class="weiboReportAction">
+            <result name="success">/result.jsp</result>
+        </action>
+		<action name="weiboReport*" class="topicAction" method="{1}">
+			<result name="mgr">/WEB-INF/web/admin/weiboreportmgr.jsp</result>
+			<result name="show">/WEB-INF/web/admin/weiboreportshow.jsp</result>
+			<result name="success">/result.jsp</result>
+		</action>
 	</package>
 </struts>
