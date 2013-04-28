@@ -19,14 +19,14 @@ public class CommonMsgRecvDaoImpl extends HDaoSupport implements BaseDao<CommonM
 	@Override
 	public void update(CommonMsgRecv instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(CommonMsgRecv instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

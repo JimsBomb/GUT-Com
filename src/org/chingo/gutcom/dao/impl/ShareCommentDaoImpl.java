@@ -19,14 +19,14 @@ public class ShareCommentDaoImpl extends HDaoSupport implements BaseDao<ShareCom
 	@Override
 	public void update(ShareComment instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(ShareComment instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

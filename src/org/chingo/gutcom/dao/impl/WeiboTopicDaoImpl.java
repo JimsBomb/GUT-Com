@@ -19,14 +19,14 @@ public class WeiboTopicDaoImpl extends HDaoSupport implements BaseDao<WeiboTopic
 	@Override
 	public void update(WeiboTopic instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(WeiboTopic instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

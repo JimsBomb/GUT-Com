@@ -19,14 +19,14 @@ public class ShareStatusDaoImpl extends HDaoSupport implements BaseDao<ShareStat
 	@Override
 	public void update(ShareStatus instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(ShareStatus instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

@@ -19,14 +19,14 @@ public class CommonUserStatusDaoImpl extends HDaoSupport implements BaseDao<Comm
 	@Override
 	public void update(CommonUserStatus instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(CommonUserStatus instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

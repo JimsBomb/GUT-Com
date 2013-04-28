@@ -19,14 +19,14 @@ public class ShareCategoryDaoImpl extends HDaoSupport implements BaseDao<ShareCa
 	@Override
 	public void update(ShareCategory instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(ShareCategory instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

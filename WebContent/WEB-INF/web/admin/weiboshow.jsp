@@ -89,7 +89,7 @@
 					<tr>
 						<td>微博图片：</td>
 						<td>
-							<a href='<s:property value="#request.weibo.originalPic" />' title="查看原图">
+							<a href='<s:property value="#request.weibo.originalPic" />' title="查看原图" target="_blank">
 								<img src='<s:property value="#request.weibo.middlePic" />' />
 							</a>
 						</td>

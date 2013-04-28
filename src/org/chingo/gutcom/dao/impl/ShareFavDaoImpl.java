@@ -19,14 +19,14 @@ public class ShareFavDaoImpl extends HDaoSupport implements BaseDao<ShareFav>
 	@Override
 	public void update(ShareFav instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(ShareFav instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

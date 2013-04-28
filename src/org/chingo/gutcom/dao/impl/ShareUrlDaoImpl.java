@@ -19,14 +19,14 @@ public class ShareUrlDaoImpl extends HDaoSupport implements BaseDao<ShareUrl>
 	@Override
 	public void update(ShareUrl instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(ShareUrl instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

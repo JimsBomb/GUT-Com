@@ -19,14 +19,14 @@ public class WeiboFollowGroupDaoImpl extends HDaoSupport implements BaseDao<Weib
 	@Override
 	public void update(WeiboFollowGroup instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(WeiboFollowGroup instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

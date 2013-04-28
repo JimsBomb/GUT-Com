@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.chingo.gutcom.common.constant.WeiboConst;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.domain.WeiboContent;
@@ -117,7 +118,7 @@ public class WeiboManagerImpl implements WeiboManager
 		{
 			wheres.append(" and wc.dateline <= :endTime ");
 		}
-		hql.append(froms).append(wheres).append(" order by wid desc "); // 降序排序
+		hql.append(froms).append(wheres).append(" order by wc.dateline desc "); // 降序排序
 		hqlCnt.append(froms).append(wheres);
 		
 		List<Object> rst = new ArrayList<Object>();
@@ -177,7 +178,7 @@ public class WeiboManagerImpl implements WeiboManager
 		}
 		if(values.containsKey("sort")) // 排序
 		{
-			wheres.append(" order by wt.:sort desc ");
+			wheres.append(" order by :sort desc ");
 		}
 		else
 		{
@@ -207,6 +208,26 @@ public class WeiboManagerImpl implements WeiboManager
 	{
 		return reportDao.get(id);
 	}
+	
+	@Override
+	public void updateWeiboReportStatus(Serializable[] ids, Map<String, Object> logParams)
+	{
+		for(Serializable id : ids)
+		{
+			reportDao.get(id).setStatus(WeiboConst.REPORT_DEALED);
+		}
+	}
+	
+	@Override
+	public void updateWeiboReportDeal(Serializable id, Map<String, Object> logParams)
+	{
+		WeiboReport wr = reportDao.get(id);
+		if(wr.getWeiboContent() != null) // 所举报的微博存在时
+		{
+			weiboDao.delete(wr.getWeiboContent().getWid()); // 删除微博
+		}
+		wr.setStatus(WeiboConst.REPORT_DEALED); // 标记为已处理
+	}
 
 	@Override
 	public List findWeiboReportByPage(Map<String, Object> values, int offset,
@@ -216,7 +237,12 @@ public class WeiboManagerImpl implements WeiboManager
 		StringBuffer hqlCnt = new StringBuffer("select count(wr) from WeiboReport wr ");
 		StringBuffer froms = new StringBuffer();
 		StringBuffer wheres = new StringBuffer(" where 1=1 ");
-		hql.append(froms).append(wheres);
+		/* 填充查询条件 */
+		if(values.containsKey("status")) // 状态
+		{
+			wheres.append(" and wr.status = :status ");
+		}
+		hql.append(froms).append(wheres).append(" order by wr.dateline desc ");
 		hqlCnt.append(froms).append(wheres);
 		
 		List<Object> rst = new ArrayList<Object>();

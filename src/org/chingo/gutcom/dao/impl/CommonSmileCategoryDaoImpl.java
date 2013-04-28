@@ -19,14 +19,14 @@ public class CommonSmileCategoryDaoImpl extends HDaoSupport implements BaseDao<C
 	@Override
 	public void update(CommonSmileCategory instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(CommonSmileCategory instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

@@ -19,14 +19,14 @@ public class WeiboFavDaoImpl extends HDaoSupport implements BaseDao<WeiboFav>
 	@Override
 	public void update(WeiboFav instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(WeiboFav instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

@@ -19,14 +19,14 @@ public class WeiboAtDaoImpl extends HDaoSupport implements BaseDao<WeiboAt>
 	@Override
 	public void update(WeiboAt instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(WeiboAt instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

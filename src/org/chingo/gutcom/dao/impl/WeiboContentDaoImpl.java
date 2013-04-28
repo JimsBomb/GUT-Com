@@ -19,14 +19,14 @@ public class WeiboContentDaoImpl extends HDaoSupport implements BaseDao<WeiboCon
 	@Override
 	public void update(WeiboContent instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(WeiboContent instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

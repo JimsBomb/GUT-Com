@@ -19,14 +19,14 @@ public class ShareContentDaoImpl extends HDaoSupport implements BaseDao<ShareCon
 	@Override
 	public void update(ShareContent instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(ShareContent instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

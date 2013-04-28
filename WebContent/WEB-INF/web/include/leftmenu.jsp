@@ -35,7 +35,7 @@
 			<li class="menuitem"><a href="admin/weibomgr.do" target="mainFrame">管理微博</a></li>
 			<li class="menuitem"><a href="admin/weiboauditmgr.do" target="mainFrame">审核微博</a></li>
 			<li class="menuitem"><a href="admin/topicmgr.do" target="mainFrame">管理话题</a></li>
-			<li class="menuitem"><a href="admin/weiboreport.do" target="mainFrame">管理举报</a></li>
+			<li class="menuitem"><a href="admin/wbReportmgr.do" target="mainFrame">管理举报</a></li>
 		</ul>
 	</li>
 </ul>

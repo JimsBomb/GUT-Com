@@ -19,14 +19,14 @@ public class ShareReportDaoImpl extends HDaoSupport implements BaseDao<ShareRepo
 	@Override
 	public void update(ShareReport instance)
 	{
-		getSession().save(instance);
+		getSession().update(instance);
 		
 	}
 
 	@Override
 	public void delete(ShareReport instance)
 	{
-		getSession().update(instance);
+		getSession().delete(instance);
 	}
 
 	@Override

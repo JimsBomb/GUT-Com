@@ -85,6 +85,21 @@ public interface WeiboManager
 	public WeiboReport getWeiboReport(java.io.Serializable id);
 	
 	/**
+	 * 更新微博举报状态
+	 * @param ids 要更新的微博举报的ID列表(Long)
+	 * @param status 更新的状态
+	 * @param logParams 日志参数
+	 */
+	public void updateWeiboReportStatus(java.io.Serializable[] ids, Map<String, Object> logParams);
+	
+	/**
+	 * 删除微博举报的微博，并将微博举报标记为已处理
+	 * @param id 要处理的微博举报的ID
+	 * @param logParams 日志参数
+	 */
+	public void updateWeiboReportDeal(java.io.Serializable id, Map<String, Object> logParams);
+	
+	/**
 	 * 按条件分页查询微博举报
 	 * @param values 查询条件集
 	 * @param offset 第一条记录的索引
