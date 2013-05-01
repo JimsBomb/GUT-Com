@@ -33,8 +33,23 @@
     </package>
 
 	<package name="admin" namespace="/admin" extends="json-default">
+	    
+	    <interceptors>
+	        <interceptor name="adminAuth"
+				class="org.chingo.gutcom.interceptor.AdminAuthorityInterceptor" />
+	        <interceptor-stack name="adminStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="adminAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    
+	    <global-results>
+	        <result name="login" type="redirect">/login.jsp</result>
+	    </global-results>
+	    
 		<!-- 系统设置Action -->
 		<action name="sysconf*" class="sysconfAction" method="{1}">
+		    <interceptor-ref name="adminStack" />
         	<result name="mgr">/WEB-INF/web/admin/sysconfmgr.jsp</result>
         	<result name="update" type="redirectAction">sysconfmgr.do</result>
         	<result name="success">/result.jsp</result>
@@ -101,6 +116,38 @@
 			<result name="mgr">/WEB-INF/web/admin/weiboreportmgr.jsp</result>
 			<result name="show">/WEB-INF/web/admin/weiboreportshow.jsp</result>
 			<result name="success">/result.jsp</result>
+		</action>
+		
+		<!-- 数据管理Action -->
+		<action name="dbopAction" class="dbopAction">
+		    <result name="success">/WEB-INF/web/admin/dbopresult.jsp</result>
+		</action>
+		<action name="dbop*" class="dbopAction" method="{1}">
+		    <result name="success">/result.jsp</result>
+		    <result name="result">/WEB-INF/web/admin/dbopresult.jsp</result>
+		    <result name="mgr">/WEB-INF/web/admin/dbopmgr.jsp</result>
+		</action>
+		
+		<!-- 发布公告Action -->
+		<action name="msgAction" class="msgAction">
+		    <result name="success">/WEB-INF/web/admin/msgmgr.jsp</result>
+		    <result name="send">/WEB-INF/web/admin/msgsend.jsp</result>
+		</action>
+		<action name="msg*" class="msgAction" method="{1}">
+		    <result name="send">/WEB-INF/web/admin/msgsend.jsp</result>
+		    <result name="mgr">/WEB-INF/web/admin/msgmgr.jsp</result>
+		</action>
+		
+		<!-- 账号相关Action -->
+		<action name="login" class="accAction" method="login">
+		    <result name="login" type="redirect">/login.jsp</result>
+		    <result name="success" type="redirect">/index.jsp</result>
+		</action>
+		<action name="logout" class="accAction" method="logout">
+		    <result name="success" type="redirect">/login.jsp</result>
+		</action>
+		<action name="changepwd" class="accAction" method="changePwd">
+		    <result name="success">/result.jsp</result>
 		</action>
 	</package>
 </struts>

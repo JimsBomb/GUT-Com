@@ -10,7 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
- * HibernateÖ§³ÖÀà£¬Ìá¹©SessionFactoryºÍSession£¬²¢ÊµÏÖÌõ¼þ¡¢·ÖÒ³²éÑ¯
+ * HibernateÖ§ï¿½ï¿½ï¿½à£¬ï¿½á¹©SessionFactoryï¿½ï¿½Sessionï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½Ñ¯
  * @author Chingo.Org
  *
  */
@@ -29,11 +29,11 @@ public class HDaoSupport
 	}
 
 	/**
-	 * ¸ù¾ÝHQL·ÖÒ³²éÑ¯Êý¾Ý£¨ÎÞ²ÎÊý£©
-	 * @param hql ²éÑ¯Óï¾ä
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òý
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êý
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * ï¿½ï¿½ï¿½HQLï¿½ï¿½Ò³ï¿½ï¿½Ñ¯ï¿½ï¿½Ý£ï¿½ï¿½Þ²ï¿½ï¿½ï¿½
+	 * @param hql ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½
+	 * @param offset ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param pageSize Ã¿Ò³ï¿½ï¿½Ê¾ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
+	 * @return ï¿½ï¿½Ñ¯Ò³ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
 	 */
 	public List findByPage(final String hql, final int offset, final int pageSize)
 	{
@@ -46,12 +46,12 @@ public class HDaoSupport
 	}
 	
 	/**
-	 * ¸ù¾ÝHQL·ÖÒ³²éÑ¯Êý¾Ý£¨µ¥¸ö²ÎÊý£©
-	 * @param hql ²éÑ¯Óï¾ä
-	 * @param value ²éÑ¯²ÎÊý
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òý
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êý
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * ï¿½ï¿½ï¿½HQLï¿½ï¿½Ò³ï¿½ï¿½Ñ¯ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param hql ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½
+	 * @param value ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½
+	 * @param offset ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param pageSize Ã¿Ò³ï¿½ï¿½Ê¾ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
+	 * @return ï¿½ï¿½Ñ¯Ò³ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
 	 */
 	public List findByPage(final String hql, final Object value,
 			final int offset, final int pageSize)
@@ -66,12 +66,12 @@ public class HDaoSupport
 	}
 	
 	/**
-	 * ¸ù¾ÝHQL·ÖÒ³²éÑ¯Êý¾Ý£¨¶à¸ö²ÎÊý£©
-	 * @param hql ²éÑ¯Óï¾ä
-	 * @param values ²éÑ¯²ÎÊýÊý×é
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òý
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êý
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * ï¿½ï¿½ï¿½HQLï¿½ï¿½Ò³ï¿½ï¿½Ñ¯ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param hql ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½
+	 * @param values ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param offset ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param pageSize Ã¿Ò³ï¿½ï¿½Ê¾ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
+	 * @return ï¿½ï¿½Ñ¯Ò³ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
 	 */
 	public List findByPage(final String hql, final Object[] values,
 			final int offset, final int pageSize)
@@ -89,33 +89,12 @@ public class HDaoSupport
 	}
 	
 	/**
-	 * ¸ù¾ÝHQLÓï¾ä½øÐÐ²éÑ¯
-	 * @param hql HQLÓï¾ä
-	 * @param values ²éÑ¯Óï¾ä²ÎÊýÖµ£¬ÎÞ²ÎÊýÔòÖÃnull
-	 * @return ²éÑ¯½á¹û
-	 */
-	public List query(final String hql, final Object[] values)
-	{
-		Query query = getSession().createQuery(hql);
-		if(values != null)
-		{
-			for(int i=0; i<values.length; i++)
-			{
-				query.setParameter(i, values[i]);
-			}
-		}
-		List lst = query.list();
-		
-		return lst;
-	}
-	
-	/**
-	 * ¸ù¾ÝHQL·ÖÒ³²éÑ¯Êý¾Ý£¨¶à¸ö²ÎÊý£©
-	 * @param hql ²éÑ¯Óï¾ä
-	 * @param values ²éÑ¯²ÎÊýÊý×é
-	 * @param offset µÚÒ»Ìõ¼ÇÂ¼µÄË÷Òý
-	 * @param pageSize Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êý
-	 * @return ²éÑ¯Ò³µÄ¼ÇÂ¼¼¯
+	 * ï¿½ï¿½ï¿½HQLï¿½ï¿½Ò³ï¿½ï¿½Ñ¯ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param hql ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½
+	 * @param values ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param offset ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param pageSize Ã¿Ò³ï¿½ï¿½Ê¾ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
+	 * @return ï¿½ï¿½Ñ¯Ò³ï¿½Ä¼ï¿½Â¼ï¿½ï¿½
 	 */
 	public List findByPage(final String hql, final Map<String, Object> values, final int offset, final int pageSize)
 	{
@@ -132,17 +111,20 @@ public class HDaoSupport
 	}
 	
 	/**
-	 * ¸ù¾ÝHQLÓï¾ä½øÐÐ²éÑ¯
-	 * @param hql HQLÓï¾ä
-	 * @param values ²éÑ¯Óï¾ä²ÎÊýÖµ£¬ÎÞ²ÎÊýÔòÖÃnull
-	 * @return ²éÑ¯½á¹û
+	 * ï¿½ï¿½ï¿½HQLï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½Ñ¯
+	 * @param hql HQLï¿½ï¿½ï¿½
+	 * @param values ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Þ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½null
+	 * @return ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½
 	 */
 	public List query(final String hql, final Map<String, Object> values)
 	{
 		Query query = getSession().createQuery(hql);
-		for(Entry e : values.entrySet())
+		if(values != null)
 		{
-			query.setParameter(e.getKey().toString(), e.getValue());
+			for(Entry e : values.entrySet())
+			{
+				query.setParameter(e.getKey().toString(), e.getValue());
+			}
 		}
 		List lst = query.list();
 		

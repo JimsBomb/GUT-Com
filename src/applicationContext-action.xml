@@ -40,4 +40,15 @@
 	<bean name="weiboReportAction" class="org.chingo.gutcom.action.WeiboReportAction" scope="prototype">
 	    <property name="weiboMgr" ref="weiboManager" />
 	</bean>
+	
+	<bean name="dbopAction" class="org.chingo.gutcom.action.DbOpAction" scope="prototype">
+	</bean>
+	
+	<bean name="msgAction" class="org.chingo.gutcom.action.MsgAction" scope="prototype">
+	    <property name="msgMgr" ref="msgManager" />
+	</bean>
+	
+	<bean name="accAction" class="org.chingo.gutcom.action.AccountAction" scope="prototype">
+	    <property name="accMgr" ref="accManager" />
+	</bean>
 </beans>

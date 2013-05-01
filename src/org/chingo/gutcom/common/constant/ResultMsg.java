@@ -7,6 +7,11 @@ package org.chingo.gutcom.common.constant;
  */
 public class ResultMsg
 {
+	/* 账号相关操作信息 */
+	public static final String ACCOUNT_LOGIN = "登录成功，稍后将转到后台首页。";
+	public static final String ACCOUNT_LOGOUT = "已成功退出登录。";
+	public static final String ACCOUNT_CHANGE_PWD = "已成功更改密码。";
+	
 	/* 过滤关键词管理操作信息 */
 	public static final String FILTER_WORD_ADD = "关键词已成功添加。";
 	public static final String FILTER_WORD_DEL = "关键词已成功删除。";
@@ -30,4 +35,10 @@ public class ResultMsg
 	public static final String WEIBO_REPORT_DEL = "微博举报信息已成功删除。";
 	public static final String WEIBO_REPORT_STATUS_UPDATE = "微博举报状态已成功更新。";
 	public static final String WEIBO_REPORT_DEAL = "微博举报处理已成功。";
+	
+	/* 数据管理操作信息 */
+	public static final String DB_BACKUP = "数据库已成功备份到backup目录下，文件名为 ";
+	public static final String DB_RESTORE = "数据已成功恢复。";
+	public static final String DB_DEL = "数据备份文件已成功删除。";
+	public static final String DB_OP_FAILED = "数据库操作失败。请确定已将MySQL相关目录添加到系统常量中。";
 }

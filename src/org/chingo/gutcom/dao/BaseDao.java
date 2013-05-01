@@ -51,14 +51,6 @@ public interface BaseDao<T>
 	public List<T> list();
 	
 	/**
-	 * 根据HQL查询数据
-	 * @param hql HQL查询语句
-	 * @param values 条件参数集，无则置NULL
-	 * @return 查询结果集
-	 */
-	public List query(final String hql, final Object[] values);
-	
-	/**
 	 * 根据HQL分页查询数据
 	 * @param hql HQL查询语句
 	 * @param offset 第一条记录的索引

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.chingo.gutcom.common.constant.FilterWordConst;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonFilterWord;
 import org.chingo.gutcom.domain.CommonSysconf;
@@ -151,13 +152,25 @@ public class SystemManagerImpl implements SystemManager
 	public long getSyslogTotalSize()
 	{
 		String hql = "select count(*) from CommonSyslog l";
-		return (long) syslogDao.query(hql, new Object[0]).get(0);
+		return (long) syslogDao.query(hql, null).get(0);
 	}
 
 	@Override
 	public void addFilterWord(CommonFilterWord word)
 	{
-		wordDao.save(word);
+		Map<String, Object> values = new HashMap<String, Object>(1);
+		values.put("word", word.getWord());
+		// 查询是否已存在该关键词
+		CommonFilterWord cfw = 
+				(CommonFilterWord) wordDao.query("from CommonFilterWord cfw where cfw.word=:word", values).get(0);
+		if(cfw != null) // 存在时更新
+		{
+			cfw.setLevel(word.getLevel());
+		}
+		else // 不存在时插入
+		{
+			wordDao.save(word);
+		}
 	}
 	
 	@Override
@@ -172,35 +185,36 @@ public class SystemManagerImpl implements SystemManager
 			String[] temp;
 			CommonFilterWord word, tmpWord;
 			Map<String, Object> value = new HashMap<String, Object>(1);
-			while((line = br.readLine()) != null)
+			while((line = br.readLine()) != null) // 读取文件
 			{
 				temp = line.split("=");
 				value.put("word", temp[0]);
+				// 查询是否已存在该关键词
 				tmpWord = (CommonFilterWord) wordDao
 						.query("from CommonFilterWord cfw where cfw.word = :word", value).get(0);
-				if(temp.length == 1)
+				if(temp.length == 1) // 没有填写过滤级别时
 				{
-					word = new CommonFilterWord(temp[0],(byte) 0);
+					word = new CommonFilterWord(temp[0], FilterWordConst.LEVEL_SCREEN); // 默认为屏蔽
 				}
-				else
+				else // 填写了过滤级别时
 				{
 					switch(temp[1])
 					{
-					case "1":
-						word = new CommonFilterWord(temp[0], (byte) 1);
+					case "1": // 1为审核
+						word = new CommonFilterWord(temp[0], FilterWordConst.LEVEL_AUDIT);
 						break;
-					case "2":
-						word = new CommonFilterWord(temp[0], (byte) 2);
+					case "2": // 2为禁止
+						word = new CommonFilterWord(temp[0], FilterWordConst.LEVEL_BAN);
 						break;
-					default:
-						word = new CommonFilterWord(temp[0], (byte) 0);
+					default: // 其它为屏蔽
+						word = new CommonFilterWord(temp[0], FilterWordConst.LEVEL_SCREEN);
 					}
 				}
-				if(tmpWord == null)
+				if(tmpWord == null) // 已存在该关键词时更新
 				{
 					wordDao.save(word);
 				}
-				else
+				else // 不存在则插入
 				{
 					tmpWord.setLevel(word.getLevel());
 				}

@@ -46,6 +46,12 @@
 	<bean name="weiboReportDao" class="org.chingo.gutcom.dao.impl.WeiboReportDaoImpl">
 	    <property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	<bean name="msgRecvDao" class="org.chingo.gutcom.dao.impl.CommonMsgRecvDaoImpl">
+	    <property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean name="msgSendDao" class="org.chingo.gutcom.dao.impl.CommonMsgSendDaoImpl">
+	    <property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 	
 	<bean name="sysManager" class="org.chingo.gutcom.service.impl.SystemManagerImpl">
 		<property name="sysconfDao" ref="sysconfDao" />
@@ -61,6 +67,14 @@
 	    <property name="weiboDao" ref="weiboDao" />
 	    <property name="topicDao" ref="topicDao" />
 	    <property name="reportDao" ref="weiboReportDao" />
+	    <property name="userDao" ref="userDao" />
+	</bean>
+	<bean name="msgManager" class="org.chingo.gutcom.service.impl.MsgManagerImpl">
+	    <property name="msgRecvDao" ref="msgRecvDao" />
+	    <property name="msgSendDao" ref="msgSendDao" />
+	    <property name="userDao" ref="userDao" />
+	</bean>
+	<bean name="accManager" class="org.chingo.gutcom.service.impl.AccountManagerImpl">
 	    <property name="userDao" ref="userDao" />
 	</bean>
 	

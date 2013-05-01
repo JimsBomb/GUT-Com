@@ -8,6 +8,16 @@
 <title>Insert title here</title>
 </head>
 <body>
+<%
+Object o = request.getSession().getAttribute("user");
+if(o==null)
+{
+%>
+<jsp:forward page="/login.jsp" />
+<%
+}
+else
+{%>
 <% 
 String method = request.getParameter("method");
 if(method==null) {
@@ -19,6 +29,7 @@ if(method==null) {
 %>
 <jsp:forward page="<%=method %>"/>
 <%
+}
 }
 %>
 <s:form action="test.do" namespace="/">

@@ -1,5 +1,6 @@
 package org.chingo.gutcom.common.util;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -24,5 +25,40 @@ public class FormatUtil
 		{
 			throw e;
 		}
+	}
+	
+	/**
+	 * 计算并格式化文件大小
+	 * @param length 文件长度（byte）
+	 * @return 格式化后的文件大小字符串
+	 */
+	public static String calcFileSize(long length)
+	{
+		String size;
+		double len = length;
+		int divisor = 1024;
+		NumberFormat nf = NumberFormat.getNumberInstance();
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
+		
+		if(len >= divisor)
+		{
+			len /= divisor;
+			if(len >= divisor)
+			{
+				size = nf.format(len) + " MB";
+			}
+			else
+			{
+				size = nf.format(len) + " KB";
+			}
+		}
+		else
+		{
+			size = nf.format(len) + " B";
+		}
+		
+		
+		return size;
 	}
 }
