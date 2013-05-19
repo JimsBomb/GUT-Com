@@ -11,39 +11,39 @@ import java.util.Set;
 public class CommonUser implements java.io.Serializable
 {
 
-	private Integer uid;
+	private String uid;
 	private String nickname;
 	private String email;
 	private String studentnum;
 	private String password;
 	private byte status;
 	private long regdate;
-	private Set<CommonMsgSend> commonMsgSendsForSenduser = new HashSet<CommonMsgSend>(
-			0);
-	private CommonUserProfile commonUserProfile;
-	private Set<CommonMsgSend> commonMsgSendsForRecvuser = new HashSet<CommonMsgSend>(
-			0);
-	private Set<WeiboContent> weiboContents = new HashSet<WeiboContent>(0);
-	private Set<CommonSyslog> commonSyslogs = new HashSet<CommonSyslog>(0);
-	private Set<WeiboFollow> weiboFollowsForFollowuid = new HashSet<WeiboFollow>(
-			0);
-	private Set<ShareReport> shareReports = new HashSet<ShareReport>(0);
-	private Set<CommonMsgRecv> commonMsgRecvsForSenduser = new HashSet<CommonMsgRecv>(
-			0);
-	private Set<WeiboTopic> weiboTopics = new HashSet<WeiboTopic>(0);
-	private Set<CommonMsgRecv> commonMsgRecvsForRecvuser = new HashSet<CommonMsgRecv>(
-			0);
-	private Set<ShareComment> shareComments = new HashSet<ShareComment>(0);
-	private Set<WeiboFollow> weiboFollowsForUid = new HashSet<WeiboFollow>(0);
-	private Set<WeiboReport> weiboReports = new HashSet<WeiboReport>(0);
-	private Set<ShareContent> shareContents = new HashSet<ShareContent>(0);
-	private Set<ShareFav> shareFavs = new HashSet<ShareFav>(0);
-	private CommonUserStatus commonUserStatus;
-	private Set<WeiboFav> weiboFavs = new HashSet<WeiboFav>(0);
-	private Set<WeiboAt> weiboAts = new HashSet<WeiboAt>(0);
-	private Set<WeiboTopicFollow> weiboTopicFollows = new HashSet<WeiboTopicFollow>(
-			0);
-	private Set<CommonToken> commonToken = new HashSet<CommonToken>(0);
+	private String regip;
+	private String realname;
+	private String college;
+	private String major;
+	private String classname;
+	private byte gender;
+	private int birthyear;
+	private byte birthmonth;
+	private byte birthday;
+	private String constellation;
+	private String zodiac;
+	private String bloodtype;
+	private String qq;
+	private String selfintro;
+	private String avatarurl;
+	private String bigavatarurl;
+	
+	private long lastlogin;
+	private String lastip;
+	private int weibocnt;
+	private int follower;
+	private int following;
+	private int newfollower;
+	private int newmsg;
+	private int newat;
+	private int newcomment;
 
 	public CommonUser()
 	{
@@ -62,22 +62,12 @@ public class CommonUser implements java.io.Serializable
 
 	public CommonUser(String nickname, String email, String studentnum,
 			String password, byte status, long regdate,
-			Set<CommonMsgSend> commonMsgSendsForSenduser,
-			CommonUserProfile commonUserProfile,
-			Set<CommonMsgSend> commonMsgSendsForRecvuser,
-			Set<WeiboContent> weiboContents,
-			Set<CommonSyslog> commonSyslogs,
-			Set<WeiboFollow> weiboFollowsForFollowuid,
-			Set<ShareReport> shareReports,
-			Set<CommonMsgRecv> commonMsgRecvsForSenduser,
-			Set<WeiboTopic> weiboTopics,
-			Set<CommonMsgRecv> commonMsgRecvsForRecvuser,
-			Set<ShareComment> shareComments,
-			Set<WeiboFollow> weiboFollowsForUid, Set<WeiboReport> weiboReports,
-			Set<ShareContent> shareContents, Set<ShareFav> shareFavs,
-			CommonUserStatus commonUserStatus, Set<WeiboFav> weiboFavs,
-			Set<WeiboAt> weiboAts, Set<WeiboTopicFollow> weiboTopicFollows,
-			Set<CommonToken> commonToken)
+			String regip, String realname, String college,
+			String major, String classname, byte gender,
+			int birthyear, byte birthmonth, byte birthday,
+			String constellation, String zodiac, String bloodtype,
+			String qq, String selfintro, String avatarurl,
+			String bigavatarurl)
 	{
 		this.nickname = nickname;
 		this.email = email;
@@ -85,34 +75,30 @@ public class CommonUser implements java.io.Serializable
 		this.password = password;
 		this.status = status;
 		this.regdate = regdate;
-		this.commonMsgSendsForSenduser = commonMsgSendsForSenduser;
-		this.commonUserProfile = commonUserProfile;
-		this.commonMsgSendsForRecvuser = commonMsgSendsForRecvuser;
-		this.weiboContents = weiboContents;
-		this.commonSyslogs = commonSyslogs;
-		this.weiboFollowsForFollowuid = weiboFollowsForFollowuid;
-		this.shareReports = shareReports;
-		this.commonMsgRecvsForSenduser = commonMsgRecvsForSenduser;
-		this.weiboTopics = weiboTopics;
-		this.commonMsgRecvsForRecvuser = commonMsgRecvsForRecvuser;
-		this.shareComments = shareComments;
-		this.weiboFollowsForUid = weiboFollowsForUid;
-		this.weiboReports = weiboReports;
-		this.shareContents = shareContents;
-		this.shareFavs = shareFavs;
-		this.commonUserStatus = commonUserStatus;
-		this.weiboFavs = weiboFavs;
-		this.weiboAts = weiboAts;
-		this.weiboTopicFollows = weiboTopicFollows;
-		this.commonToken = commonToken;
+		this.regip = regip;
+		this.realname = realname;
+		this.college = college;
+		this.major = major;
+		this.classname = classname;
+		this.gender = gender;
+		this.birthyear = birthyear;
+		this.birthmonth = birthmonth;
+		this.birthday = birthday;
+		this.constellation = constellation;
+		this.zodiac = zodiac;
+		this.bloodtype = bloodtype;
+		this.qq = qq;
+		this.selfintro = selfintro;
+		this.avatarurl = avatarurl;
+		this.bigavatarurl = bigavatarurl;
 	}
 
-	public Integer getUid()
+	public String getUid()
 	{
 		return this.uid;
 	}
 
-	public void setUid(Integer uid)
+	public void setUid(String uid)
 	{
 		this.uid = uid;
 	}
@@ -177,208 +163,4 @@ public class CommonUser implements java.io.Serializable
 		this.regdate = regdate;
 	}
 
-	public Set<CommonMsgSend> getCommonMsgSendsForSenduser()
-	{
-		return this.commonMsgSendsForSenduser;
-	}
-
-	public void setCommonMsgSendsForSenduser(
-			Set<CommonMsgSend> commonMsgSendsForSenduser)
-	{
-		this.commonMsgSendsForSenduser = commonMsgSendsForSenduser;
-	}
-
-	public CommonUserProfile getCommonUserProfile()
-	{
-		return this.commonUserProfile;
-	}
-
-	public void setCommonUserProfile(CommonUserProfile commonUserProfile)
-	{
-		this.commonUserProfile = commonUserProfile;
-	}
-
-	public Set<CommonMsgSend> getCommonMsgSendsForRecvuser()
-	{
-		return this.commonMsgSendsForRecvuser;
-	}
-
-	public void setCommonMsgSendsForRecvuser(
-			Set<CommonMsgSend> commonMsgSendsForRecvuser)
-	{
-		this.commonMsgSendsForRecvuser = commonMsgSendsForRecvuser;
-	}
-
-	public Set<WeiboContent> getWeiboContents()
-	{
-		return this.weiboContents;
-	}
-
-	public void setWeiboContents(Set<WeiboContent> weiboContents)
-	{
-		this.weiboContents = weiboContents;
-	}
-
-	public Set<CommonSyslog> getCommonSyslogs()
-	{
-		return this.commonSyslogs;
-	}
-
-	public void setCommonSyslogs(Set<CommonSyslog> commonSyslogs)
-	{
-		this.commonSyslogs = commonSyslogs;
-	}
-
-	public Set<WeiboFollow> getWeiboFollowsForFollowuid()
-	{
-		return this.weiboFollowsForFollowuid;
-	}
-
-	public void setWeiboFollowsForFollowuid(
-			Set<WeiboFollow> weiboFollowsForFollowuid)
-	{
-		this.weiboFollowsForFollowuid = weiboFollowsForFollowuid;
-	}
-
-	public Set<ShareReport> getShareReports()
-	{
-		return this.shareReports;
-	}
-
-	public void setShareReports(Set<ShareReport> shareReports)
-	{
-		this.shareReports = shareReports;
-	}
-
-	public Set<CommonMsgRecv> getCommonMsgRecvsForSenduser()
-	{
-		return this.commonMsgRecvsForSenduser;
-	}
-
-	public void setCommonMsgRecvsForSenduser(
-			Set<CommonMsgRecv> commonMsgRecvsForSenduser)
-	{
-		this.commonMsgRecvsForSenduser = commonMsgRecvsForSenduser;
-	}
-
-	public Set<WeiboTopic> getWeiboTopics()
-	{
-		return this.weiboTopics;
-	}
-
-	public void setWeiboTopics(Set<WeiboTopic> weiboTopics)
-	{
-		this.weiboTopics = weiboTopics;
-	}
-
-	public Set<CommonMsgRecv> getCommonMsgRecvsForRecvuser()
-	{
-		return this.commonMsgRecvsForRecvuser;
-	}
-
-	public void setCommonMsgRecvsForRecvuser(
-			Set<CommonMsgRecv> commonMsgRecvsForRecvuser)
-	{
-		this.commonMsgRecvsForRecvuser = commonMsgRecvsForRecvuser;
-	}
-
-	public Set<ShareComment> getShareComments()
-	{
-		return this.shareComments;
-	}
-
-	public void setShareComments(Set<ShareComment> shareComments)
-	{
-		this.shareComments = shareComments;
-	}
-
-	public Set<WeiboFollow> getWeiboFollowsForUid()
-	{
-		return this.weiboFollowsForUid;
-	}
-
-	public void setWeiboFollowsForUid(Set<WeiboFollow> weiboFollowsForUid)
-	{
-		this.weiboFollowsForUid = weiboFollowsForUid;
-	}
-
-	public Set<WeiboReport> getWeiboReports()
-	{
-		return this.weiboReports;
-	}
-
-	public void setWeiboReports(Set<WeiboReport> weiboReports)
-	{
-		this.weiboReports = weiboReports;
-	}
-
-	public Set<ShareContent> getShareContents()
-	{
-		return this.shareContents;
-	}
-
-	public void setShareContents(Set<ShareContent> shareContents)
-	{
-		this.shareContents = shareContents;
-	}
-
-	public Set<ShareFav> getShareFavs()
-	{
-		return this.shareFavs;
-	}
-
-	public void setShareFavs(Set<ShareFav> shareFavs)
-	{
-		this.shareFavs = shareFavs;
-	}
-
-	public CommonUserStatus getCommonUserStatus()
-	{
-		return this.commonUserStatus;
-	}
-
-	public void setCommonUserStatus(CommonUserStatus commonUserStatus)
-	{
-		this.commonUserStatus = commonUserStatus;
-	}
-
-	public Set<WeiboFav> getWeiboFavs()
-	{
-		return this.weiboFavs;
-	}
-
-	public void setWeiboFavs(Set<WeiboFav> weiboFavs)
-	{
-		this.weiboFavs = weiboFavs;
-	}
-
-	public Set<WeiboAt> getWeiboAts()
-	{
-		return this.weiboAts;
-	}
-
-	public void setWeiboAts(Set<WeiboAt> weiboAts)
-	{
-		this.weiboAts = weiboAts;
-	}
-
-	public Set<WeiboTopicFollow> getWeiboTopicFollows()
-	{
-		return this.weiboTopicFollows;
-	}
-
-	public void setWeiboTopicFollows(Set<WeiboTopicFollow> weiboTopicFollows)
-	{
-		this.weiboTopicFollows = weiboTopicFollows;
-	}
-
-	public Set<CommonToken> getCommonToken()
-	{
-		return this.commonToken;
-	}
-	
-	public void setCommonToken(Set<CommonToken> commonToken)
-	{
-		this.commonToken = commonToken;
-	}
 }

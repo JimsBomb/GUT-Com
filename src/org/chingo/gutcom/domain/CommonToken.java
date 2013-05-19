@@ -2,33 +2,33 @@ package org.chingo.gutcom.domain;
 
 public class CommonToken implements java.io.Serializable
 {
-	private Long tid;
-	private CommonUser commonUser;
-	private String accessToken;
-	private long expiredTime;
+	private String accessToken; // rowKey，令牌
+	private String userid; // 用户ID
+	private CommonUser commonUser; // 用户对象
+	private long expiredTime; // 令牌过期时间戳
 	
 	public CommonToken()
 	{
 		
 	}
 	
-	public CommonToken(CommonUser commonUser, String accessToken, long expiredTime)
+	public CommonToken(String userid, String accessToken, long expiredTime)
 	{
-		this.commonUser = commonUser;
+		this.userid = userid;
 		this.accessToken = accessToken;
 		this.expiredTime = expiredTime;
 	}
 
-	public Long getTid()
+	public String getUserid()
 	{
-		return tid;
+		return this.userid;
 	}
-
-	public void setTid(Long tid)
+	
+	public void setUserid(String userid)
 	{
-		this.tid = tid;
+		this.userid = userid;
 	}
-
+	
 	public CommonUser getCommonUser()
 	{
 		return commonUser;

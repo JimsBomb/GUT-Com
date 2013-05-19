@@ -42,6 +42,7 @@
 	</bean>
 	
 	<bean name="dbopAction" class="org.chingo.gutcom.action.DbOpAction" scope="prototype">
+	    <property name="ht" ref="hbtest" />
 	</bean>
 	
 	<bean name="msgAction" class="org.chingo.gutcom.action.MsgAction" scope="prototype">

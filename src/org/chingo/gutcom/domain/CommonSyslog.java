@@ -8,35 +8,47 @@ package org.chingo.gutcom.domain;
 public class CommonSyslog implements java.io.Serializable
 {
 
-	private Long lid;
-	private CommonUser commonUser;
-	private String detail;
-	private long dateline;
-	private String ip;
-	private byte type;
+	private String lid; // rowKey，日志ID
+	private String userid; // 操作用户ID
+	private CommonUser commonUser; // 用户对象
+	private String detail; // 日志描述
+	private long dateline; // 生成时间戳
+	private String ip; // 用户IP
+	private byte type; // 日志类型
 
 	public CommonSyslog()
 	{
 	}
 
-	public CommonSyslog(CommonUser commonUser, String detail,
+	public CommonSyslog(String lid, String userid, String detail,
 			long dateline, String ip, byte type)
 	{
-		this.commonUser = commonUser;
+		this.lid = lid;
+		this.userid = userid;
 		this.detail = detail;
 		this.dateline = dateline;
 		this.ip = ip;
 		this.type = type;
 	}
 
-	public Long getLid()
+	public String getLid()
 	{
 		return this.lid;
 	}
 
-	public void setLid(Long lid)
+	public void setLid(String lid)
 	{
 		this.lid = lid;
+	}
+	
+	public String getUserid()
+	{
+		return this.userid;
+	}
+	
+	public void setUserid(String userid)
+	{
+		this.userid = userid;
 	}
 
 	public CommonUser getCommonUser()

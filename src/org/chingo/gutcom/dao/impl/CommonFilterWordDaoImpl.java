@@ -1,51 +1,31 @@
 package org.chingo.gutcom.dao.impl;
 
-import java.io.Serializable;
-import java.util.List;
-
+import org.apache.hadoop.hbase.client.Result;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonFilterWord;
-import org.chingo.gutcom.hibernate4.support.HDaoSupport;
+import org.chingo.gutcom.hbase.HBaseSupport;
 
-public class CommonFilterWordDaoImpl extends HDaoSupport implements BaseDao<CommonFilterWord>
+public class CommonFilterWordDaoImpl extends HBaseSupport implements BaseDao<CommonFilterWord>
 {
 
 	@Override
-	public Serializable save(CommonFilterWord instance)
+	public void put(CommonFilterWord instance)
 	{
-		return getSession().save(instance);
-	}
-
-	@Override
-	public void update(CommonFilterWord instance)
-	{
-		getSession().update(instance);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(CommonFilterWord instance)
+	public void delete(String row)
 	{
-		getSession().delete(instance);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		getSession().delete(get(id));
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-	@Override
-	public CommonFilterWord get(Serializable id)
-	{
-		return (CommonFilterWord) getSession().get(CommonFilterWord.class, id);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<CommonFilterWord> list()
-	{
-		return getSession().createQuery("from CommonFilterWord word").list();
-	}
-
 }

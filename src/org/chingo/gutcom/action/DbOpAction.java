@@ -23,6 +23,7 @@ import org.chingo.gutcom.common.constant.ErrorMsg;
 import org.chingo.gutcom.common.constant.ResultMsg;
 import org.chingo.gutcom.common.util.FormatUtil;
 import org.chingo.gutcom.exception.GcException;
+import org.chingo.gutcom.hadoop.HbaseTest;
 
 public class DbOpAction extends BaseAction
 {
@@ -36,6 +37,13 @@ public class DbOpAction extends BaseAction
 	
 	private String resultMsg;
 	private String backTo;
+	
+	private HbaseTest ht;
+	
+	public void setHt(HbaseTest ht)
+	{
+		this.ht = ht;
+	}
 	
 	public String getAct()
 	{
@@ -362,5 +370,11 @@ public class DbOpAction extends BaseAction
 						, FormatUtil.calcFileSize(f.length())));
 			}
 		}
+	}
+	
+	public String hbtest() throws Exception
+	{
+		ht.test();
+		return "mgr";
 	}
 }

@@ -8,9 +8,8 @@ package org.chingo.gutcom.domain;
 public class CommonSysconf implements java.io.Serializable
 {
 
-	private Integer cid;
-	private String confname;
-	private String confvalue;
+	private String confname; // rowKey，设置字段名
+	private String confvalue; // 设置值
 
 	public CommonSysconf()
 	{
@@ -20,16 +19,6 @@ public class CommonSysconf implements java.io.Serializable
 	{
 		this.confname = confname;
 		this.confvalue = confvalue;
-	}
-
-	public Integer getCid()
-	{
-		return this.cid;
-	}
-
-	public void setCid(Integer cid)
-	{
-		this.cid = cid;
 	}
 
 	public String getConfname()

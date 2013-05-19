@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:hdp="http://www.springframework.org/schema/hadoop"
+    xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       ">
+       
+    <!-- <hdp:configuration resources="classpath:/core-site.xml, classpath:/hdfs-site.xml" /> -->
+    <hdp:configuration />
+    <hdp:hbase-configuration />
+    
+    <bean id="htemplate" class="org.springframework.data.hadoop.hbase.HbaseTemplate">
+        <property name="configuration" ref="hbaseConfiguration" />
+    </bean>
+    
+    <bean id="hbtest" class="org.chingo.gutcom.hadoop.HbaseTest">
+        <property name="ht" ref="htemplate" />
+    </bean>
+       
+    <!-- <hdp:job-runner id="myjob-runner" job-ref="wordCnt" run-at-startup="true"/>
+    <hdp:job id="wordCnt" input-path="hdfs://localhost:9000/input/" output-path="hdfs://localhost:9000/output/ss" 
+        mapper="org.chingo.gutcom.hadoop.WordCount.TokenizerMapper" 
+        reducer="org.chingo.gutcom.hadoop.WordCount.IntSumReducer" /> -->
+</beans>

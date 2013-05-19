@@ -23,6 +23,7 @@
 			<input type="hidden" name="act" value="backup" />
 			<s:submit value="马上备份" />
 		</s:form>
+		<s:a action="dbophbtest.do">Hbase</s:a>
 	</div>
 	<div class="mgrlist">
 		<table>
