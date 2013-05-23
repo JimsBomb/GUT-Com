@@ -8,64 +8,34 @@ package org.chingo.gutcom.domain;
 public class WeiboFollow implements java.io.Serializable
 {
 
-	private Long id;
-	private WeiboFollowGroup weiboFollowGroup;
-	private CommonUser commonUserByFollowuid;
-	private CommonUser commonUserByUid;
-	private String remark;
+	private String id; // rowKey， 关注ID
+	private String userId; // 关注用户的ID
+	private String followId; // 被关注用户的ID
+	private String groupName; // 关注分组名
+	private String remark = ""; // 被关注用户的备注名
 
 	public WeiboFollow()
 	{
 	}
 
-	public WeiboFollow(WeiboFollowGroup weiboFollowGroup,
-			CommonUser commonUserByFollowuid, CommonUser commonUserByUid,
-			String remark)
+	public WeiboFollow(String id, String userId, String followId,
+			String groupName, String remark)
 	{
-		this.weiboFollowGroup = weiboFollowGroup;
-		this.commonUserByFollowuid = commonUserByFollowuid;
-		this.commonUserByUid = commonUserByUid;
+		this.id = id;
+		this.userId = userId;
+		this.followId = followId;
+		this.groupName = groupName;
 		this.remark = remark;
 	}
 
-	public Long getId()
+	public String getId()
 	{
 		return this.id;
 	}
 
-	public void setId(Long id)
+	public void setId(String id)
 	{
 		this.id = id;
-	}
-
-	public WeiboFollowGroup getWeiboFollowGroup()
-	{
-		return this.weiboFollowGroup;
-	}
-
-	public void setWeiboFollowGroup(WeiboFollowGroup weiboFollowGroup)
-	{
-		this.weiboFollowGroup = weiboFollowGroup;
-	}
-
-	public CommonUser getCommonUserByFollowuid()
-	{
-		return this.commonUserByFollowuid;
-	}
-
-	public void setCommonUserByFollowuid(CommonUser commonUserByFollowuid)
-	{
-		this.commonUserByFollowuid = commonUserByFollowuid;
-	}
-
-	public CommonUser getCommonUserByUid()
-	{
-		return this.commonUserByUid;
-	}
-
-	public void setCommonUserByUid(CommonUser commonUserByUid)
-	{
-		this.commonUserByUid = commonUserByUid;
 	}
 
 	public String getRemark()
@@ -76,6 +46,36 @@ public class WeiboFollow implements java.io.Serializable
 	public void setRemark(String remark)
 	{
 		this.remark = remark;
+	}
+
+	public String getUserId()
+	{
+		return userId;
+	}
+
+	public void setUserId(String userId)
+	{
+		this.userId = userId;
+	}
+
+	public String getFollowId()
+	{
+		return followId;
+	}
+
+	public void setFollowId(String followId)
+	{
+		this.followId = followId;
+	}
+
+	public String getGroupName()
+	{
+		return groupName;
+	}
+
+	public void setGroupName(String groupName)
+	{
+		this.groupName = groupName;
 	}
 
 }

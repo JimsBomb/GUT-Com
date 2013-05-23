@@ -2,8 +2,8 @@ package org.chingo.gutcom.domain;
 
 public class CommonToken implements java.io.Serializable
 {
-	private String accessToken; // rowKey，令牌
-	private String userid; // 用户ID
+	private String userid; // rowKey，用户ID
+	private String accessToken; // 令牌
 	private CommonUser commonUser; // 用户对象
 	private long expiredTime; // 令牌过期时间戳
 	

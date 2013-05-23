@@ -8,48 +8,49 @@ package org.chingo.gutcom.domain;
 public class WeiboFav implements java.io.Serializable
 {
 
-	private Long fid;
-	private WeiboContent weiboContent;
-	private CommonUser commonUser;
+	private String fid; // rowKey，收藏ID
+	private String userId; // 收藏用户的ID
+	private String weiboId; // 被收藏微博的ID
 
 	public WeiboFav()
 	{
 	}
 
-	public WeiboFav(WeiboContent weiboContent, CommonUser commonUser)
+	public WeiboFav(String fid, String userId, String weiboId)
 	{
-		this.weiboContent = weiboContent;
-		this.commonUser = commonUser;
+		this.fid = fid;
+		this.userId = userId;
+		this.weiboId = weiboId;
 	}
 
-	public Long getFid()
+	public String getFid()
 	{
 		return this.fid;
 	}
 
-	public void setFid(Long fid)
+	public void setFid(String fid)
 	{
 		this.fid = fid;
 	}
 
-	public WeiboContent getWeiboContent()
+	public String getUserId()
 	{
-		return this.weiboContent;
+		return userId;
 	}
 
-	public void setWeiboContent(WeiboContent weiboContent)
+	public void setUserId(String userId)
 	{
-		this.weiboContent = weiboContent;
+		this.userId = userId;
 	}
 
-	public CommonUser getCommonUser()
+	public String getWeiboId()
 	{
-		return this.commonUser;
+		return weiboId;
 	}
 
-	public void setCommonUser(CommonUser commonUser)
+	public void setWeiboId(String weiboId)
 	{
-		this.commonUser = commonUser;
+		this.weiboId = weiboId;
 	}
 
 }

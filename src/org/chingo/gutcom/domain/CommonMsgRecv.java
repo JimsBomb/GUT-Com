@@ -8,56 +8,34 @@ package org.chingo.gutcom.domain;
 public class CommonMsgRecv implements java.io.Serializable
 {
 
-	private Long mid;
-	private CommonUser commonUserByRecvuser;
-	private CommonUser commonUserBySenduser;
-	private String content;
-	private long dateline;
-	private byte isread;
+	private String mid; // rowKey，消息ID
+	private String recvuserId; // 接收用户ID
+	private String senduserId; // 发送用户ID
+	private CommonUser recvuser; // 接收用户对象
+	private CommonUser senduser; // 发送用户对象
+	private String content; // 消息内容
+	private long dateline; // 接收时间戳
+	private byte isread; // 是否已读
 
 	public CommonMsgRecv()
 	{
 	}
 
-	public CommonMsgRecv(CommonUser commonUserByRecvuser,
-			CommonUser commonUserBySenduser, String content, long dateline,
+	public CommonMsgRecv(String mid, String recvuserId,
+			String senduserId, String content, long dateline,
 			byte isread)
 	{
-		this.commonUserByRecvuser = commonUserByRecvuser;
-		this.commonUserBySenduser = commonUserBySenduser;
+		this.mid = mid;
+		this.recvuserId = recvuserId;
+		this.senduserId = senduserId;
 		this.content = content;
 		this.dateline = dateline;
 		this.isread = isread;
 	}
 
-	public Long getMid()
+	public String getMid()
 	{
 		return this.mid;
-	}
-
-	public void setMid(Long mid)
-	{
-		this.mid = mid;
-	}
-
-	public CommonUser getCommonUserByRecvuser()
-	{
-		return this.commonUserByRecvuser;
-	}
-
-	public void setCommonUserByRecvuser(CommonUser commonUserByRecvuser)
-	{
-		this.commonUserByRecvuser = commonUserByRecvuser;
-	}
-
-	public CommonUser getCommonUserBySenduser()
-	{
-		return this.commonUserBySenduser;
-	}
-
-	public void setCommonUserBySenduser(CommonUser commonUserBySenduser)
-	{
-		this.commonUserBySenduser = commonUserBySenduser;
 	}
 
 	public String getContent()
@@ -88,6 +66,51 @@ public class CommonMsgRecv implements java.io.Serializable
 	public void setIsread(byte isread)
 	{
 		this.isread = isread;
+	}
+
+	public String getRecvuserId()
+	{
+		return recvuserId;
+	}
+
+	public void setRecvuserId(String recvuserId)
+	{
+		this.recvuserId = recvuserId;
+	}
+
+	public String getSenduserId()
+	{
+		return senduserId;
+	}
+
+	public void setSenduserId(String senduserId)
+	{
+		this.senduserId = senduserId;
+	}
+
+	public CommonUser getRecvuser()
+	{
+		return recvuser;
+	}
+
+	public void setRecvuser(CommonUser recvuser)
+	{
+		this.recvuser = recvuser;
+	}
+
+	public CommonUser getSenduser()
+	{
+		return senduser;
+	}
+
+	public void setSenduser(CommonUser senduser)
+	{
+		this.senduser = senduser;
+	}
+
+	public void setMid(String mid)
+	{
+		this.mid = mid;
 	}
 
 }

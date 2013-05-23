@@ -18,22 +18,28 @@ public interface BaseDao<T>
 	 * 追加数据（新增、更新）
 	 * @param instance 要追加的对象实例
 	 */
-	public void put(T instance);
+	public void put(final T instance);
 	
 	/**
 	 * 删除指定行
 	 * @param row 要删除的行的rowKey
 	 */
-	public void delete(String row);
+	public void delete(final String row);
+	
+	/**
+	 * 批量删除指定行
+	 * @param rows 要删除的行的rowKey集
+	 */
+	public void delete(final List<String> rows);
 	
 	/**
 	 * 查询指定行、列族、列的值
 	 * @param row 要查询的rowKey
-	 * @param family 指定列族，不指定列族则置null
-	 * @param qualifier 指定列，不指定列则置null
-	 * @return 查询结果
+	 * @param family 指定列族，不指定列族（即整行）则置null
+	 * @param qualifier 指定列（此时也必须指定family），不指定列（即全部列）则置null
+	 * @return 查询结果，无则返回null
 	 */
-	public Result get(String row, String family, String qualifier);
+	public Result get(final String row, final String family, final String qualifier);
 	
 	/**
 	 * 分页查询数据（待解决：由于PageFilter本身的限制，当数据分散在不同的region server时，不保证返回的结果满足指定的单页显示记录数）
@@ -41,7 +47,7 @@ public interface BaseDao<T>
 	 * @param fl 查询条件过滤器
 	 * @param startRow 开始查询的第一行的row值
 	 * @param pageSize 每页显示记录数，为记录下一次（页）查询的第一行的row值，该参数应该比实际值+1
-	 * @return 查询结果集，如果还有下一页，则会在List末端额外多返回一条结果，以便记录下次查询的第一行的row值
+	 * @return 查询结果集，如果还有下一页，则会在List末端额外多返回一条结果，以便记录下次查询的第一行的row值。无则返回null
 	 */
 	public List<Result> findByPage(final String table
 			, final FilterList fl, final String startRow, final int pageSize);

@@ -3,49 +3,41 @@ package org.chingo.gutcom.dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Result;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonUserStatus;
+import org.chingo.gutcom.hbase.HBaseSupport;
 import org.chingo.gutcom.hibernate4.support.HDaoSupport;
 
-public class CommonUserStatusDaoImpl extends HDaoSupport implements BaseDao<CommonUserStatus>
+public class CommonUserStatusDaoImpl extends HBaseSupport implements BaseDao<CommonUserStatus>
 {
 
 	@Override
-	public Serializable save(CommonUserStatus instance)
+	public void put(CommonUserStatus instance)
 	{
-		return getSession().save(instance);
-	}
-
-	@Override
-	public void update(CommonUserStatus instance)
-	{
-		getSession().update(instance);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(CommonUserStatus instance)
+	public void delete(String row)
 	{
-		getSession().delete(instance);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public void delete(List<String> rows)
 	{
-		getSession().delete(get(id));
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public CommonUserStatus get(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		return (CommonUserStatus) getSession().get(CommonUserStatus.class, id);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<CommonUserStatus> list()
-	{
-		return getSession().createQuery("from CommonUserStatus us").list();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,51 +1,41 @@
 package org.chingo.gutcom.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Result;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.ShareFav;
-import org.chingo.gutcom.hibernate4.support.HDaoSupport;
+import org.chingo.gutcom.hbase.HBaseSupport;
 
-public class ShareFavDaoImpl extends HDaoSupport implements BaseDao<ShareFav>
+public class ShareFavDaoImpl extends HBaseSupport implements BaseDao<ShareFav>
 {
 
 	@Override
-	public Serializable save(ShareFav instance)
+	public void put(ShareFav instance)
 	{
-		return getSession().save(instance);
-	}
-
-	@Override
-	public void update(ShareFav instance)
-	{
-		getSession().update(instance);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(ShareFav instance)
+	public void delete(String row)
 	{
-		getSession().delete(instance);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public void delete(List<String> rows)
 	{
-		getSession().delete(get(id));
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public ShareFav get(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		return (ShareFav) getSession().get(ShareFav.class, id);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ShareFav> list()
-	{
-		return getSession().createQuery("from ShareFav sf").list();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

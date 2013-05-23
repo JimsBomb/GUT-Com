@@ -1,51 +1,41 @@
 package org.chingo.gutcom.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Result;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.ShareComment;
-import org.chingo.gutcom.hibernate4.support.HDaoSupport;
+import org.chingo.gutcom.hbase.HBaseSupport;
 
-public class ShareCommentDaoImpl extends HDaoSupport implements BaseDao<ShareComment>
+public class ShareCommentDaoImpl extends HBaseSupport implements BaseDao<ShareComment>
 {
 
 	@Override
-	public Serializable save(ShareComment instance)
+	public void put(ShareComment instance)
 	{
-		return getSession().save(instance);
-	}
-
-	@Override
-	public void update(ShareComment instance)
-	{
-		getSession().update(instance);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(ShareComment instance)
+	public void delete(String row)
 	{
-		getSession().delete(instance);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public void delete(List<String> rows)
 	{
-		getSession().delete(get(id));
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public ShareComment get(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		return (ShareComment) getSession().get(ShareComment.class, id);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ShareComment> list()
-	{
-		return getSession().createQuery("from ShareComment sc").list();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -24,7 +24,7 @@ public class AdminAuthorityInterceptor extends AbstractInterceptor
 		if(obj != null) // 非空时
 		{
 			CommonUser user = (CommonUser) obj;
-			if(user.getUid() == 0) // 为管理员时
+			if(user.getUid().equals("0")) // 为管理员时
 			{
 				return invocation.invoke(); // 继续执行
 			}

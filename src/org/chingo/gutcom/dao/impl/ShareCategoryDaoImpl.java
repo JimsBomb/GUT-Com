@@ -1,51 +1,41 @@
 package org.chingo.gutcom.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Result;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.ShareCategory;
-import org.chingo.gutcom.hibernate4.support.HDaoSupport;
+import org.chingo.gutcom.hbase.HBaseSupport;
 
-public class ShareCategoryDaoImpl extends HDaoSupport implements BaseDao<ShareCategory>
+public class ShareCategoryDaoImpl extends HBaseSupport implements BaseDao<ShareCategory>
 {
 
 	@Override
-	public Serializable save(ShareCategory instance)
+	public void put(ShareCategory instance)
 	{
-		return getSession().save(instance);
-	}
-
-	@Override
-	public void update(ShareCategory instance)
-	{
-		getSession().update(instance);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(ShareCategory instance)
+	public void delete(String row)
 	{
-		getSession().delete(instance);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public void delete(List<String> rows)
 	{
-		getSession().delete(get(id));
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public ShareCategory get(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		return (ShareCategory) getSession().get(ShareCategory.class, id);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ShareCategory> list()
-	{
-		return getSession().createQuery("from ShareCategory sc").list();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

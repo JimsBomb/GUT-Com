@@ -8,48 +8,49 @@ package org.chingo.gutcom.domain;
 public class WeiboAt implements java.io.Serializable
 {
 
-	private Long id;
-	private WeiboContent weiboContent;
-	private CommonUser commonUser;
+	private String id; // rowKey，提到ID
+	private String userId; // 提到的用户的ID
+	private String weiboId; // 提到的微博的ID
 
 	public WeiboAt()
 	{
 	}
 
-	public WeiboAt(WeiboContent weiboContent, CommonUser commonUser)
+	public WeiboAt(String id, String userId, String weiboId)
 	{
-		this.weiboContent = weiboContent;
-		this.commonUser = commonUser;
+		this.id = id;
+		this.userId = userId;
+		this.weiboId = weiboId;
 	}
 
-	public Long getId()
+	public String getId()
 	{
 		return this.id;
 	}
 
-	public void setId(Long id)
+	public void setId(String id)
 	{
 		this.id = id;
 	}
 
-	public WeiboContent getWeiboContent()
+	public String getUserId()
 	{
-		return this.weiboContent;
+		return userId;
 	}
 
-	public void setWeiboContent(WeiboContent weiboContent)
+	public void setUserId(String userId)
 	{
-		this.weiboContent = weiboContent;
+		this.userId = userId;
 	}
 
-	public CommonUser getCommonUser()
+	public String getWeiboId()
 	{
-		return this.commonUser;
+		return weiboId;
 	}
 
-	public void setCommonUser(CommonUser commonUser)
+	public void setWeiboId(String weiboId)
 	{
-		this.commonUser = commonUser;
+		this.weiboId = weiboId;
 	}
 
 }

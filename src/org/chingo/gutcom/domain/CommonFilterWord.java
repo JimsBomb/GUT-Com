@@ -7,10 +7,8 @@ package org.chingo.gutcom.domain;
  */
 public class CommonFilterWord implements java.io.Serializable
 {
-
-	private Integer wid;
-	private String word;
-	private byte level;
+	private String word; // rowKey，关键词
+	private byte level; // 过滤级别
 
 	public CommonFilterWord()
 	{
@@ -20,16 +18,6 @@ public class CommonFilterWord implements java.io.Serializable
 	{
 		this.word = word;
 		this.level = level;
-	}
-
-	public Integer getWid()
-	{
-		return this.wid;
-	}
-
-	public void setWid(Integer wid)
-	{
-		this.wid = wid;
 	}
 
 	public String getWord()

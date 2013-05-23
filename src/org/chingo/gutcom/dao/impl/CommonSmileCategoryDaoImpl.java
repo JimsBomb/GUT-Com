@@ -1,51 +1,63 @@
 package org.chingo.gutcom.dao.impl;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.HTableInterface;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonSmileCategory;
-import org.chingo.gutcom.hibernate4.support.HDaoSupport;
+import org.chingo.gutcom.hbase.HBaseSupport;
+import org.springframework.data.hadoop.hbase.TableCallback;
 
-public class CommonSmileCategoryDaoImpl extends HDaoSupport implements BaseDao<CommonSmileCategory>
+public class CommonSmileCategoryDaoImpl extends HBaseSupport implements BaseDao<CommonSmileCategory>
 {
+	private static String TAB_NAME = "common_smile";
 
 	@Override
-	public Serializable save(CommonSmileCategory instance)
+	public void put(CommonSmileCategory instance)
 	{
-		return getSession().save(instance);
-	}
-
-	@Override
-	public void update(CommonSmileCategory instance)
-	{
-		getSession().update(instance);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(CommonSmileCategory instance)
+	public void delete(String row)
 	{
-		getSession().delete(instance);
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void delete(final List<String> rows)
+	{
+		ht.execute(TAB_NAME, new TableCallback<Result>()
+				{
+
+					@Override
+					public Result doInTable(HTableInterface htable)
+							throws Throwable
+					{
+						List<Delete> dels = new ArrayList<Delete>();
+						for(String row : rows)
+						{
+							Delete del = new Delete(Bytes.toBytes(row));
+							dels.add(del);
+						}
+						htable.delete(dels);
+						return null;
+					}
+			
+				});
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		getSession().delete(get(id));
-	}
-
-	@Override
-	public CommonSmileCategory get(Serializable id)
-	{
-		return (CommonSmileCategory) getSession().get(CommonSmileCategory.class, id);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<CommonSmileCategory> list()
-	{
-		return getSession().createQuery("from CommonSmileCategory sc").list();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -11,35 +11,32 @@ import java.util.Set;
 public class WeiboContent implements java.io.Serializable
 {
 
-	private Long wid;
-	private CommonUser commonUser;
-	private String content;
-	private long sourceid;
-	private byte type;
-	private byte format;
-	private byte visibility;
-	private byte status;
-	private String thumbnailPic;
-	private String middlePic;
-	private String originalPic;
-	private long dateline;
-	private Set<WeiboTopicRelation> weiboTopicRelations = new HashSet<WeiboTopicRelation>(
-			0);
-	private Set<WeiboTopic> weiboTopics = new HashSet<WeiboTopic>(0);
-	private Set<WeiboAt> weiboAts = new HashSet<WeiboAt>(0);
-	private Set<WeiboFav> weiboFavs = new HashSet<WeiboFav>(0);
-	private Set<WeiboReport> weiboReports = new HashSet<WeiboReport>(0);
+	private String wid; // rowKey，微博ID
+	private String authorid; // 作者ID
+	private String content; // 微博内容
+	private String sourceid = ""; // 源微博ID，转发或评论时可用
+	private WeiboContent source; // 源微博对象
+	private String sourceContent = ""; // 源微博内容
+	private byte type = 0; // 微博类型
+	private byte format = 0; // 微博内容格式
+	private byte visibility = 0; // 微博可见性
+	private byte status = 0; // 微博状态
+	private String thumbnailPic = ""; // 缩略图地址
+	private String middlePic = ""; // 标准图地址
+	private String originalPic = ""; // 原始图地址
+	private long dateline; // 发表时间戳
 
 	public WeiboContent()
 	{
 	}
 
-	public WeiboContent(CommonUser commonUser, String content, int sourceid,
+	public WeiboContent(String wid, String authorid, String content, String sourceid,
 			byte type, byte format, byte visibility, byte status,
 			String thumbnailPic, String middlePic, String originalPic,
 			long dateline)
 	{
-		this.commonUser = commonUser;
+		this.wid = wid;
+		this.authorid = authorid;
 		this.content = content;
 		this.sourceid = sourceid;
 		this.type = type;
@@ -52,49 +49,14 @@ public class WeiboContent implements java.io.Serializable
 		this.dateline = dateline;
 	}
 
-	public WeiboContent(CommonUser commonUser, String content, int sourceid,
-			byte type, byte format, byte visibility, byte status,
-			String thumbnailPic, String middlePic, String originalPic,
-			long dateline, Set<WeiboTopicRelation> weiboTopicRelations,
-			Set<WeiboTopic> weiboTopics, Set<WeiboAt> weiboAts,
-			Set<WeiboFav> weiboFavs, Set<WeiboReport> weiboReports)
-	{
-		this.commonUser = commonUser;
-		this.content = content;
-		this.sourceid = sourceid;
-		this.type = type;
-		this.format = format;
-		this.visibility = visibility;
-		this.status = status;
-		this.thumbnailPic = thumbnailPic;
-		this.middlePic = middlePic;
-		this.originalPic = originalPic;
-		this.dateline = dateline;
-		this.weiboTopicRelations = weiboTopicRelations;
-		this.weiboTopics = weiboTopics;
-		this.weiboAts = weiboAts;
-		this.weiboFavs = weiboFavs;
-		this.weiboReports = weiboReports;
-	}
-
-	public Long getWid()
+	public String getWid()
 	{
 		return this.wid;
 	}
 
-	public void setWid(Long wid)
+	public void setWid(String wid)
 	{
 		this.wid = wid;
-	}
-
-	public CommonUser getCommonUser()
-	{
-		return this.commonUser;
-	}
-
-	public void setCommonUser(CommonUser commonUser)
-	{
-		this.commonUser = commonUser;
 	}
 
 	public String getContent()
@@ -107,12 +69,12 @@ public class WeiboContent implements java.io.Serializable
 		this.content = content;
 	}
 
-	public long getSourceid()
+	public String getSourceid()
 	{
 		return this.sourceid;
 	}
 
-	public void setSourceid(long sourceid)
+	public void setSourceid(String sourceid)
 	{
 		this.sourceid = sourceid;
 	}
@@ -197,55 +159,35 @@ public class WeiboContent implements java.io.Serializable
 		this.dateline = dateline;
 	}
 
-	public Set<WeiboTopicRelation> getWeiboTopicRelations()
+	public String getAuthorid()
 	{
-		return this.weiboTopicRelations;
+		return authorid;
 	}
 
-	public void setWeiboTopicRelations(
-			Set<WeiboTopicRelation> weiboTopicRelations)
+	public void setAuthorid(String authorid)
 	{
-		this.weiboTopicRelations = weiboTopicRelations;
+		this.authorid = authorid;
 	}
 
-	public Set<WeiboTopic> getWeiboTopics()
+	public WeiboContent getSource()
 	{
-		return this.weiboTopics;
+		return source;
 	}
 
-	public void setWeiboTopics(Set<WeiboTopic> weiboTopics)
+	public void setSource(WeiboContent source)
 	{
-		this.weiboTopics = weiboTopics;
+		this.source = source;
 	}
 
-	public Set<WeiboAt> getWeiboAts()
+	public String getSourceContent()
 	{
-		return this.weiboAts;
+		return sourceContent;
 	}
 
-	public void setWeiboAts(Set<WeiboAt> weiboAts)
+	public void setSourceContent(String sourceContent)
 	{
-		this.weiboAts = weiboAts;
+		this.sourceContent = sourceContent;
 	}
 
-	public Set<WeiboFav> getWeiboFavs()
-	{
-		return this.weiboFavs;
-	}
-
-	public void setWeiboFavs(Set<WeiboFav> weiboFavs)
-	{
-		this.weiboFavs = weiboFavs;
-	}
-
-	public Set<WeiboReport> getWeiboReports()
-	{
-		return this.weiboReports;
-	}
-
-	public void setWeiboReports(Set<WeiboReport> weiboReports)
-	{
-		this.weiboReports = weiboReports;
-	}
 
 }

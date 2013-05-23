@@ -1,51 +1,136 @@
 package org.chingo.gutcom.dao.impl;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.HTableInterface;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.WeiboTopicRelation;
-import org.chingo.gutcom.hibernate4.support.HDaoSupport;
+import org.chingo.gutcom.hbase.HBaseSupport;
+import org.springframework.data.hadoop.hbase.RowMapper;
+import org.springframework.data.hadoop.hbase.TableCallback;
 
-public class WeiboTopicRelationDaoImpl extends HDaoSupport implements BaseDao<WeiboTopicRelation>
+public class WeiboTopicRelationDaoImpl extends HBaseSupport implements BaseDao<WeiboTopicRelation>
 {
+	private static String TAB_NAME = "weibo_topic_relation";
 
 	@Override
-	public Serializable save(WeiboTopicRelation instance)
+	public void put(final WeiboTopicRelation instance)
 	{
-		return getSession().save(instance);
-	}
+		ht.execute(TAB_NAME, new TableCallback<Result>()
+				{
 
-	@Override
-	public void update(WeiboTopicRelation instance)
-	{
-		getSession().update(instance);
+					@Override
+					public Result doInTable(HTableInterface htable) throws Throwable
+					{
+						Put p = new Put(Bytes.toBytes(instance.getId()));
+						p.add(Bytes.toBytes("info"), Bytes.toBytes("topic_title")
+								, Bytes.toBytes(instance.getTopicTitle()));
+						p.add(Bytes.toBytes("info"), Bytes.toBytes("weiboid")
+								, Bytes.toBytes(instance.getWeiboId()));
+						htable.put(p);
+						return null;
+					}
+					
+				});
 		
 	}
 
 	@Override
-	public void delete(WeiboTopicRelation instance)
+	public void delete(final String row)
 	{
-		getSession().delete(instance);
+		ht.execute(TAB_NAME, new TableCallback<Result>()
+				{
+
+					@Override
+					public Result doInTable(HTableInterface htable)
+							throws Throwable
+					{
+						Delete del = new Delete(Bytes.toBytes(row));
+						htable.delete(del);
+						return null;
+					}
+			
+				});
+	}
+	
+	@Override
+	public void delete(final List<String> rows)
+	{
+		ht.execute(TAB_NAME, new TableCallback<Result>()
+				{
+
+					@Override
+					public Result doInTable(HTableInterface htable)
+							throws Throwable
+					{
+						List<Delete> dels = new ArrayList<Delete>();
+						for(String row : rows)
+						{
+							Delete del = new Delete(Bytes.toBytes(row));
+							dels.add(del);
+						}
+						htable.delete(dels);
+						return null;
+					}
+			
+				});
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		getSession().delete(get(id));
-	}
+		Result rst = null;
+		if(family == null) // 查询整行
+		{
+			rst = ht.get(TAB_NAME, row, new RowMapper<Result>()
+					{
 
-	@Override
-	public WeiboTopicRelation get(Serializable id)
-	{
-		return (WeiboTopicRelation) getSession().get(WeiboTopicRelation.class, id);
-	}
+						@Override
+						public Result mapRow(Result result, int rownum)
+								throws Exception
+						{
+							return result;
+						}
+				
+					});
+		}
+		else
+		{
+			if(qualifier == null) // 查询指定列族
+			{
+				rst = ht.get(TAB_NAME, row, family, new RowMapper<Result>()
+						{
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<WeiboTopicRelation> list()
-	{
-		return getSession().createQuery("from WeiboTopicRelation wtr").list();
+							@Override
+							public Result mapRow(Result result, int rownum)
+									throws Exception
+							{
+								return result;
+							}
+					
+						});
+			}
+			else // 查询指定列
+			{
+				rst = ht.get(TAB_NAME, row, family, qualifier, new RowMapper<Result>()
+						{
+
+							@Override
+							public Result mapRow(Result result, int rownum)
+									throws Exception
+							{
+								return result;
+							}
+					
+						});
+			}
+		}
+		return (rst==null||rst.isEmpty())?null:rst; // 无结果则返回null
 	}
 
 }

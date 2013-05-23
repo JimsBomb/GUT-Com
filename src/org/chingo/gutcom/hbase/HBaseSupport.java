@@ -11,13 +11,13 @@ import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.data.hadoop.hbase.RowMapper;
 
 /**
- * HBase数据库操作支持类，主要用于实现分页查询
+ * HBase数据库操作支持类，主要用于实现分页和表运算查询
  * @author Chingo.Org
  * 
  */
 public class HBaseSupport
 {
-	private HbaseTemplate ht;
+	protected HbaseTemplate ht; // Spring提供的HBase操作支持类
 	
 	public void setHt(HbaseTemplate ht)
 	{
@@ -53,7 +53,7 @@ public class HBaseSupport
 			
 		});
 		
-		return rst;
+		return (rst==null||rst.size()==0)?null:rst; // 无数据则返回null
 	}
 	
 	/**

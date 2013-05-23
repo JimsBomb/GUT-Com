@@ -8,48 +8,49 @@ package org.chingo.gutcom.domain;
 public class WeiboTopicFollow implements java.io.Serializable
 {
 
-	private Long id;
-	private WeiboTopic weiboTopic;
-	private CommonUser commonUser;
+	private String id; // rowKey，关注ID
+	private String topicTitle; // 关注话题的标题
+	private String userId; // 关注的用户ID
 
 	public WeiboTopicFollow()
 	{
 	}
 
-	public WeiboTopicFollow(WeiboTopic weiboTopic, CommonUser commonUser)
+	public WeiboTopicFollow(String id, String topicTitle, String userId)
 	{
-		this.weiboTopic = weiboTopic;
-		this.commonUser = commonUser;
+		this.id = id;
+		this.topicTitle = topicTitle;
+		this.userId = userId;
 	}
 
-	public Long getId()
+	public String getId()
 	{
 		return this.id;
 	}
 
-	public void setId(Long id)
+	public void setId(String id)
 	{
 		this.id = id;
 	}
-
-	public WeiboTopic getWeiboTopic()
+	
+	public String getTopicTitle()
 	{
-		return this.weiboTopic;
+		return topicTitle;
 	}
 
-	public void setWeiboTopic(WeiboTopic weiboTopic)
+	public void setTopicTitle(String topicTitle)
 	{
-		this.weiboTopic = weiboTopic;
+		this.topicTitle = topicTitle;
 	}
 
-	public CommonUser getCommonUser()
+	public String getUserId()
 	{
-		return this.commonUser;
+		return userId;
 	}
 
-	public void setCommonUser(CommonUser commonUser)
+	public void setUserId(String userId)
 	{
-		this.commonUser = commonUser;
+		this.userId = userId;
 	}
 
 }

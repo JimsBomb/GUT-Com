@@ -1,51 +1,41 @@
 package org.chingo.gutcom.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Result;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.ShareStatus;
-import org.chingo.gutcom.hibernate4.support.HDaoSupport;
+import org.chingo.gutcom.hbase.HBaseSupport;
 
-public class ShareStatusDaoImpl extends HDaoSupport implements BaseDao<ShareStatus>
+public class ShareStatusDaoImpl extends HBaseSupport implements BaseDao<ShareStatus>
 {
 
 	@Override
-	public Serializable save(ShareStatus instance)
+	public void put(ShareStatus instance)
 	{
-		return getSession().save(instance);
-	}
-
-	@Override
-	public void update(ShareStatus instance)
-	{
-		getSession().update(instance);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(ShareStatus instance)
+	public void delete(String row)
 	{
-		getSession().delete(instance);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public void delete(List<String> rows)
 	{
-		getSession().delete(get(id));
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public ShareStatus get(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		return (ShareStatus) getSession().get(ShareStatus.class, id);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ShareStatus> list()
-	{
-		return getSession().createQuery("from ShareStatus ss").list();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,51 +1,41 @@
 package org.chingo.gutcom.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Result;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.ShareReport;
-import org.chingo.gutcom.hibernate4.support.HDaoSupport;
+import org.chingo.gutcom.hbase.HBaseSupport;
 
-public class ShareReportDaoImpl extends HDaoSupport implements BaseDao<ShareReport>
+public class ShareReportDaoImpl extends HBaseSupport implements BaseDao<ShareReport>
 {
 
 	@Override
-	public Serializable save(ShareReport instance)
+	public void put(ShareReport instance)
 	{
-		return getSession().save(instance);
-	}
-
-	@Override
-	public void update(ShareReport instance)
-	{
-		getSession().update(instance);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(ShareReport instance)
+	public void delete(String row)
 	{
-		getSession().delete(instance);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void delete(Serializable id)
+	public void delete(List<String> rows)
 	{
-		getSession().delete(get(id));
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public ShareReport get(Serializable id)
+	public Result get(String row, String family, String qualifier)
 	{
-		return (ShareReport) getSession().get(ShareReport.class, id);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ShareReport> list()
-	{
-		return getSession().createQuery("from ShareReport sr").list();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -8,43 +8,32 @@ package org.chingo.gutcom.domain;
 public class CommonSmile implements java.io.Serializable
 {
 
-	private Integer sid;
-	private CommonSmileCategory commonSmileCategory;
-	private String description;
-	private String imgurl;
-	private int order;
+	private String sid; // rowKey，表情ID
+	private String description; // 表情描述
+	private String imgurl; // 表情图片地址
+	private int order; // 表情顺序
 
 	public CommonSmile()
 	{
 	}
 
-	public CommonSmile(CommonSmileCategory commonSmileCategory,
-			String description, String imgurl, int order)
+	public CommonSmile(String sid, String description,
+			String imgurl, int order)
 	{
-		this.commonSmileCategory = commonSmileCategory;
+		this.sid = sid;
 		this.description = description;
 		this.imgurl = imgurl;
 		this.order = order;
 	}
 
-	public Integer getSid()
+	public String getSid()
 	{
 		return this.sid;
 	}
 
-	public void setSid(Integer sid)
+	public void setSid(String sid)
 	{
 		this.sid = sid;
-	}
-
-	public CommonSmileCategory getCommonSmileCategory()
-	{
-		return this.commonSmileCategory;
-	}
-
-	public void setCommonSmileCategory(CommonSmileCategory commonSmileCategory)
-	{
-		this.commonSmileCategory = commonSmileCategory;
 	}
 
 	public String getDescription()

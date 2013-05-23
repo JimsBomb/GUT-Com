@@ -8,48 +8,49 @@ package org.chingo.gutcom.domain;
 public class WeiboTopicRelation implements java.io.Serializable
 {
 
-	private Long id;
-	private WeiboTopic weiboTopic;
-	private WeiboContent weiboContent;
+	private String id; // rowKey，关系ID
+	private String topicTitle; // 话题标题
+	private String weiboId; // 微博ID
 
 	public WeiboTopicRelation()
 	{
 	}
 
-	public WeiboTopicRelation(WeiboTopic weiboTopic, WeiboContent weiboContent)
+	public WeiboTopicRelation(String id, String topicTitle, String weiboId)
 	{
-		this.weiboTopic = weiboTopic;
-		this.weiboContent = weiboContent;
+		this.id = id;
+		this.topicTitle = topicTitle;
+		this.weiboId = weiboId;
 	}
 
-	public Long getId()
+	public String getId()
 	{
 		return this.id;
 	}
 
-	public void setId(Long id)
+	public void setId(String id)
 	{
 		this.id = id;
 	}
 
-	public WeiboTopic getWeiboTopic()
+	public String getTopicTitle()
 	{
-		return this.weiboTopic;
+		return topicTitle;
 	}
 
-	public void setWeiboTopic(WeiboTopic weiboTopic)
+	public void setTopicTitle(String topicTitle)
 	{
-		this.weiboTopic = weiboTopic;
+		this.topicTitle = topicTitle;
 	}
 
-	public WeiboContent getWeiboContent()
+	public String getWeiboId()
 	{
-		return this.weiboContent;
+		return weiboId;
 	}
 
-	public void setWeiboContent(WeiboContent weiboContent)
+	public void setWeiboId(String weiboId)
 	{
-		this.weiboContent = weiboContent;
+		this.weiboId = weiboId;
 	}
 
 }

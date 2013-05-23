@@ -8,55 +8,38 @@ package org.chingo.gutcom.domain;
 public class WeiboReport implements java.io.Serializable
 {
 
-	private Long rid;
-	private CommonUser commonUser;
-	private WeiboContent weiboContent;
-	private long dateline;
-	private String reason;
-	private byte status;
+	private String rid; // 举报ID
+	private String reportUserId; // 举报用户的ID
+	private CommonUser reportUser; // 举报用户对象
+	private String reportWeiboId; // 举报微博的ID
+	private WeiboContent reportWeibo; // 举报微博对象
+	private long dateline; // 举报时间戳
+	private String reason; // 举报理由
+	private byte status; // 举报处理状态
 
 	public WeiboReport()
 	{
 	}
 
-	public WeiboReport(CommonUser commonUser, WeiboContent weiboContent,
+	public WeiboReport(String rid, String reportUserId, String reportWeiboId,
 			long dateline, String reason, byte status)
 	{
-		this.commonUser = commonUser;
-		this.weiboContent = weiboContent;
+		this.rid = rid;
+		this.reportUserId = reportUserId;
+		this.reportWeiboId = reportWeiboId;
 		this.dateline = dateline;
 		this.reason = reason;
 		this.status = status;
 	}
 
-	public Long getRid()
+	public String getRid()
 	{
 		return this.rid;
 	}
 
-	public void setRid(Long rid)
+	public void setRid(String rid)
 	{
 		this.rid = rid;
-	}
-
-	public CommonUser getCommonUser()
-	{
-		return this.commonUser;
-	}
-
-	public void setCommonUser(CommonUser commonUser)
-	{
-		this.commonUser = commonUser;
-	}
-
-	public WeiboContent getWeiboContent()
-	{
-		return this.weiboContent;
-	}
-
-	public void setWeiboContent(WeiboContent weiboContent)
-	{
-		this.weiboContent = weiboContent;
 	}
 
 	public long getDateline()
@@ -87,6 +70,46 @@ public class WeiboReport implements java.io.Serializable
 	public void setStatus(byte status)
 	{
 		this.status = status;
+	}
+
+	public String getReportUserId()
+	{
+		return reportUserId;
+	}
+
+	public void setReportUserId(String reportUserId)
+	{
+		this.reportUserId = reportUserId;
+	}
+
+	public CommonUser getReportUser()
+	{
+		return reportUser;
+	}
+
+	public void setReportUser(CommonUser reportUser)
+	{
+		this.reportUser = reportUser;
+	}
+
+	public String getReportWeiboId()
+	{
+		return reportWeiboId;
+	}
+
+	public void setReportWeiboId(String reportWeiboId)
+	{
+		this.reportWeiboId = reportWeiboId;
+	}
+
+	public WeiboContent getReportWeibo()
+	{
+		return reportWeibo;
+	}
+
+	public void setReportWeibo(WeiboContent reportWeibo)
+	{
+		this.reportWeibo = reportWeibo;
 	}
 
 }
