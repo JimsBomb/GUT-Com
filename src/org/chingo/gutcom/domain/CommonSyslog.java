@@ -1,5 +1,8 @@
 package org.chingo.gutcom.domain;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
+
 // Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 /**
@@ -10,7 +13,7 @@ public class CommonSyslog implements java.io.Serializable
 
 	private String lid; // rowKey，日志ID
 	private String userid; // 操作用户ID
-	private CommonUser commonUser; // 用户对象
+	private CommonUser user; // 用户对象
 	private String detail; // 日志描述
 	private long dateline; // 生成时间戳
 	private String ip; // 用户IP
@@ -51,14 +54,14 @@ public class CommonSyslog implements java.io.Serializable
 		this.userid = userid;
 	}
 
-	public CommonUser getCommonUser()
+	public CommonUser getUser()
 	{
-		return this.commonUser;
+		return this.user;
 	}
 
-	public void setCommonUser(CommonUser commonUser)
+	public void setUser(CommonUser user)
 	{
-		this.commonUser = commonUser;
+		this.user = user;
 	}
 
 	public String getDetail()
@@ -99,5 +102,24 @@ public class CommonSyslog implements java.io.Serializable
 	public void setType(byte type)
 	{
 		this.type = type;
+	}
+	
+	/**
+	 * 根据Result填充字段
+	 * @param rst 填充数据源Result
+	 */
+	public void fillByResult(Result rst)
+	{
+		this.setLid(Bytes.toString(rst.getRow()));
+		this.setDetail(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 
+				Bytes.toBytes("detail"))));
+		this.setUserid(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 
+				Bytes.toBytes("userid"))));
+		this.setIp(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 
+				Bytes.toBytes("ip"))));
+		this.setType(Byte.parseByte(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 
+				Bytes.toBytes("type")))));
+		this.setDateline(Long.parseLong(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 
+				Bytes.toBytes("dateline")))));
 	}
 }

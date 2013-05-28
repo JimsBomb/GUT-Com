@@ -49,12 +49,13 @@
 					<tr>
 						<td><input name="checkbox" class="checkbox" type="checkbox"
 							value='<s:property value="#u.uid" />' /></td>
-						<td><s:property value="#u.studentnum" /></td>
+						<td><s:if test="#u.studentnum==''"><i>未绑定</i></s:if>
+						<s:else><s:property value="#u.studentnum" /></s:else></td>
 						<td style="text-align: center;"><s:property
 								value="#u.nickname" /></td>
-						<td><s:if test="#u.commonUserProfile.gender==0">保密</s:if>
-							<s:elseif test="#u.commonUserProfile.gender==1">男</s:elseif> <s:elseif
-								test="#u.commonUserProfile.gender==2">女</s:elseif></td>
+						<td><s:if test="#u.gender==0">保密</s:if>
+							<s:elseif test="#u.gender==1">男</s:elseif> <s:elseif
+								test="#u.gender==2">女</s:elseif></td>
 						<td><s:text name="format.datetime">
 								<s:param value="#u.regdate" />
 							</s:text></td>
@@ -127,20 +128,12 @@
 					<s:a href="%{mgrurl}">首页</s:a>
 				</s:if>
 				<s:if test="#request.pageCount > 1">
-					<s:a href="%{mgrurl}&p=%{pageCount-1}">上一页</s:a>
+					<s:a href="%{mgrurl}&p=%{prevP}&pageCount=%{pageCount-1}">上一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount < #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageCount+1}">下一页</s:a>
+				<s:if test="#request.nextP != null">
+					<s:a href="%{mgrurl}&p=%{nextP}&pageCount=%{pageCount+1}">下一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount != #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageSize}">尾页</s:a>
-				</s:if>
-				当前第<s:property value="%{pageCount}" />页 <input type="text" id="txtPage" class="txtPage" name="p"
-					style="width: 30px;" onkeypress="return txtPageKeyPress(event);" />
-				<s:submit id="goto" value="跳转" method="mgr"
-					onclick="return checkPage(%{pageSize});" />
-				共<s:property value="%{pageSize}" />页
-				总计<s:property value="%{totalSize}" />条记录
+				当前第<s:property value="%{pageCount}" />页
 			</div>
 		</s:form>
 	</div>

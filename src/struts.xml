@@ -7,7 +7,7 @@
 
     <constant name="struts.enable.DynamicMethodInvocation" value="true" />
     <constant name="struts.devMode" value="true" />
-    <constant name="struts.action.extension" value="do" />
+    <constant name="struts.action.extension" value="do,json" />
     <constant name="struts.custom.i18n.resources" value="applicationResource" />
     <constant name="struts.ui.theme" value="simple" />
     <constant name="struts.ui.templateDir" value="template" />
@@ -148,6 +148,17 @@
 		</action>
 		<action name="changepwd" class="accAction" method="changePwd">
 		    <result name="success">/result.jsp</result>
+		    <result name="changePwd">/WEB-INF/web/admin/accchangepwd.jsp</result>
 		</action>
 	</package>
+	
+	<!-- API映射设置BEGIN -->
+	<package name="api" namespace="/api/common/authorize" extends="json-default">
+	    <action name="login" class="authorizeApiAction" method="login">
+	        <result type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </action>
+	</package>
+	<!-- API映射设置END -->
 </struts>

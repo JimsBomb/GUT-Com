@@ -1,19 +1,27 @@
 package org.chingo.gutcom.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
+import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
+import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.chingo.gutcom.common.util.FormatUtil;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonMsgRecv;
 import org.chingo.gutcom.domain.CommonMsgSend;
+import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.service.MsgManager;
 
 public class MsgManagerImpl implements MsgManager
 {
-	private BaseDao<CommonMsgRecv> msgRecvDao;
-	private BaseDao<CommonMsgSend> msgSendDao;
-	private BaseDao<CommonUser> userDao;
+	private BaseDao<CommonMsgRecv> msgRecvDao; // 已发消息DAO
+	private BaseDao<CommonMsgSend> msgSendDao; // 已收消息DAO
+	private BaseDao<CommonUser> userDao; // 用户DAO
+	private BaseDao<CommonSyslog> logDao; // 日志DAO
 	
 	public void setMsgRecvDao(BaseDao<CommonMsgRecv> msgRecvDao)
 	{
@@ -29,38 +37,31 @@ public class MsgManagerImpl implements MsgManager
 	{
 		this.userDao = userDao;
 	}
+	
+	public void setLogDao(BaseDao<CommonSyslog> logDao)
+	{
+		this.logDao = logDao;
+	}
 
 	@Override
-	public boolean addMsg(int offset, int size, CommonMsgRecv msg, Map<String, Object> logParams)
+	public void sendNotice(CommonMsgRecv msg, CommonSyslog log)
 	{
-		String hql = "select count(u) from CommonUser u";
-		int userAmount = Integer.parseInt(userDao.query(hql, null).get(0).toString()); // 查询用户总数
-		List<CommonUser> users = null;
-		// 查询管理员信息
-		CommonUser sendUsr = (CommonUser) userDao.query("from CommonUser u where u.uid=0", null).get(0);
-		hql = "from CommonUser u where u.uid<>0"; // 排除管理员帐号
-		/* 批量发送 */
-		if(offset < userAmount) // 第一个用户的索引小于用户总数时
+		FilterList fl = new FilterList();
+		// 排除管理员账号
+		fl.addFilter(new RowFilter(CompareOp.NOT_EQUAL, new BinaryComparator(Bytes.toBytes("0"))));
+		List<Result> users = userDao.findByPage("common_user", null, null, 0);
+		if(users != null) // 用户列表非空时
 		{
-			users = userDao.findByPage(hql, offset, size); // 批量查询用户
-			/* 为每个用户发送消息 */
-			for(CommonUser u : users)
+			/* 逐个发送消息 */
+			for(Result r : users)
 			{
-				CommonMsgRecv m = new CommonMsgRecv(u, sendUsr, msg.getContent()
-						, msg.getDateline(), msg.getIsread());
-				msgRecvDao.save(m);
+				msg.setMid(FormatUtil.createRowKey()); // 创建消息rowKey
+				msg.setRecvuserId(Bytes.toString(r.getRow()));
+				msgRecvDao.put(msg);
 			}
-			offset += size;
 		}
-		
-		if(offset < userAmount) // 未发送完毕
-		{
-			return false;
-		}
-		else // 发送完毕
-		{
-			return true;
-		}
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		logDao.put(log); // 记录日志
 	}
 
 }

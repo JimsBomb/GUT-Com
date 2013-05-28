@@ -1,5 +1,8 @@
 package org.chingo.gutcom.domain;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
+
 // Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 /**
@@ -410,4 +413,74 @@ public class CommonUser implements java.io.Serializable
 		this.newcomment = newcomment;
 	}
 
+	/**
+	 * 通过Result来填充字段
+	 * @param rst 填充数据源Result
+	 */
+	public void fillByResult(Result rst)
+	{
+		this.setUid(Bytes.toString(rst.getRow()));
+		this.setNickname(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("nickname"))));
+		this.setPassword(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("password"))));
+		this.setEmail(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("email"))));
+		this.setStudentnum(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("studentnum"))));
+		this.setStatus(Byte.parseByte(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("status")))));
+		this.setRegip(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("regip"))));
+		this.setRegdate(Long.parseLong(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("regdate")))));
+		this.setRealname(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("realname"))));
+		this.setCollege(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("college"))));
+		this.setMajor(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("major"))));
+		this.setClassname(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("classname"))));
+		this.setGender(Byte.parseByte(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("gender")))));
+		this.setBirthyear(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("birthyear")))));
+		this.setBirthmonth(Byte.parseByte(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("birthmonth")))));
+		this.setBirthday(Byte.parseByte(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("birthday")))));
+		this.setConstellation(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("constellation"))));
+		this.setZodiac(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("zodiac"))));
+		this.setBloodtype(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("bloodtype"))));
+		this.setQq(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("qq"))));
+		this.setSelfintro(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("selfintro"))));
+		this.setAvatarurl(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("avatarurl"))));
+		this.setBigavatarurl(Bytes.toString(rst.getValue(Bytes.toBytes("info")
+				, Bytes.toBytes("bigavatarurl"))));
+		this.setLastlogin(Long.parseLong(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("lastlogin")))));
+		this.setLastip(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("lastip"))));
+		this.setWeibocnt(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("weibocnt")))));
+		this.setFollower(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("follower")))));
+		this.setFollowing(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("following")))));
+		this.setNewfollower(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("newfollower")))));
+		this.setNewmsg(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("newmsg")))));
+		this.setNewat(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("newat")))));
+		this.setNewcomment(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("status")
+				, Bytes.toBytes("newcomment")))));
+	}
 }

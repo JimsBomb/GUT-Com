@@ -52,4 +52,10 @@
 	<bean name="accAction" class="org.chingo.gutcom.action.AccountAction" scope="prototype">
 	    <property name="accMgr" ref="accManager" />
 	</bean>
+	
+	<!-- API BEGIN -->
+	<bean name="authorizeApiAction" class="org.chingo.gutcom.action.api.common.AuthorizeAction" scope="prototype">
+	    <property name="userMgr" ref="userManager" />
+	</bean>
+	<!-- API END -->
 </beans>

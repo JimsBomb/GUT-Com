@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
+import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.dao.impl.CommonSysconfDaoImpl;
 import org.chingo.gutcom.domain.CommonSysconf;
 import org.chingo.gutcom.service.SystemManager;
@@ -55,7 +56,7 @@ public class InitServlet extends HttpServlet {
 		{
 			mapConf.put(c.getConfname(), c.getConfvalue());
 		}
-		servletContext.setAttribute("sysconf", mapConf);
+		servletContext.setAttribute(SystemConst.CONTEXT_CONF, mapConf);
 	}
 
 }

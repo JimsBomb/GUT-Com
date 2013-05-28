@@ -27,7 +27,7 @@ $(function(){
 			<table>
 			<tr>
 			<td>日志类型：<s:select
-				list="#{'-1':'所有日志', '0':'登录日志', '1':'后台日志', '2':'微博日志'}"
+				list="#{'-1':'所有日志', '0':'后台登录日志', '1':'前台登录日志', '2':'后台操作日志', '3':'前台操作日志', '4':'微博日志'}"
 				name="type" listKey="key" listValue="value" 
 				onchange="selectChanged(this.id)" /></td>
 			<td>用户昵称：<s:textfield name="username" /></td>
@@ -54,18 +54,22 @@ $(function(){
 					<tr>
 						<td><input name="checkbox" class="checkbox" type="checkbox"
 							value='<s:property value="#log.lid" />' /></td>
-						<td><s:if test="#log.type==0">登录日志</s:if> <s:elseif
-									test="#log.type==1">后台日志</s:elseif> <s:elseif
-									test="#log.type==2">微博日志</s:elseif></td>
+						<td><s:if test="#log.type==0">后台登录日志</s:if> <s:elseif
+									test="#log.type==1">前台登录日志</s:elseif> <s:elseif
+									test="#log.type==2">后台操作日志</s:elseif> <s:elseif
+									test="#log.type==3">前台操作日志</s:elseif> <s:elseif
+									test="#log.type==4">微博日志</s:elseif></td>
 						<td style="text-align: center;"><s:url action="syslogmgr"
 								id="userfilter">
 								<s:param name="searchMode">1</s:param>
 								<s:param name="username">
-									<s:property value="#log.commonUser.nickname" />
+									<s:property value="#log.user.nickname" />
 								</s:param>
-							</s:url> <s:a href="%{userfilter}" title="只查看该用户">
-								<s:property value="#log.commonUser.nickname" />
-							</s:a></td>
+							</s:url><s:if test="#log.user==null">
+							<i>无</i></s:if><s:else> 
+							<s:a href="%{userfilter}" title="只查看该用户">
+								<s:property value="#log.user.nickname" />
+							</s:a></s:else></td>
 						<td><s:property value="#log.detail" /></td>
 						<td><s:property value="#log.ip" /></td>
 						<td><s:text name="format.datetime"><s:param value="#log.dateline" /></s:text></td>
@@ -114,20 +118,12 @@ $(function(){
 					<s:a href="%{mgrurl}">首页</s:a>
 				</s:if>
 				<s:if test="#request.pageCount > 1">
-					<s:a href="%{mgrurl}&p=%{pageCount-1}">上一页</s:a>
+					<s:a href="%{mgrurl}&p=%{prevP}&pageCount=%{pageCount-1}">上一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount < #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageCount+1}">下一页</s:a>
+				<s:if test="#request.nextP != null">
+					<s:a href="%{mgrurl}&p=%{nextP}&pageCount=%{pageCount+1}">下一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount != #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageSize}">尾页</s:a>
-				</s:if>
-				当前第<s:property value="%{pageCount}" />页 <input type="text" id="txtPage" class="txtPage" name="p"
-					style="width: 30px;" onkeypress="return txtPageKeyPress(event);" />
-				<s:submit id="goto" value="跳转" method="mgr"
-					onclick="return checkPage(%{pageSize});" />
-				共<s:property value="%{pageSize}" />页
-				总计<s:property value="%{totalSize}" />条记录
+				当前第<s:property value="%{pageCount}" />页
 			</div>
 		</s:form>
 	</div>

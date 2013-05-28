@@ -1,131 +1,323 @@
 package org.chingo.gutcom.service.impl;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
+import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
+import org.apache.hadoop.hbase.filter.PageFilter;
+import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.filter.SubstringComparator;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.chingo.gutcom.common.constant.SyslogConst;
+import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.constant.UserConst;
+import org.chingo.gutcom.common.util.FormatUtil;
 import org.chingo.gutcom.common.util.SecurityUtil;
 import org.chingo.gutcom.dao.BaseDao;
+import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonToken;
 import org.chingo.gutcom.domain.CommonUser;
-import org.chingo.gutcom.domain.CommonUserProfile;
-import org.chingo.gutcom.domain.CommonUserStatus;
 import org.chingo.gutcom.service.UserManager;
 
 public class UserManagerImpl implements UserManager
 {
-	private BaseDao<CommonUser> userDao;
-	private BaseDao<CommonUserProfile> upDao;
-	private BaseDao<CommonUserStatus> usDao;
+	private BaseDao<CommonUser> userDao; // 用户DAO
+	private BaseDao<CommonSyslog> logDao; // 日志DAO
+	private BaseDao<CommonToken> tokenDao; // 令牌DAO
 	
 	public void setUserDao(BaseDao<CommonUser> userDao)
 	{
 		this.userDao = userDao;
 	}
-
-	public void setUpDao(BaseDao<CommonUserProfile> upDao)
+	
+	public void setLogDao(BaseDao<CommonSyslog> logDao)
 	{
-		this.upDao = upDao;
+		this.logDao = logDao;
 	}
-
-	public void setUsDao(BaseDao<CommonUserStatus> usDao)
+	
+	public void setTokenDao(BaseDao<CommonToken> tokenDao)
 	{
-		this.usDao = usDao;
+		this.tokenDao = tokenDao;
 	}
 
 	@Override
-	public void addUser(CommonUser u, Map<String, Object> logParams)
+	public CommonUser putUser(CommonUser user, CommonSyslog log)
 	{
-		CommonUser user = u;
-		user.setPassword(SecurityUtil.md5(user.getPassword()));
-		userDao.save(user);
+		if(user.getUid()==null || user.getUid().isEmpty()) // 用户ID不存在时
+		{
+			user.setUid(FormatUtil.createRowKey()); // 创建用户rowKey
+		}
+		user.setPassword(SecurityUtil.md5(user.getPassword())); // 加密密码
+		userDao.put(user); // 追加用户
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		logDao.put(log); // 记录日志
 		
-		CommonUserProfile up = new CommonUserProfile(user, "",
-				"", "", "", (byte) 0, (short) 0,  (byte) 0, (byte) 0,
-				"", "", "", "", "", UserConst.AVATAR_URL, UserConst.BIG_AVATAR_URL);
-		upDao.save(up);
-		
-		CommonUserStatus us = new CommonUserStatus(user, "",
-				0l, "", 0, 0, 0, 0, 0, 0, 0, 0);
-		usDao.save(us);
+		return user;
 	}
 	
 	@Override
-	public void updateStatus(Serializable id, byte status, Map<String, Object> logParams)
+	public List<CommonUser> putUser(List<CommonUser> users, CommonSyslog log)
 	{
-		userDao.get(id).setStatus(status);
+		for(CommonUser user : users)
+		{
+			if(user.getUid()==null || user.getUid().isEmpty()) // 用户ID不存在时
+			{
+				user.setUid(FormatUtil.createRowKey()); // 创建用户rowKey
+			}
+			user.setPassword(SecurityUtil.md5(user.getPassword())); // 加密密码
+			userDao.put(user); // 追加用户
+		}
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		logDao.put(log); // 记录日志
+		
+		return users;
+	}
+	
+	@Override
+	public void updateStatus(String rowKey, byte status, CommonSyslog log)
+	{
+		// 查询用户
+		Result rst = userDao.get(rowKey, null, null);
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		if(rst != null) // 存在用户时
+		{
+			/* 解析并设置用户字段 */
+			CommonUser u = new CommonUser();
+			u.fillByResult(rst); // 填充字段
+			u.setStatus(status); // 设置新状态
+			
+			userDao.put(u); // 更新状态
+			logDao.put(log); // 记录日志
+		}
+		
+		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_STATUS_UPDATE_FAILED); // 设置更新失败描述
+		logDao.put(log); // 记录日志
 	}
 
 	@Override
-	public void updateStatus(Serializable[] ids, byte status, Map<String, Object> logParams)
+	public void updateStatus(List<String> rowKeys, byte status, CommonSyslog log)
 	{
-		for(Serializable id : ids)
+		for(String rowKey : rowKeys)
 		{
-			userDao.get(id).setStatus(status);
+			// 查询用户
+			Result rst = userDao.get(rowKey, null, null);
+			log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+			if(rst != null) // 存在用户时
+			{
+				/* 解析并设置用户字段 */
+				CommonUser u = new CommonUser();
+				u.fillByResult(rst); // 填充字段
+				u.setStatus(status); // 设置新状态
+				
+				userDao.put(u); // 更新状态
+				logDao.put(log); // 记录日志
+			}
+			
+			log.setDetail(SyslogConst.DETAIL_ADMIN_USER_STATUS_UPDATE_FAILED); // 设置更新失败描述
+			logDao.put(log); // 记录日志
 		}
 	}
 
 	@Override
-	public void updatePassword(Serializable id, String pwd, Map<String, Object> logParams)
+	public void updatePassword(String rowKey, String pwd, CommonSyslog log)
 	{
-		userDao.get(id).setPassword(SecurityUtil.md5(pwd));
-	}
-
-	@Override
-	public void delUser(Serializable id, Map<String, Object> logParams)
-	{
-		userDao.delete(id);
-	}
-
-	@Override
-	public void delUser(Serializable[] ids, Map<String, Object> logParams)
-	{
-		for(Serializable id : ids)
+		// 查询用户
+		Result rst = userDao.get(rowKey, null, null);
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		if(rst != null) // 存在用户时
 		{
-			userDao.delete(id);
+			/* 解析并设置用户字段 */
+			CommonUser u = new CommonUser();
+			u.fillByResult(rst); // 填充字段
+			u.setPassword(SecurityUtil.md5(pwd)); // 设置新密码
+
+			userDao.put(u); // 更新用户
+			logDao.put(log); // 记录日志
 		}
+
+		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_PWD_UPDATE_FAILED); // 设置更新失败描述
+		logDao.put(log); // 记录日志
 	}
 
 	@Override
-	public CommonUser getUser(Serializable id)
+	public void delUser(String rowKey, CommonSyslog log)
 	{
-		return userDao.get(id);
+		userDao.delete(rowKey); // 执行删除
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		logDao.put(log); // 记录日志
 	}
 
 	@Override
-	public List findUserByPage(Map<String, Object> values, int offset,
+	public void delUser(List<String> rowKeys, CommonSyslog log)
+	{
+		userDao.delete(rowKeys); // 执行删除
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		logDao.put(log); // 记录日志
+	}
+
+	@Override
+	public CommonUser getUser(String rowKey)
+	{
+		// 查询用户
+		Result result = userDao.get(rowKey, null, null);
+		if(result != null) // 用户存在时
+		{
+			CommonUser user = new CommonUser();
+			user.fillByResult(result); // 填充字段
+			return user; // 返回用户
+		}
+		return null;
+	}
+
+	@Override
+	public List<Object> findUserByPage(Map<String, Object> values, String startRow,
 			int pageSize)
 	{
-		StringBuffer hql = new StringBuffer("select cu from CommonUser cu ");
-		StringBuffer hqlCnt = new StringBuffer("select count(cu) from CommonUser cu ");
-		StringBuffer froms = new StringBuffer();
-		StringBuffer wheres = new StringBuffer(" where cu.uid <> 0 "); // 排除管理员账号
+		FilterList fl = new FilterList();
+		// 排除管理员账号
+		fl.addFilter(new RowFilter(CompareOp.NOT_EQUAL, new BinaryComparator(Bytes.toBytes("0"))));
+		fl.addFilter(new PageFilter(pageSize+1)); // 设置单页数量
 		/* 填充查询条件 */
-		if(values.containsKey("status"))
+		if(values.containsKey("status")) // 匹配状态
 		{
-			wheres.append(" and cu.status = :status ");
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("status"),
+					CompareOp.EQUAL, Bytes.toBytes(String.valueOf(values.get("status")))));
 		}
-		if(values.containsKey("nickname"))
+		if(values.containsKey("nickname")) // 模糊匹配昵称
 		{
-			wheres.append(" and cu.nickname like :nickname ");
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("nickname"),
+					CompareOp.EQUAL, new SubstringComparator(String.valueOf(values.get("nickname")))));
 		}
-		if(values.containsKey("studentnum"))
+		if(values.containsKey("studentnum")) // 模糊匹配学号
 		{
-			wheres.append(" and cu.studentnum like :studentnum ");
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("studentnum"),
+					CompareOp.EQUAL, new SubstringComparator(String.valueOf(values.get("studentnum")))));
 		}
-		if(values.containsKey("regdate"))
+		if(values.containsKey("regdate")) // 指定时间后注册
 		{
-			wheres.append(" and cu.regdate = :regdate ");
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("status"),
+					CompareOp.GREATER_OR_EQUAL, Bytes.toBytes(String.valueOf(values.get("regdate")))));
 		}
-		hql.append(froms).append(wheres);
-		hqlCnt.append(froms).append(wheres);
 		
-		List<Object> rst = new ArrayList<Object>();
-		rst.add(userDao.findByPage(hql.toString(), values, offset, pageSize));
-		rst.add((long) userDao.query(hqlCnt.toString(), values).get(0));
-		
-		return rst;
+		// 分页查询
+		List<Result> results = userDao.findByPage("common_user", fl, startRow, pageSize+1);
+		if(results != null) // 结果非空时
+		{
+			List<Object> rst = new ArrayList<Object>();
+			List<CommonUser> users = new ArrayList<CommonUser>();
+			int rstSize = results.size();
+			if(rstSize > pageSize) // 结果数量大于需要的数量，即存在下一页时
+			{
+				rstSize = pageSize; // 循环判断上限设置为单页数量
+			}
+			Result result;
+			/* 解析结果并添加到结果列表中 */
+			for(int i=0; i<rstSize; i++)
+			{
+				result = results.get(i);
+				CommonUser user = new CommonUser();
+				user.fillByResult(result); // 填充用户字段
+				users.add(user);
+			}
+			rst.add(users); // 添加用户列表到返回结果列表中
+			if(results.size() > pageSize) // 存在更多记录时
+			{
+				// 添加下一页起始行的rowKey到结果列表中
+				rst.add(Bytes.toString(results.get(pageSize).getRow()));
+			}
+			return rst; // 返回结果列表
+		}
+		return null;
+	}
+
+	@Override
+	public List<Object> checkLogin(String nickname, String email,
+			String studentnum, String pwd, CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
+		/* 设置条件 */
+		FilterList fl = new FilterList();
+		if(nickname != null) // 昵称非空时，设置昵称过滤器
+		{
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("nickname"), CompareOp.EQUAL,
+					Bytes.toBytes(nickname)));
+		}
+		else if(email != null) // 邮箱非空时，设置邮箱过滤器
+		{
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("email"), CompareOp.EQUAL,
+					Bytes.toBytes(email)));
+		}
+		else if(studentnum != null) // 学号非空时，设置学号过滤器
+		{
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("studentnum"), CompareOp.EQUAL,
+					Bytes.toBytes(studentnum)));
+		}
+		else // 三个参数都为空时
+		{
+			log.setDetail(SyslogConst.DETAIL_USER_LOGIN_FAILED); // 设置登录失败描述
+			logDao.put(log); // 记录日志
+			return null; // 返回null
+		}
+		// 排除管理员过滤器
+		fl.addFilter(new RowFilter(CompareOp.NOT_EQUAL, 
+				new BinaryComparator(Bytes.toBytes(UserConst.SYSTEM_ID))));
+		// 密码过滤器
+		fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+				Bytes.toBytes("password"), CompareOp.EQUAL,
+				Bytes.toBytes(SecurityUtil.md5(pwd))));
+		// 查询用户
+		List<Result> results = userDao.findByPage("common_user", fl, null, 0);
+		if(results != null) // 用户存在时
+		{
+			List<Object> rst = new ArrayList<Object>();
+			Result result = results.get(0);
+			CommonUser user = new CommonUser();
+			user.fillByResult(result); // 填充用户字段
+			user.setLastip(log.getIp()); // 更新最后登录IP
+			user.setLastlogin(new Date().getTime()); // 更新最后登录时间戳
+			userDao.put(user); // 更新用户
+			rst.add(user); // 添加用户对象
+			/* 令牌过滤器 */
+			FilterList tokenFl = new FilterList();
+			// 有效时长超过1小时的令牌过滤器
+			tokenFl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+				Bytes.toBytes("expired_time"), CompareOp.GREATER_OR_EQUAL,
+				Bytes.toBytes(String.valueOf(user.getLastlogin() + 3600 * 1000))));
+			// 查询令牌
+			List<Result> tokenRsts = tokenDao.findByPage("common_token", tokenFl, null, 0);
+			CommonToken token = new CommonToken();
+			if(tokenRsts != null) // 令牌存在时
+			{
+				token.fillByResult(tokenRsts.get(0)); // 填充令牌字段
+			}
+			else // 否则创建新令牌
+			{
+				/* 更新令牌表 */
+				token.setUserid(user.getUid());
+				token.setAccessToken(SecurityUtil.createAccessToken()); // 创建令牌
+				// 设置过期时间戳为(用户登陆时间+令牌默认有效时长)，前者为毫秒，后者为秒
+				token.setExpiredTime(user.getLastlogin() + 
+						SystemConst.ACCESS_TOKEN_EFFECTIVE_TIME * 1000);
+				tokenDao.put(token); // 插入令牌关联数据
+			}
+			
+			rst.add(token.getAccessToken()); // 添加访问令牌
+			rst.add((token.getExpiredTime() - user.getLastlogin()) / 1000); // 添加令牌有效时长，单位为秒
+			logDao.put(log); // 记录日志
+			return rst; // 返回结果列表
+		}
+		log.setDetail(SyslogConst.DETAIL_USER_LOGIN_FAILED); // 设置登录失败描述
+		logDao.put(log); // 记录日志
+		return null;
 	}
 
 }

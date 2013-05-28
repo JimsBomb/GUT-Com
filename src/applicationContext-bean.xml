@@ -19,63 +19,73 @@
 		<property name="userDao" ref="userDao"></property>
 	</bean> -->
 	
+	<bean name="tokenDao" class="org.chingo.gutcom.dao.impl.CommonTokenDaoImpl">
+	    <property name="ht" ref="htemplate" />
+	</bean>
 	<bean name="sysconfDao" class="org.chingo.gutcom.dao.impl.CommonSysconfDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="ht" ref="htemplate" />
 	</bean>
 	<bean name="syslogDao" class="org.chingo.gutcom.dao.impl.CommonSyslogDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="ht" ref="htemplate" />
 	</bean>
 	<bean name="wordDao" class="org.chingo.gutcom.dao.impl.CommonFilterWordDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="ht" ref="htemplate" />
 	</bean>
 	<bean name="userDao" class="org.chingo.gutcom.dao.impl.CommonUserDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	<bean name="userProfileDao" class="org.chingo.gutcom.dao.impl.CommonUserProfileDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	<bean name="userStatusDao" class="org.chingo.gutcom.dao.impl.CommonUserStatusDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="ht" ref="htemplate" />
 	</bean>
 	<bean name="weiboDao" class="org.chingo.gutcom.dao.impl.WeiboContentDaoImpl">
-	    <property name="sessionFactory" ref="sessionFactory" />
+	   <property name="ht" ref="htemplate" />
 	</bean>
 	<bean name="topicDao" class="org.chingo.gutcom.dao.impl.WeiboTopicDaoImpl">
-	    <property name="sessionFactory" ref="sessionFactory" />
+	   <property name="ht" ref="htemplate" />
+	</bean>
+	<bean name="topicRelaDao" class="org.chingo.gutcom.dao.impl.WeiboTopicRelationDaoImpl">
+	   <property name="ht" ref="htemplate" />
+	</bean>
+	<bean name="atDao" class="org.chingo.gutcom.dao.impl.WeiboAtDaoImpl">
+	   <property name="ht" ref="htemplate" />
 	</bean>
 	<bean name="weiboReportDao" class="org.chingo.gutcom.dao.impl.WeiboReportDaoImpl">
-	    <property name="sessionFactory" ref="sessionFactory" />
+	   <property name="ht" ref="htemplate" />
 	</bean>
 	<bean name="msgRecvDao" class="org.chingo.gutcom.dao.impl.CommonMsgRecvDaoImpl">
-	    <property name="sessionFactory" ref="sessionFactory" />
+	    <property name="ht" ref="htemplate" />
 	</bean>
 	<bean name="msgSendDao" class="org.chingo.gutcom.dao.impl.CommonMsgSendDaoImpl">
-	    <property name="sessionFactory" ref="sessionFactory" />
+	   <property name="ht" ref="htemplate" />
 	</bean>
 	
 	<bean name="sysManager" class="org.chingo.gutcom.service.impl.SystemManagerImpl">
 		<property name="sysconfDao" ref="sysconfDao" />
 		<property name="syslogDao" ref="syslogDao" />
 		<property name="wordDao" ref="wordDao" />
+		<property name="userDao" ref="userDao" />
 	</bean>
 	<bean name="userManager" class="org.chingo.gutcom.service.impl.UserManagerImpl">
 		<property name="userDao" ref="userDao" />
-		<property name="upDao" ref="userProfileDao" />
-		<property name="usDao" ref="userStatusDao" />
+		<property name="logDao" ref="syslogDao" />
+		<property name="tokenDao" ref="tokenDao" />
 	</bean>
 	<bean name="weiboManager" class="org.chingo.gutcom.service.impl.WeiboManagerImpl">
 	    <property name="weiboDao" ref="weiboDao" />
 	    <property name="topicDao" ref="topicDao" />
 	    <property name="reportDao" ref="weiboReportDao" />
 	    <property name="userDao" ref="userDao" />
+	    <property name="topicRelaDao" ref="topicRelaDao" />
+	    <property name="atDao" ref="atDao" />
+	    <property name="logDao" ref="syslogDao" />
+	    <property name="msgRecvDao" ref="msgRecvDao" />
 	</bean>
 	<bean name="msgManager" class="org.chingo.gutcom.service.impl.MsgManagerImpl">
 	    <property name="msgRecvDao" ref="msgRecvDao" />
 	    <property name="msgSendDao" ref="msgSendDao" />
 	    <property name="userDao" ref="userDao" />
+	    <property name="logDao" ref="syslogDao" />
 	</bean>
 	<bean name="accManager" class="org.chingo.gutcom.service.impl.AccountManagerImpl">
 	    <property name="userDao" ref="userDao" />
+	    <property name="logDao" ref="syslogDao" />
 	</bean>
 	
 	<bean name="initServlet" class="org.chingo.gutcom.servlet.InitServlet">

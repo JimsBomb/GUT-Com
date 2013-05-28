@@ -3,16 +3,14 @@ package org.chingo.gutcom.service;
 import java.util.Map;
 
 import org.chingo.gutcom.domain.CommonMsgRecv;
+import org.chingo.gutcom.domain.CommonSyslog;
 
 public interface MsgManager
-{
+{	
 	/**
-	 * 向所有用户发送消息
-	 * @param offset 第一个用户的索引
-	 * @param size 每批次发送用户数
+	 * 向所有用户发送通知消息
 	 * @param msg 要发送的消息对象
-	 * @param logParams 日志参数
-	 * @return 是否已全部发完，false-未发完，true-已发完
+	 * @param log 日志对象
 	 */
-	public boolean addMsg(int offset, int size, CommonMsgRecv msg, Map<String, Object> logParams);
+	public void sendNotice(CommonMsgRecv msg, CommonSyslog log);
 }

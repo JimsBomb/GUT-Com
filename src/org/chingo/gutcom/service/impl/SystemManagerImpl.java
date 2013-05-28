@@ -4,27 +4,38 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
+import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.filter.PageFilter;
+import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.filter.SubstringComparator;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.chingo.gutcom.common.constant.ErrorMsg;
 import org.chingo.gutcom.common.constant.FilterWordConst;
+import org.chingo.gutcom.common.util.FormatUtil;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonFilterWord;
 import org.chingo.gutcom.domain.CommonSysconf;
 import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.exception.GcException;
 import org.chingo.gutcom.service.SystemManager;
-import org.hibernate.exception.ConstraintViolationException;
 
 public class SystemManagerImpl implements SystemManager
 {
-	private BaseDao<CommonSysconf> sysconfDao;
-	private BaseDao<CommonSyslog> syslogDao;
-	private BaseDao<CommonFilterWord> wordDao;
+	private BaseDao<CommonSysconf> sysconfDao; // 系统配置DAO
+	private BaseDao<CommonSyslog> syslogDao; // 日志DAO
+	private BaseDao<CommonFilterWord> wordDao; // 过滤关键词DAO
+	private BaseDao<CommonUser> userDao; // 用户DAO
 	
 	public void setSysconfDao(BaseDao<CommonSysconf> sysconfDao)
 	{
@@ -40,141 +51,249 @@ public class SystemManagerImpl implements SystemManager
 	{
 		this.wordDao = wordDao;
 	}
-
-	@Override
-	public void addConf(CommonSysconf conf)
+	
+	public void setUserDao(BaseDao<CommonUser> userDao)
 	{
-		sysconfDao.save(conf);
+		this.userDao = userDao;
 	}
 
 	@Override
-	public void updateConf(CommonSysconf conf)
+	public CommonSysconf putConf(CommonSysconf conf, CommonSyslog log)
 	{
-		sysconfDao.update(conf);
+		sysconfDao.put(conf); // 更新数据
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		syslogDao.put(log); // 记录日志
+		
+		return conf;
 	}
 	
 	@Override
-	public void updateConf(Map<String, String> confs)
+	public List<CommonSysconf> putConf(Map<String, String> confs, CommonSyslog log)
 	{
-		String hql = "from CommonSysconf cs where cs.confname=:confname";
-		Map<String, Object> v = new HashMap<String, Object>(1);
-		CommonSysconf conf;
-		for(Entry c : confs.entrySet())
+		// 存储返回列表
+		List<CommonSysconf> rstConfs = new ArrayList<CommonSysconf>();
+		/* 批量更新数据 */
+		Set<Entry<String, String>> tmp = confs.entrySet();
+		for(Entry<String, String> entry : tmp)
 		{
-			v.clear();
-			v.put("confname", c.getKey());
-			conf = (CommonSysconf) sysconfDao.query(hql, v).get(0);
-			conf.setConfvalue((String) c.getValue());
+			// 新建系统配置对象
+			CommonSysconf conf = new CommonSysconf(entry.getKey(), entry.getValue());
+			rstConfs.add(conf); // 添加到返回列表中
+			sysconfDao.put(conf); // 追加数据
 		}
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		syslogDao.put(log); // 记录日志
+		
+		return rstConfs;
 	}
-
+	
 	@Override
-	public void delConf(java.io.Serializable id)
+	public void delConf(List<String> rowKeys, CommonSyslog log)
 	{
-		sysconfDao.delete(id);
+		sysconfDao.delete(rowKeys); // 执行删除
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		syslogDao.put(log); // 记录日志
 	}
 
 	@Override
 	public List<CommonSysconf> findAllConf()
 	{
-		return sysconfDao.list();
-	}
-
-	@Override
-	public void addSyslog(CommonSyslog log)
-	{
-		syslogDao.save(log);
-	}
-
-	@Override
-	public void delSyslog(Serializable[] ids)
-	{
-		for(Serializable id : ids)
+		// 查询所有配置
+		List<Result> results = sysconfDao.findByPage("common_sysconf", null, null, 0);
+		if(results != null) // 存在配置项时
 		{
-			syslogDao.delete(id);
+			List<CommonSysconf> confs = new ArrayList<CommonSysconf>();
+			/* 逐个解析并添加到列表中 */
+			for(Result result : results)
+			{
+				CommonSysconf conf = new CommonSysconf();
+				conf.fillByResult(result); // 填充字段
+				confs.add(conf);
+			}
+			return confs; // 返回列表
 		}
+		
+		return null;
+	}
+
+	@Override
+	public void putSyslog(CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		syslogDao.put(log);
+	}
+
+	@Override
+	public void delSyslog(List<String> rowKeys, CommonSyslog log)
+	{
+		syslogDao.delete(rowKeys); // 执行删除
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		syslogDao.put(log); // 记录日志
 	}
 
 	@Override
 	public List<CommonSyslog> findAllSyslog()
 	{
-		return syslogDao.list();
+		// 查询日志
+		List<Result> results = syslogDao.findByPage("common_syslog", null, null, 0);
+		if(results != null) // 日志列表非空时
+		{
+			List<CommonSyslog> logs = new ArrayList<CommonSyslog>();
+			/* 逐个解析并添加到列表中 */
+			for(Result result : results)
+			{
+				CommonSyslog log = new CommonSyslog();
+				log.fillByResult(result); // 填充日志字段
+				// 查询用户
+				Result userRst = userDao.get(log.getUserid(), null, null);
+				if(userRst != null) // 用户存在时
+				{
+					CommonUser user = new CommonUser();
+					user.fillByResult(userRst); // 填充用户字段
+					log.setUser(user); // 设置用户
+				}
+				logs.add(log);
+			}
+			return logs; // 返回结果列表
+		}
+		return null;
 	}
 
 	@Override
-	public List<CommonSyslog> findSyslogByPage(int offset, int pageSize)
+	public List<Object> findSyslogByPage(String startRow, int pageSize)
 	{
-		String hql = "from CommonSyslog cs order by cs.lid desc";
-		return syslogDao.findByPage(hql, offset, pageSize);
+		FilterList fl = new FilterList();
+		// 单页数量过滤器
+		fl.addFilter(new PageFilter(pageSize+1));
+		// 分页查询
+		List<Result> results = syslogDao.findByPage("common_syslog", fl, startRow, pageSize+1);
+		if(results != null) // 结果非空时
+		{
+			List<Object> rst = new ArrayList<Object>();
+			List<CommonSyslog> logs = new ArrayList<CommonSyslog>();
+			int rstSize = results.size();
+			if(rstSize > pageSize) // 结果数量大于需要的数量，即存在下一页时
+			{
+				rstSize = pageSize; // 循环判断上限设置为单页数量
+			}
+			Result result;
+			/* 逐个解析并添加倒日志列表中 */
+			for(int i=0; i<rstSize; i++)
+			{
+				result = results.get(i);
+				CommonSyslog log = new CommonSyslog();
+				log.fillByResult(result); // 填充日志字段
+				// 查询用户
+				Result userRst = userDao.get(log.getUserid(), null, null);
+				if(userRst != null) // 用户存在时
+				{
+					CommonUser user = new CommonUser();
+					user.fillByResult(userRst); // 填充用户字段
+					log.setUser(user); // 设置用户
+				}
+				logs.add(log);
+			}
+			rst.add(logs); // 添加日志列表到返回结果列表中
+			if(results.size() > pageSize) // 存在更多记录时
+			{
+				// 添加下一页起始行的rowKey到结果列表中
+				rst.add(Bytes.toString(results.get(pageSize).getRow()));
+			}
+			return rst; // 返回结果列表
+		}
+		return null;
 	}
 	
 	@Override
-	public List findSyslogByPage(Map<String, Object> values, int offset, int pageSize)
+	public List<Object> findSyslogByPage(Map<String, Object> values, String startRow, int pageSize)
 	{
-		StringBuffer hql = new StringBuffer("select cs from CommonSyslog cs ");
-		StringBuffer hqlCnt = new StringBuffer("select count(cs) from CommonSyslog cs ");
-		StringBuffer froms = new StringBuffer();
-		StringBuffer wheres = new StringBuffer(" where 1=1 ");
-		if(values.containsKey("username"))
+		FilterList fl = new FilterList();
+		if(values != null)
 		{
-//			froms.append(" left join CommonUser cu ");
-//			wheres.append(" with cs.commonUser.uid=cu.uid and cu.nickname like '%?%' ");
-			wheres.append(" and cs.commonUser.nickname like :username ");
+			if(values.containsKey("startTime")) // 起始时间
+			{
+				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("dateline"),
+						CompareOp.GREATER_OR_EQUAL, Bytes.toBytes(String.valueOf(values.get("startTime")))));
+			}
+			if(values.containsKey("endTime")) // 终止时间
+			{
+				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("dateline"),
+						CompareOp.LESS_OR_EQUAL, Bytes.toBytes(String.valueOf(values.get("endTime")))));
+			}
+			if(values.containsKey("type")) // 
+			{
+				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("type"),
+						CompareOp.EQUAL, Bytes.toBytes(String.valueOf(values.get("type")))));
+			}
 		}
-//		else
-//		{
-//			wheres.append(" where 1=1 ");
-//		}
-		if(values.containsKey("startTime"))
-		{
-			wheres.append(" and cs.dateline>=:startTime ");
-		}
-		if(values.containsKey("endTime"))
-		{
-			wheres.append(" and cs.dateline<=:endTime ");
-		}
-		if(values.containsKey("type"))
-		{
-			wheres.append(" and cs.type=:type ");
-		}
-		hql.append(froms).append(wheres).append(" order by cs.lid desc ");
-		hqlCnt.append(froms).append(wheres);
+		fl.addFilter(new PageFilter(pageSize+1)); // 设置单页显示数
 		
-		List<Object> rst = new ArrayList<Object>();
-//		Object[] v = values.values().toArray();
-		rst.add(syslogDao.findByPage(hql.toString(), values, offset, pageSize));
-		rst.add((long) syslogDao.query(hqlCnt.toString(), values).get(0));
-		
-		return rst;
+		// 分页查询
+		List<Result> results = syslogDao.findByPage("common_syslog", fl, startRow, pageSize+1);
+		if(results != null) // 结果非空时
+		{
+			List<Object> rst = new ArrayList<Object>();
+			List<CommonSyslog> logs = new ArrayList<CommonSyslog>();
+			int rstSize = results.size();
+			if(rstSize > pageSize) // 结果数量大于需要的数量，即存在下一页时
+			{
+				rstSize = pageSize; // 循环判断上限设置为单页数量
+			}
+			Result result;
+			/* 逐个解析并添加倒日志列表中 */
+			for(int i=0; i<rstSize; i++)
+			{
+				result = results.get(i);
+				CommonSyslog log = new CommonSyslog();
+				log.fillByResult(result); // 填充日志字段
+				// 查询用户
+				Result userRst = userDao.get(log.getUserid(), null, null);
+				if(userRst != null) // 用户存在时
+				{
+					CommonUser user = new CommonUser();
+					user.fillByResult(userRst); // 填充用户字段
+					log.setUser(user); // 设置用户
+				}
+				logs.add(log);
+			}
+			rst.add(logs); // 添加日志列表到返回结果列表中
+			if(results.size() > pageSize) // 存在更多记录时
+			{
+				// 添加下一页起始行的rowKey到结果列表中
+				rst.add(Bytes.toString(results.get(pageSize).getRow()));
+			}
+			return rst; // 返回结果列表
+		}
+		return null;
 	}
 
 	@Override
 	public long getSyslogTotalSize()
 	{
-		String hql = "select count(*) from CommonSyslog l";
-		return (long) syslogDao.query(hql, null).get(0);
+		long size = 0;
+		try
+		{
+			size = syslogDao.rowCount("common_syslog", null); // 查询日志数量
+		}
+		catch(Throwable t)
+		{
+			
+		}
+		return size;
 	}
 
 	@Override
-	public void addFilterWord(CommonFilterWord word)
+	public CommonFilterWord putFilterWord(CommonFilterWord word, CommonSyslog log)
 	{
-		Map<String, Object> values = new HashMap<String, Object>(1);
-		values.put("word", word.getWord());
-		// 查询是否已存在该关键词
-		CommonFilterWord cfw = 
-				(CommonFilterWord) wordDao.query("from CommonFilterWord cfw where cfw.word=:word", values).get(0);
-		if(cfw != null) // 存在时更新
-		{
-			cfw.setLevel(word.getLevel());
-		}
-		else // 不存在时插入
-		{
-			wordDao.save(word);
-		}
+		wordDao.put(word); // 追加关键词
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		syslogDao.put(log); // 记录日志
+		
+		return word;
 	}
 	
 	@Override
-	public void addFilterWord(String filePath) throws GcException
+	public void putFilterWord(String filePath, CommonSyslog log) throws GcException
 	{
 		File file = new File(filePath);
 		BufferedReader br = null;
@@ -183,15 +302,12 @@ public class SystemManagerImpl implements SystemManager
 		{
 			br = new BufferedReader(new FileReader(file));
 			String[] temp;
-			CommonFilterWord word, tmpWord;
+			CommonFilterWord word;
 			Map<String, Object> value = new HashMap<String, Object>(1);
 			while((line = br.readLine()) != null) // 读取文件
 			{
 				temp = line.split("=");
 				value.put("word", temp[0]);
-				// 查询是否已存在该关键词
-				tmpWord = (CommonFilterWord) wordDao
-						.query("from CommonFilterWord cfw where cfw.word = :word", value).get(0);
 				if(temp.length == 1) // 没有填写过滤级别时
 				{
 					word = new CommonFilterWord(temp[0], FilterWordConst.LEVEL_SCREEN); // 默认为屏蔽
@@ -210,24 +326,16 @@ public class SystemManagerImpl implements SystemManager
 						word = new CommonFilterWord(temp[0], FilterWordConst.LEVEL_SCREEN);
 					}
 				}
-				if(tmpWord == null) // 已存在该关键词时更新
-				{
-					wordDao.save(word);
-				}
-				else // 不存在则插入
-				{
-					tmpWord.setLevel(word.getLevel());
-				}
+				wordDao.put(word); // 追加关键词
 			}
+			log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+			syslogDao.put(log); // 记录日志
 		}
-		catch(ConstraintViolationException ex)
-		{
-			throw new GcException("导入失败。有重复内容。");
-		} 
 		catch(Exception ex)
 		{
-			throw new GcException("导入失败。路径不正确或文件不存在。");
-		} finally
+			throw new GcException(ErrorMsg.FILTER_WORD_PATH_WRONG); // 文件不存在或路径错误
+		}
+		finally // 关闭流
 		{
 			if(br != null)
 			{
@@ -244,62 +352,80 @@ public class SystemManagerImpl implements SystemManager
 	}
 
 	@Override
-	public void updateFilterWord(CommonFilterWord word)
+	public void delFilterWord(List<String> rowKeys, CommonSyslog log)
 	{
-		wordDao.update(word);
-	}
-
-	@Override
-	public void delFilterWord(CommonFilterWord word)
-	{
-		wordDao.delete(word);
-	}
-
-	@Override
-	public void delFilterWord(Serializable id)
-	{
-		wordDao.delete(id);
-	}
-	
-	@Override
-	public void delFilterWord(Serializable[] ids)
-	{
-		for(Serializable id : ids)
-		{
-			wordDao.delete(id);
-		}
+		wordDao.delete(rowKeys); // 删除关键词
+		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
+		syslogDao.put(log); // 记录日志
 	}
 
 	@Override
 	public List<CommonFilterWord> findAllFilterWord()
 	{
-		return wordDao.list();
+		// 查询关键词
+		List<Result> results = wordDao.findByPage("common_filter_word", null, null, 0);
+		if(results != null) // 查询结果非空时
+		{
+			List<CommonFilterWord> rst = new ArrayList<CommonFilterWord>();
+			/* 解析结果并添加到结果列表中 */
+			for(Result result : results)
+			{
+				CommonFilterWord word = new CommonFilterWord();
+				word.fillByResult(result); // 填充关键词字段
+				rst.add(word);
+			}
+			return rst; // 返回结果列表
+		}
+		
+		return null;
 	}
 
 	@Override
-	public List findFilterWordByPage(Map<String, Object> values, int offset,
+	public List<Object> findFilterWordByPage(Map<String, Object> values, String startRow,
 			int pageSize)
 	{
-		StringBuffer hql = new StringBuffer("select cfw from CommonFilterWord cfw ");
-		StringBuffer hqlCnt = new StringBuffer("select count(cfw) from CommonFilterWord cfw ");
-		StringBuffer froms = new StringBuffer();
-		StringBuffer wheres = new StringBuffer(" where 1=1 ");
-		if(values.containsKey("word"))
+		FilterList fl = new FilterList();
+		if(values.containsKey("word")) // 模糊匹配关键词
 		{
-			wheres.append(" and cfw.word like :word ");
+			fl.addFilter(new RowFilter(CompareOp.EQUAL, new SubstringComparator(
+					String.valueOf(values.get("word")))));
 		}
-		if(values.containsKey("level"))
+		if(values.containsKey("level")) // 匹配过滤级别
 		{
-			wheres.append(" and cfw.level=:level ");
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("level"),
+					CompareOp.EQUAL, Bytes.toBytes(String.valueOf((values.get("level"))))));
 		}
-		hql.append(froms).append(wheres);
-		hqlCnt.append(froms).append(wheres);
+		fl.addFilter(new PageFilter(pageSize+1)); // 设置单页显示数
 		
-		List<Object> rst = new ArrayList<Object>();
-		rst.add(syslogDao.findByPage(hql.toString(), values, offset, pageSize));
-		rst.add((long) syslogDao.query(hqlCnt.toString(), values).get(0));
-		
-		return rst;
+		// 分页查询
+		List<Result> results = syslogDao.findByPage("common_filter_word", fl, startRow, pageSize+1);
+		if(results != null) // 结果非空时
+		{
+			List<Object> rst = new ArrayList<Object>();
+			List<CommonFilterWord> words = new ArrayList<CommonFilterWord>();
+			int rstSize = results.size();
+			if(rstSize > pageSize) // 结果数量大于需要的数量，即存在下一页时
+			{
+				rstSize = pageSize; // 循环判断上限设置为单页数量
+			}
+			Result result;
+			/* 解析结果并添加到结果列表中 */
+			for(int i=0; i<rstSize; i++)
+			{
+				result = results.get(i);
+				CommonFilterWord word = new CommonFilterWord();
+				word.fillByResult(result); // 填充关键词字段
+				words.add(word);
+			}
+			rst.add(words); // 添加日志列表到返回结果列表中
+			if(results.size() > pageSize) // 存在更多记录时
+			{
+				// 添加下一页起始行的rowKey到结果列表中
+				rst.add(Bytes.toString(results.get(pageSize).getRow()));
+			}
+			return rst; // 返回结果列表
+		}
+		return null;
 	}
 	
 }

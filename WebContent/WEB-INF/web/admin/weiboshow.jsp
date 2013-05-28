@@ -21,7 +21,7 @@
 			<table>
 				<tr>
 					<td>作者：</td>
-					<td><s:text name="weibo.commonUser.nickname" /></td>
+					<td><s:text name="weibo.author.nickname" /></td>
 				</tr>
 				<tr>
 					<td>发表时间：</td>
@@ -34,12 +34,12 @@
 				<tr>
 					<td>所在话题：</td>
 					<td>
-						<s:if test="#request.weibo.weiboTopicRelations == null">
+						<s:if test="#request.weibo.topics.size == 0">
 							<i>无</i>
 						</s:if>
 						<s:else>
 							<s:iterator var="topic"
-									value="#request.weibo.weiboTopicRelations.weiboTopic">
+									value="#request.weibo.topics">
 								<s:property value="#topic.title" />&nbsp;&nbsp;
 							</s:iterator>
 						</s:else>
@@ -82,7 +82,7 @@
 				<tr>
 					<td>内容：</td>
 					<td>
-						<s:textarea readonly="readonly" value='<s:property value="#request.weibo.content" />' />
+						<textarea readonly="readonly"><s:property value="#request.weibo.content" /></textarea>
 					</td>
 				</tr>
 				<s:if test="#request.weibo.middlePic.isEmpty()==false">

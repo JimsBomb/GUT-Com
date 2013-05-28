@@ -11,6 +11,7 @@ public class ResultMsg
 	public static final String ACCOUNT_LOGIN = "登录成功，稍后将转到后台首页。";
 	public static final String ACCOUNT_LOGOUT = "已成功退出登录。";
 	public static final String ACCOUNT_CHANGE_PWD = "已成功更改密码。";
+	public static final String ACCOUNT_CHANGE_PWD_FAILED = "更改密码失败，原密码不正确。";
 	
 	/* 过滤关键词管理操作信息 */
 	public static final String FILTER_WORD_ADD = "关键词已成功添加。";

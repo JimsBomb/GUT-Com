@@ -66,20 +66,12 @@
 					<s:a href="%{mgrurl}">首页</s:a>
 				</s:if>
 				<s:if test="#request.pageCount > 1">
-					<s:a href="%{mgrurl}&p=%{pageCount-1}">上一页</s:a>
+					<s:a href="%{mgrurl}&p=%{prevP}&pageCount=%{pageCount-1}">上一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount < #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageCount+1}">下一页</s:a>
+				<s:if test="#request.nextP != null">
+					<s:a href="%{mgrurl}&p=%{nextP}&pageCount=%{pageCount+1}">下一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount != #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageSize}">尾页</s:a>
-				</s:if>
-				当前第<s:property value="%{pageCount}" />页 <input type="text" id="txtPage" class="txtPage" name="p"
-					style="width: 30px;" onkeypress="return txtPageKeyPress(event);" />
-				<s:submit id="goto" value="跳转" method="mgr"
-					onclick="return checkPage(%{pageSize});" />
-				共<s:property value="%{pageSize}" />页
-				总计<s:property value="%{totalSize}" />条记录
+				当前第<s:property value="%{pageCount}" />页
 			</div>
 		</s:form>
 	</div>

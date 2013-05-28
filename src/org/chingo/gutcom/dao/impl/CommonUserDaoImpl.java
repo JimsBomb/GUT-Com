@@ -74,23 +74,23 @@ public class CommonUserDaoImpl extends HBaseSupport implements BaseDao<CommonUse
 						p.add(Bytes.toBytes("info"), Bytes.toBytes("bigavatarurl")
 								, Bytes.toBytes(instance.getBigavatarurl()));
 						/* family : status */
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("lastlogin")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("lastlogin")
 								, Bytes.toBytes(String.valueOf(instance.getLastlogin())));
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("lastip")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("lastip")
 								, Bytes.toBytes(instance.getLastip()));
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("weibocnt")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("weibocnt")
 								, Bytes.toBytes(String.valueOf(instance.getWeibocnt())));
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("follower")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("follower")
 								, Bytes.toBytes(String.valueOf(instance.getFollower())));
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("following")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("following")
 								, Bytes.toBytes(String.valueOf(instance.getFollowing())));
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("newfollower")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("newfollower")
 								, Bytes.toBytes(String.valueOf(instance.getNewfollower())));
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("newmsg")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("newmsg")
 								, Bytes.toBytes(String.valueOf(instance.getNewmsg())));
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("newat")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("newat")
 								, Bytes.toBytes(String.valueOf(instance.getNewat())));
-						p.add(Bytes.toBytes("info"), Bytes.toBytes("newcomment")
+						p.add(Bytes.toBytes("status"), Bytes.toBytes("newcomment")
 								, Bytes.toBytes(String.valueOf(instance.getNewcomment())));
 						htable.put(p);
 						return null;

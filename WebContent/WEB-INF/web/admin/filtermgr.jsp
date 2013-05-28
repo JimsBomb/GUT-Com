@@ -9,11 +9,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/style.css" media="all">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/admin/general.js"></script>
-<script type="text/javascript">
-$(function(){
-				
-});
-</script>
 </head>
 <body>
 	<div class="nav">当前位置：系统管理 -&gt; 内容过滤</div>
@@ -64,14 +59,14 @@ $(function(){
 				<s:iterator var="word" value="#request.lstWord">
 					<tr>
 						<td><input name="checkbox" class="checkbox" type="checkbox"
-							value='<s:property value="#word.wid" />' /></td>
+							value='<s:property value="#word.word" />' /></td>
 						<td><s:property value="#word.word" /></td>
 						<td style="text-align: center;"><s:if test="#word.level==0">屏蔽</s:if> <s:elseif
 									test="#word.level==1">审核</s:elseif> <s:elseif
 									test="#word.level==2">禁止发表</s:elseif></td>
 						<td><s:url action="filterdel" id="delurl">
 								<s:param name="id">
-									<s:property value="#word.wid" />
+									<s:property value="#word.word" />
 								</s:param>
 							</s:url> <s:a cssClass="delete" href="%{delurl}">删除</s:a></td>
 					</tr>
@@ -106,20 +101,12 @@ $(function(){
 					<s:a href="%{mgrurl}">首页</s:a>
 				</s:if>
 				<s:if test="#request.pageCount > 1">
-					<s:a href="%{mgrurl}&p=%{pageCount-1}">上一页</s:a>
+					<s:a href="%{mgrurl}&p=%{prevP}&pageCount=%{pageCount-1}">上一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount < #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageCount+1}">下一页</s:a>
+				<s:if test="#request.nextP != null">
+					<s:a href="%{mgrurl}&p=%{nextP}&pageCount=%{pageCount+1}">下一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount != #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageSize}">尾页</s:a>
-				</s:if>
-				当前第<s:property value="%{pageCount}" />页 <input type="text" id="txtPage" class="txtPage" name="p"
-					style="width: 30px;" onkeypress="return txtPageKeyPress(event);" />
-				<s:submit id="goto" value="跳转" method="mgr"
-					onclick="return checkPage(%{pageSize});" />
-				共<s:property value="%{pageSize}" />页
-				总计<s:property value="%{totalSize}" />条记录
+				当前第<s:property value="%{pageCount}" />页
 			</div>
 		</s:form>
 	</div>

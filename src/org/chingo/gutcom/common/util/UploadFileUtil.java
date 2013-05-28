@@ -21,7 +21,12 @@ public class UploadFileUtil
 		{
 			is = new FileInputStream(file);
 			toFile = new File(uploadPath, fileName);
-			if(toFile.exists() == false)
+			File toPath = new File(uploadPath);
+			if(!toPath.exists()) // 上传目录不存在时创建
+			{
+				toPath.mkdirs();
+			}
+			if(toFile.exists() == false) // 文件不存在时创建
 			{
 				toFile.createNewFile();
 			}

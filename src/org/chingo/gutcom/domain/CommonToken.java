@@ -1,11 +1,14 @@
 package org.chingo.gutcom.domain;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
+
 public class CommonToken implements java.io.Serializable
 {
 	private String userid; // rowKey，用户ID
 	private String accessToken; // 令牌
 	private CommonUser commonUser; // 用户对象
-	private long expiredTime; // 令牌过期时间戳
+	private long expiredTime = 0L; // 令牌过期时间戳
 	
 	public CommonToken()
 	{
@@ -59,4 +62,16 @@ public class CommonToken implements java.io.Serializable
 		this.expiredTime = expiredTime;
 	}
 	
+	/**
+	 * 根据Result填充字段
+	 * @param rst 填充数据源Result
+	 */
+	public void fillByResult(Result rst)
+	{
+		this.setUserid(Bytes.toString(rst.getRow()));
+		this.setAccessToken(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("access_token"))));
+		this.setExpiredTime(Long.parseLong(Bytes.toString(rst.getValue(
+				Bytes.toBytes("info"), Bytes.toBytes("expired_time")))));
+	}
 }

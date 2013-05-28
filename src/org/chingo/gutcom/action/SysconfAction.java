@@ -1,11 +1,17 @@
 package org.chingo.gutcom.action;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.chingo.gutcom.action.base.SystemBaseAction;
 import org.chingo.gutcom.common.CommonConst;
 import org.chingo.gutcom.common.constant.SysconfConst;
+import org.chingo.gutcom.common.constant.SyslogConst;
+import org.chingo.gutcom.common.constant.SystemConst;
+import org.chingo.gutcom.common.util.WebUtil;
+import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonUser;
 
 /**
  * 系统设置操作ACTION
@@ -136,7 +142,14 @@ public class SysconfAction extends SystemBaseAction
 		mapConf.put(SysconfConst.RECORDS_PER_PAGE, recordsPerPage);
 		mapConf.put(SysconfConst.LOG_LIFECYCLE, logLifecycle);
 		
-		sysMgr.updateConf(mapConf); // 提交更新
+		/* 生成日志对象 */
+		CommonSyslog log = new CommonSyslog();
+		log.setIp(WebUtil.getRemoteAddr(request));
+		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setType(SyslogConst.TYPE_OP_ADMIN);
+		log.setDetail(SyslogConst.DETAIL_ADMIN_CONF_UPDATE);
+		log.setDateline(new Date().getTime());
+		sysMgr.putConf(mapConf, log); // 提交更新
 		
 		application.put("sysconf", mapConf); // 更新application中的设置值
 		

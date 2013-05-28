@@ -1,5 +1,8 @@
 package org.chingo.gutcom.domain;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
+
 // Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 /**
@@ -53,4 +56,16 @@ public class WeiboTopicRelation implements java.io.Serializable
 		this.weiboId = weiboId;
 	}
 
+	/**
+	 * 根据Result填充字段
+	 * @param rst 填充数据源Result
+	 */
+	public void fillByResult(Result rst)
+	{
+		this.setId(Bytes.toString(rst.getRow()));
+		this.setTopicTitle(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("topic_title"))));
+		this.setWeiboId(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("weiboid"))));
+	}
 }

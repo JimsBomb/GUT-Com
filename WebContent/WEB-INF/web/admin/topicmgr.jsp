@@ -28,12 +28,6 @@
 			<input name="searchMode" type="hidden" value="1" />
 			<table>
 				<tr>
-					<td>话题排序：</td>
-					<td><s:select list="#{'dateline':'发表时间（默认）', 'count':'热度'}"
-							name="sort" listKey="key" listValue="value"
-							onchange="selectChanged(this.id)" /></td>
-				</tr>
-				<tr>
 					<td>话题状态：</td>
 					<td><s:select list="#{'-1':'不限', '0':'正常', '1':'禁止发表'}"
 							name="status" listKey="key" listValue="value"
@@ -72,10 +66,10 @@
 				<s:iterator var="t" value="#request.lstTopic">
 					<tr>
 						<td><input name="checkbox" class="checkbox" type="checkbox"
-							value='<s:property value="#t.tid" />' /></td>
+							value='<s:property value="#t.title" />' /></td>
 						<td><s:property value="#t.title" /></td>
 						<td style="text-align: center;"><s:property
-								value="#t.commonUser.nickname" /></td>
+								value="#t.sponsor.nickname" /></td>
 						<td><s:text name="format.datetime">
 								<s:param value="#t.dateline" />
 							</s:text></td>
@@ -90,31 +84,30 @@
 							</s:url> <s:a href="%{showurl}">查看微博</s:a> <s:url
 								action="topicupdateStatus" id="updatestatusurl">
 								<s:param name="id">
-									<s:property value="#t.tid" />
+									<s:property value="#t.title" />
 								</s:param>
-								<s:param name="status">
-									<s:property value="#t.isblock" />
+								<s:param name="newStatus">
+									<s:property value="%{#t.isblock^1}" />
 								</s:param>
 							</s:url> <s:a href="%{updatestatusurl}">
 								<s:if test="#t.isblock==0">屏蔽</s:if>
 								<s:elseif test="#t.isblock==1">解封</s:elseif>
 							</s:a> <s:url action="topicdel" id="delurl">
 								<s:param name="id">
-									<s:property value="#t.tid" />
+									<s:property value="#t.title" />
 								</s:param>
 							</s:url> <s:a cssClass="delete" href="%{delurl}">删除</s:a></td>
 					</tr>
 				</s:iterator>
 			</table>
 			选中项操作：<s:submit cssClass="delete" value="删除选中" method="del" />
-			<s:submit value="屏蔽/解封选中" method="audit" />
+			<!-- <s:submit value="屏蔽/解封选中" method="audit" /> -->
 			<div class="pager">
 				<s:hidden name="searchMode" />
 				<s:hidden name="title" />
 				<s:hidden name="startTime" />
 				<s:hidden name="endTime" />
 				<s:hidden name="status" />
-				<s:hidden name="sort" />
 				<s:if test="#request.searchMode == 1">
 					<s:url action="topicmgr" id="mgrurl">
 						<s:param name="searchMode">
@@ -132,9 +125,6 @@
 						<s:param name="status">
 							${ attr.status }
 						</s:param>
-						<s:param name="sort">
-							${ attr.sort }
-						</s:param>
 					</s:url>
 				</s:if>
 				<s:else>
@@ -148,25 +138,12 @@
 					<s:a href="%{mgrurl}">首页</s:a>
 				</s:if>
 				<s:if test="#request.pageCount > 1">
-					<s:a href="%{mgrurl}&p=%{pageCount-1}">上一页</s:a>
+					<s:a href="%{mgrurl}&p=%{prevP}&pageCount=%{pageCount-1}">上一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount < #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageCount+1}">下一页</s:a>
+				<s:if test="#request.nextP != null">
+					<s:a href="%{mgrurl}&p=%{nextP}&pageCount=%{pageCount+1}">下一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount != #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageSize}">尾页</s:a>
-				</s:if>
-				当前第
-				<s:property value="%{pageCount}" />
-				页 <input type="text" id="txtPage" class="txtPage" name="p"
-					style="width: 30px;" onkeypress="return txtPageKeyPress(event);" />
-				<s:submit id="goto" value="跳转" method="mgr"
-					onclick="return checkPage(%{pageSize});" />
-				共
-				<s:property value="%{pageSize}" />
-				页 总计
-				<s:property value="%{totalSize}" />
-				条记录
+				当前第<s:property value="%{pageCount}" />页
 			</div>
 		</s:form>
 	</div>

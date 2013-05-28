@@ -45,7 +45,7 @@
 			<a href="javascript:void(0);" title="折叠/展开">数据管理</a>
 		</h3>
 		<ul>
-			<li class="menuitem"><a href="admin/dbopmgr.do" target="mainFrame">备份/恢复</a></li>
+			<!-- <li class="menuitem"><a href="admin/dbopmgr.do" target="mainFrame">备份/恢复</a></li> -->
 			<li class="menuitem"><a href="admin/cachemgr.do" target="mainFrame">更新缓存</a></li>
 			<li class="menuitem"><a href="admin/syslogmgr.do" target="mainFrame">管理日志</a></li>
 		</ul>

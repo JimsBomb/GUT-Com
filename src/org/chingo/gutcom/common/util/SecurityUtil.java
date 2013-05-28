@@ -1,18 +1,19 @@
 package org.chingo.gutcom.common.util;
 
 import java.security.MessageDigest;
+import java.util.UUID;
 
 /**
- * ��ȫ������
- * @author TNT
+ * 安全Util类
+ * @author Chingo.Org
  * 
  */
 public class SecurityUtil
 {
 	/**
-	 * ����MD5����
-	 * @param string Ҫ���ܵ��ַ�
-	 * @return ���ܺ���ַ�
+	 * 对字符串进行MD5加密
+	 * @param string 要加密的字符串
+	 * @return 加密后的字符串
 	 */
 	public final static String md5(String string) {
         try {
@@ -28,4 +29,15 @@ public class SecurityUtil
             return null;
         }
     }
+	
+	/**
+	 * 生成基于UUID的唯一访问令牌
+	 * @return 访问令牌
+	 */
+	public final static String createAccessToken()
+	{
+		// 使用UUID生成令牌，去处-
+		String result = UUID.randomUUID().toString().replace("-", "");
+		return result;
+	}
 }

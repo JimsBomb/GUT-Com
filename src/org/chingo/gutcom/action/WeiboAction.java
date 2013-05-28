@@ -1,6 +1,7 @@
 package org.chingo.gutcom.action;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +10,12 @@ import org.chingo.gutcom.action.base.WeiboBaseAction;
 import org.chingo.gutcom.common.constant.ErrorMsg;
 import org.chingo.gutcom.common.constant.ResultMsg;
 import org.chingo.gutcom.common.constant.SysconfConst;
-import org.chingo.gutcom.common.constant.UserConst;
+import org.chingo.gutcom.common.constant.SyslogConst;
+import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.constant.WeiboConst;
 import org.chingo.gutcom.common.util.FormatUtil;
+import org.chingo.gutcom.common.util.WebUtil;
+import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.domain.WeiboContent;
 import org.chingo.gutcom.exception.GcException;
@@ -29,9 +33,9 @@ public class WeiboAction extends WeiboBaseAction
 	private String endTime; // 截止时间
 	private WeiboContent weibo; // 微博对象
 	
-	private long totalSize = 0; // 记录总数
-	private int pageCount = 1; // 当前页码
-	private int pageSize; // 总页数
+	private int pageCount = 1; // 当前页数
+	private String prevP; // 上一页起始行的rowKey
+	private String nextP; // 下一页起始行的rowKey
 	
 	private String resultMsg; // 操作结果信息
 	private String backTo; // 返回页面
@@ -120,25 +124,9 @@ public class WeiboAction extends WeiboBaseAction
 	{
 		return pageCount;
 	}
-	public long getTotalSize()
+	public void setPageCount(int pageCount)
 	{
-		return totalSize;
-	}
-	public int getPageSize()
-	{
-		return pageSize;
-	}
-	/**
-	 * 计算并设置总页数
-	 */
-	public void setPageSize()
-	{
-		int sizePerPage = Integer.parseInt(getConfigurations().get(SysconfConst.RECORDS_PER_PAGE));
-		this.pageSize = (int) (this.totalSize / sizePerPage);
-		if(this.totalSize % sizePerPage > 0)
-		{
-			this.pageSize++;
-		}
+		this.pageCount = pageCount;
 	}
 	public String getResultMsg()
 	{
@@ -149,26 +137,49 @@ public class WeiboAction extends WeiboBaseAction
 		return backTo;
 	}
 	
+	public String getPrevP()
+	{
+		return prevP;
+	}
+	public void setPrevP(String prevP)
+	{
+		this.prevP = prevP;
+	}
+	public String getNextP()
+	{
+		return nextP;
+	}
+	public void setNextP(String nextP)
+	{
+		this.nextP = nextP;
+	}
+	
+	/**
+	 * 微博管理列表Method
+	 * @return Action Result
+	 * @throws Exception
+	 */
 	public String mgr() throws Exception
 	{
 		// 存放请求参数
 		Map<String, Object> values = new HashMap<String, Object>();
+		String p = null;
 		if(searchMode == 1) // 搜索模式时
 		{
 			/* 作者昵称非空则获取 */
 			if(author!=null && author.isEmpty()==false)
 			{
-				values.put("author", "%" + author + "%");
+				values.put("author", author);
 			}
 			/* 内容非空则获取 */
 			if(content!=null && content.isEmpty()==false)
 			{
-				values.put("content", "%" + content + "%");
+				values.put("content", content);
 			}
 			/* 话题非空则获取 */
 			if(topic!=null && topic.isEmpty()==false)
 			{
-				values.put("topic", "%" + topic + "%");
+				values.put("topic", topic);
 			}
 			/* 起始时间非空则获取 */
 			if(startTime!=null && startTime.isEmpty()==false)
@@ -209,27 +220,43 @@ public class WeiboAction extends WeiboBaseAction
 			}
 		}
 		/* 处理分页 */
-		if (parameters.containsKey("p"))
+		if (parameters.containsKey("p")) // 分页时获取下一页起始行
 		{
-			String p = ((String[])parameters.get("p"))[0];
-			try
-			{
-				pageCount = Integer.parseInt(p);
-			}
-			catch (Exception ex)
-			{
-				throw new GcException(ErrorMsg.INVALID_PARAM);
-			}
+			p = ((String[])parameters.get("p"))[0];
 		}
 		int sizePerPage = Integer.parseInt(getConfigurations().get(SysconfConst.RECORDS_PER_PAGE));
-		List rst = weiboMgr.findWeiboByPage(values, (pageCount-1)*sizePerPage, sizePerPage);
-		lstWeibo = (List<WeiboContent>) rst.get(0); // 获取结果集
-		totalSize = (long) rst.get(1); // 获取结果总数
-		if(totalSize == 0)
+		List<Object> rst = weiboMgr.findWeiboByPage(values, p, sizePerPage);
+		if(rst != null)
 		{
-			pageCount = 0;
+			lstWeibo = (List<WeiboContent>) rst.get(0); // 获取结果集
+			if(rst.size() > 1) // 有下一页时
+			{
+				nextP = (String) rst.get(1); // 获取并设置下一页起始行的rowKey
+			}
 		}
-		setPageSize(); // 计算总页数
+		/* SESSION分页历史处理 */
+		List<String> pageKey; // 存储分页历史的首行rowKey
+		if(session.containsKey(SystemConst.SESSION_PAGE)) // session中有分页历史时获取
+		{
+			pageKey = (List<String>) session.get(SystemConst.SESSION_PAGE);
+		}
+		else // 否则新建
+		{
+			pageKey = new ArrayList<String>();
+		}
+		if(pageCount > 1) // 当前不是第一页时
+		{
+			prevP = pageKey.get(pageCount-2); // 设置上一页首行rowKey
+		}
+		else // 否则清空历史
+		{
+			pageKey.clear();
+		}
+		if(lstWeibo!=null && lstWeibo.size()>0) // 当内容列表非空时
+		{
+			pageKey.add(lstWeibo.get(0).getWid()); // 将当前首行rowKey添加到历史列表中
+		}
+		session.put(SystemConst.SESSION_PAGE, pageKey); // 替换session中的旧分页历史
 
 		return "mgr";
 	}
@@ -242,7 +269,7 @@ public class WeiboAction extends WeiboBaseAction
 	public String del() throws Exception
 	{
 		Object[] params; // 请求参数
-		Integer[] ids; // 微博ID
+		List<String> ids = new ArrayList<String>(); // 微博ID
 		try
 		{
 			if(parameters.containsKey("id")) // 删除单条微博时
@@ -258,17 +285,23 @@ public class WeiboAction extends WeiboBaseAction
 				throw new Exception();
 			}
 			/* 填充ID列表 */
-			ids = new Integer[params.length];
 			for(int i=0; i<params.length; i++)
 			{
-				ids[i] = Integer.parseInt(params[i].toString());
+				ids.add(params[i].toString());
 			}
 		}
 		catch(Exception ex)
 		{
 			throw new GcException(ErrorMsg.INVALID_PARAM);
 		}
-		weiboMgr.delWeibo(ids, null); // 执行删除
+		/* 生成日志对象 */
+		CommonSyslog log = new CommonSyslog();
+		log.setIp(WebUtil.getRemoteAddr(request));
+		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setType(SyslogConst.TYPE_OP_ADMIN);
+		log.setDetail(SyslogConst.DETAIL_ADMIN_WEIBO_DEL);
+		log.setDateline(new Date().getTime());
+		weiboMgr.delWeibo(ids, log); // 执行删除
 		
 		this.resultMsg = ResultMsg.WEIBO_DEL; // 设置操作结果信息
 		this.backTo = "weibomgr.do"; // 设置返回页面
@@ -277,7 +310,7 @@ public class WeiboAction extends WeiboBaseAction
 	}
 	
 	/**
-	 * 微博审核Method
+	 * 微博审核列表Method
 	 * @return Action Result
 	 * @throws Exception
 	 */
@@ -285,29 +318,46 @@ public class WeiboAction extends WeiboBaseAction
 	{
 		// 存放请求参数
 		Map<String, Object> values = new HashMap<String, Object>();
+		String p = null;
 		values.put("status", WeiboConst.STATUS_NOT_AUDIT); // 只查询未审核的微博
 		/* 处理分页 */
-		if (parameters.containsKey("p"))
+		if (parameters.containsKey("p")) // 分页时获取下一页起始行
 		{
-			String p = ((String[])parameters.get("p"))[0];
-			try
-			{
-				pageCount = Integer.parseInt(p);
-			}
-			catch (Exception ex)
-			{
-				throw new GcException(ErrorMsg.INVALID_PARAM);
-			}
+			p = ((String[])parameters.get("p"))[0];
 		}
 		int sizePerPage = Integer.parseInt(getConfigurations().get(SysconfConst.RECORDS_PER_PAGE));
-		List rst = weiboMgr.findWeiboByPage(values, (pageCount-1)*sizePerPage, sizePerPage);
-		lstWeibo = (List<WeiboContent>) rst.get(0); // 获取结果集
-		totalSize = (long) rst.get(1); // 获取结果总数
-		if(totalSize == 0)
+		List<Object> rst = weiboMgr.findWeiboByPage(values, p, sizePerPage);
+		if(rst != null)
 		{
-			pageCount = 0;
+			lstWeibo = (List<WeiboContent>) rst.get(0); // 获取结果集
+			if(rst.size() > 1) // 有下一页时
+			{
+				nextP = (String) rst.get(1); // 获取并设置下一页起始行的rowKey
+			}
 		}
-		setPageSize(); // 计算总页数
+		/* SESSION分页历史处理 */
+		List<String> pageKey; // 存储分页历史的首行rowKey
+		if(session.containsKey(SystemConst.SESSION_PAGE)) // session中有分页历史时获取
+		{
+			pageKey = (List<String>) session.get(SystemConst.SESSION_PAGE);
+		}
+		else // 否则新建
+		{
+			pageKey = new ArrayList<String>();
+		}
+		if(pageCount > 1) // 当前不是第一页时
+		{
+			prevP = pageKey.get(pageCount-2); // 设置上一页首行rowKey
+		}
+		else // 否则清空历史
+		{
+			pageKey.clear();
+		}
+		if(lstWeibo!=null && lstWeibo.size()>0) // 当内容列表非空时
+		{
+			pageKey.add(lstWeibo.get(0).getWid()); // 将当前首行rowKey添加到历史列表中
+		}
+		session.put(SystemConst.SESSION_PAGE, pageKey); // 替换session中的旧分页历史
 
 		return "auditmgr";
 	}
@@ -320,7 +370,7 @@ public class WeiboAction extends WeiboBaseAction
 	public String audit() throws Exception
 	{
 		Object[] params; // 请求参数
-		Integer[] ids; // 微博ID
+		List<String> ids = new ArrayList<String>(); // 微博ID
 		try
 		{
 			if(parameters.containsKey("id")) // 审核单条微博时
@@ -336,17 +386,23 @@ public class WeiboAction extends WeiboBaseAction
 				throw new Exception();
 			}
 			/* 填充ID列表 */
-			ids = new Integer[params.length];
 			for(int i=0; i<params.length; i++)
 			{
-				ids[i] = Integer.parseInt(params[i].toString());
+				ids.add(params[i].toString());
 			}
 		}
 		catch(Exception ex)
 		{
 			throw new GcException(ErrorMsg.INVALID_PARAM);
 		}
-		weiboMgr.updateWeiboStatus(ids, WeiboConst.STATUS_AUDIT, null); // 执行审核
+		/* 生成日志对象 */
+		CommonSyslog log = new CommonSyslog();
+		log.setIp(WebUtil.getRemoteAddr(request));
+		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setType(SyslogConst.TYPE_OP_ADMIN);
+		log.setDetail(SyslogConst.DETAIL_ADMIN_WEIBO_AUDIT);
+		log.setDateline(new Date().getTime());
+		weiboMgr.updateWeiboStatus(ids, WeiboConst.STATUS_AUDIT, log); // 执行审核
 		
 		this.resultMsg = ResultMsg.WEIBO_AUDIT; // 设置操作结果信息
 		this.backTo = "weiboauditmgr.do"; // 设置返回页面
@@ -361,11 +417,10 @@ public class WeiboAction extends WeiboBaseAction
 	 */
 	public String show() throws Exception
 	{
-		Integer id;
+		String id;
 		try
 		{
-			String tmp = ((String[]) parameters.get("id"))[0];
-			id = Integer.parseInt(tmp);
+			id = ((String[]) parameters.get("id"))[0];
 		}
 		catch(Exception ex)
 		{

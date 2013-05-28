@@ -1,9 +1,13 @@
 package org.chingo.gutcom.action;
 
+import java.util.Date;
+
 import org.chingo.gutcom.action.base.AccountBaseAction;
 import org.chingo.gutcom.common.constant.ResultMsg;
+import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
-import org.chingo.gutcom.common.util.SecurityUtil;
+import org.chingo.gutcom.common.util.WebUtil;
+import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonUser;
 
 public class AccountAction extends AccountBaseAction
@@ -31,7 +35,7 @@ public class AccountAction extends AccountBaseAction
 	{
 		this.newPwd = newPwd;
 	}
-	public String getResulMsg()
+	public String getResultMsg()
 	{
 		return this.resultMsg;
 	}
@@ -47,8 +51,16 @@ public class AccountAction extends AccountBaseAction
 	 */
 	public String login() throws Exception
 	{
-		CommonUser user = accMgr.getUser(name, SecurityUtil.md5(pwd));
-		if(user==null || user.getUid()!=0) // 验证不通过
+		/* 生成日志对象 */
+		CommonSyslog log = new CommonSyslog();
+		log.setIp(WebUtil.getRemoteAddr(request));
+		log.setUserid(SystemConst.USER_ID_NOT_LOGIN);
+		log.setType(SyslogConst.TYPE_LOGIN_BACK);
+		log.setDetail(SyslogConst.DETAIL_ADMIN_LOGIN);
+		log.setDateline(new Date().getTime());
+		// 查询用户
+		CommonUser user = accMgr.getUser(name, pwd, log);
+		if(user==null || !user.getUid().equals("0"))
 		{
 			return LOGIN;
 		}
@@ -84,11 +96,25 @@ public class AccountAction extends AccountBaseAction
 		{
 			if(!pwd.equals(newPwd)) // 新旧密码不相同时
 			{
-				accMgr.updatePwd(pwd, newPwd); // 更新密码
+				/* 生成日志对象 */
+				CommonSyslog log = new CommonSyslog();
+				log.setIp(WebUtil.getRemoteAddr(request));
+				log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+				log.setType(SyslogConst.TYPE_OP_ADMIN);
+				log.setDetail(SyslogConst.DETAIL_ADMIN_PW_UPDATE);
+				log.setDateline(new Date().getTime());
+				if(false == accMgr.updatePwd(pwd, newPwd, log)) // 更新密码失败时
+				{
+					this.resultMsg = ResultMsg.ACCOUNT_CHANGE_PWD_FAILED;
+				}
+				else // 更新成功时
+				{
+					this.resultMsg = ResultMsg.ACCOUNT_CHANGE_PWD;
+				}
 			}
+			this.backTo = "changepwd.do";
+			return SUCCESS;
 		}
-		this.resultMsg = ResultMsg.ACCOUNT_CHANGE_PWD;
-		this.backTo = "changePwd.do";
-		return SUCCESS;
+		return "changePwd"; // 转到密码更改页面
 	}
 }

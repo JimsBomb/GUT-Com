@@ -4,12 +4,17 @@ import java.util.Date;
 
 import org.chingo.gutcom.action.base.MsgBaseAction;
 import org.chingo.gutcom.common.constant.MsgConst;
+import org.chingo.gutcom.common.constant.SyslogConst;
+import org.chingo.gutcom.common.constant.SystemConst;
+import org.chingo.gutcom.common.util.WebUtil;
 import org.chingo.gutcom.domain.CommonMsgRecv;
+import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonUser;
 
 public class MsgAction extends MsgBaseAction
 {
 	private String content; // 消息内容
-	private int offset; // 第一个用户的索引
+	private int offset = -1; // 第一个用户的索引
 	private int size; // 每批次发送用户数
 	
 	public String getContent()
@@ -58,15 +63,15 @@ public class MsgAction extends MsgBaseAction
 		CommonMsgRecv msg = new CommonMsgRecv();
 		msg.setContent(content); // 内容
 		msg.setDateline(new Date().getTime()); // 发送时间戳
-		msg.setIsread(MsgConst.MSG_NOT_READ); // 未读标记
-		if(msgMgr.addMsg(offset, size, msg, null) == false) // 未发送完毕
-		{
-			offset += size;
-		}
-		else // 发送完毕
-		{
-			offset = -1;
-		}
+		msg.setIsread(MsgConst.FLAG_NOT_READ); // 未读标记
+		/* 生成日志对象 */
+		CommonSyslog log = new CommonSyslog();
+		log.setIp(WebUtil.getRemoteAddr(request));
+		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setType(SyslogConst.TYPE_OP_ADMIN);
+		log.setDetail(SyslogConst.DETAIL_ADMIN_MSG_SEND);
+		log.setDateline(new Date().getTime());
+		msgMgr.sendNotice(msg, log); // 发送消息
 		
 		return "send";
 	}

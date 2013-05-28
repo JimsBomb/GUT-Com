@@ -7,4 +7,6 @@ public class UserConst
 	
 	public static final String AVATAR_URL = "";
 	public static final String BIG_AVATAR_URL = "";
+	
+	public static final String SYSTEM_ID = "0";
 }

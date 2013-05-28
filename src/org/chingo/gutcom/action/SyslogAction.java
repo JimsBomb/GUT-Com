@@ -2,6 +2,7 @@ package org.chingo.gutcom.action;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,11 @@ import org.chingo.gutcom.action.base.SystemBaseAction;
 import org.chingo.gutcom.common.constant.ErrorMsg;
 import org.chingo.gutcom.common.constant.ResultMsg;
 import org.chingo.gutcom.common.constant.SysconfConst;
+import org.chingo.gutcom.common.constant.SyslogConst;
+import org.chingo.gutcom.common.constant.SystemConst;
+import org.chingo.gutcom.common.util.WebUtil;
 import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.exception.GcException;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -23,9 +28,9 @@ import com.opensymphony.xwork2.ActionContext;
 public class SyslogAction extends SystemBaseAction
 {
 	private List<CommonSyslog> lstLog; // 存放系统日志列表
-	private long totalSize = 0; // 记录总数
-	private int pageCount = 1; // 当前页码
-	private int pageSize; // 总页数
+	private int pageCount = 1; // 当前页数
+	private String prevP; // 上一页起始行的rowKey
+	private String nextP; // 下一页起始行的rowKey
 	private int searchMode = 0; // 搜索模式：0-否，1-是
 	private String username; // 用户昵称
 	private String startTime; // 起始时间
@@ -40,32 +45,14 @@ public class SyslogAction extends SystemBaseAction
 		return this.lstLog;
 	}
 	
-	public long getTotalSize()
-	{
-		return this.totalSize;
-	}
-	
 	public int getPageCount()
 	{
 		return this.pageCount;
 	}
 	
-	public int getPageSize()
+	public void setPageCount(int pageCount)
 	{
-		return this.pageSize;
-	}
-	
-	/**
-	 * 计算并设置总页数
-	 */
-	public void setPageSize()
-	{
-		int sizePerPage = Integer.parseInt(getConfigurations().get(SysconfConst.RECORDS_PER_PAGE));
-		this.pageSize = (int) (this.totalSize / sizePerPage);
-		if(this.totalSize % sizePerPage > 0)
-		{
-			this.pageSize++;
-		}
+		this.pageCount = pageCount;
 	}
 	
 	public int getSearchMode()
@@ -128,6 +115,26 @@ public class SyslogAction extends SystemBaseAction
 		return backTo;
 	}
 
+	public String getPrevP()
+	{
+		return prevP;
+	}
+
+	public void setPrevP(String prevP)
+	{
+		this.prevP = prevP;
+	}
+
+	public String getNextP()
+	{
+		return nextP;
+	}
+
+	public void setNextP(String nextP)
+	{
+		this.nextP = nextP;
+	}
+
 	/**
 	 * 管理Method
 	 * @return Action Result
@@ -137,12 +144,13 @@ public class SyslogAction extends SystemBaseAction
 	{
 		// 存放请求参数
 		Map<String, Object> values = new HashMap<String, Object>();
+		String p = null;
 		if(searchMode == 1) // 搜索模式时
 		{
 			/* 用户昵称非空则获取 */
 			if(username!=null && username.isEmpty()==false)
 			{
-				values.put("username", "%" + username + "%");
+				values.put("username", username);
 			}
 			/* 起始时间非空则获取 */
 			if(startTime!=null && startTime.isEmpty()==false)
@@ -182,27 +190,44 @@ public class SyslogAction extends SystemBaseAction
 			}
 		}
 		/* 处理分页 */
-		if (parameters.containsKey("p"))
+		if (parameters.containsKey("p")) // 分页时获取下一页起始行
 		{
-			String p = ((String[])parameters.get("p"))[0];
-			try
-			{
-				pageCount = Integer.parseInt(p);
-			}
-			catch (Exception ex)
-			{
-				throw new GcException(ErrorMsg.INVALID_PARAM);
-			}
+			p = ((String[])parameters.get("p"))[0];
 		}
 		int sizePerPage = Integer.parseInt(getConfigurations().get(SysconfConst.RECORDS_PER_PAGE));
-		List rst = sysMgr.findSyslogByPage(values, (pageCount-1)*sizePerPage, sizePerPage);
-		lstLog = (List<CommonSyslog>) rst.get(0); // 获取结果集
-		totalSize = (long) rst.get(1); // 获取结果总数
-		if(totalSize == 0)
+		List<Object> rst = sysMgr.findSyslogByPage(values, p, sizePerPage);
+		if(rst != null)
 		{
-			pageCount = 0;
+			lstLog = (List<CommonSyslog>) rst.get(0); // 获取结果集
+			if(rst.size() > 1) // 有下一页时
+			{
+				nextP = (String) rst.get(1); // 获取并设置下一页起始行的rowKey
+			}
 		}
-		setPageSize(); // 计算总页数
+		
+		/* SESSION分页历史处理 */
+		List<String> pageKey; // 存储分页历史的首行rowKey
+		if(session.containsKey(SystemConst.SESSION_PAGE)) // session中有分页历史时获取
+		{
+			pageKey = (List<String>) session.get(SystemConst.SESSION_PAGE);
+		}
+		else // 否则新建
+		{
+			pageKey = new ArrayList<String>();
+		}
+		if(pageCount > 1) // 当前不是第一页时
+		{
+			prevP = pageKey.get(pageCount-2); // 设置上一页首行rowKey
+		}
+		else // 否则清空历史
+		{
+			pageKey.clear();
+		}
+		if(lstLog!=null && lstLog.size()>0) // 当内容列表非空时
+		{
+			pageKey.add(lstLog.get(0).getLid()); // 将当前首行rowKey添加到历史列表中
+		}
+		session.put(SystemConst.SESSION_PAGE, pageKey); // 替换session中的旧分页历史
 
 		return "mgr";
 	}
@@ -215,7 +240,7 @@ public class SyslogAction extends SystemBaseAction
 	public String del() throws Exception
 	{
 		Object[] params; // 请求参数
-		Long[] ids; // 日志ID
+		List<String> ids = new ArrayList<String>(); // 日志ID
 		try
 		{
 			if(parameters.containsKey("id")) // 删除单条日志时
@@ -231,17 +256,23 @@ public class SyslogAction extends SystemBaseAction
 				throw new Exception();
 			}
 			/* 填充ID列表 */
-			ids = new Long[params.length];
 			for(int i=0; i<params.length; i++)
 			{
-				ids[i] = Long.parseLong(params[i].toString());
+				ids.add(params[i].toString());
 			}
 		}
 		catch(Exception ex)
 		{
 			throw new GcException(ErrorMsg.INVALID_PARAM);
 		}
-		sysMgr.delSyslog(ids); // 执行删除
+		/* 生成日志对象 */
+		CommonSyslog log = new CommonSyslog();
+		log.setIp(WebUtil.getRemoteAddr(request));
+		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setType(SyslogConst.TYPE_OP_ADMIN);
+		log.setDetail(SyslogConst.DETAIL_ADMIN_LOG_DEL);
+		log.setDateline(new Date().getTime());
+		sysMgr.delSyslog(ids, log); // 执行删除
 		
 		this.resultMsg = ResultMsg.LOG_DEL; // 设置操作结果信息
 		this.backTo = "syslogmgr.do"; // 设置返回页面

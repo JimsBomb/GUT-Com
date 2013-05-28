@@ -17,7 +17,7 @@
         <property name="configuration" ref="hbaseConfiguration" />
     </bean>
     
-    <bean id="hbtest" class="org.chingo.gutcom.hadoop.HbaseTest">
+    <bean id="hbsupport" class="org.chingo.gutcom.hbase.HBaseSupport">
         <property name="ht" ref="htemplate" />
     </bean>
        

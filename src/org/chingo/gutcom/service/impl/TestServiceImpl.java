@@ -20,7 +20,7 @@ public class TestServiceImpl implements TestService
 	public void addLog(CommonSyslog log)
 	{
 		// TODO Auto-generated method stub
-		log.setCommonUser((CommonUser) td.getOne(CommonUser.class));
+		log.setUser((CommonUser) td.getOne(CommonUser.class));
 		td.save(log);
 	}
 

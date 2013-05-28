@@ -3,6 +3,7 @@ package org.chingo.gutcom.common.util;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class FormatUtil
 {
@@ -60,5 +61,14 @@ public class FormatUtil
 		
 		
 		return size;
+	}
+	
+	/**
+	 * 创建rowKey，根据Long.MAX_VALUE-CURRENT_TIME生成，以实现HBase中新记录排在前面
+	 * @return 生成的rowKey
+	 */
+	public static String createRowKey()
+	{
+		return String.valueOf(Long.MAX_VALUE - new Date().getTime());
 	}
 }

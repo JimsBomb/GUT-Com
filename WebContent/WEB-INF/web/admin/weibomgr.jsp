@@ -83,14 +83,14 @@
 						<td><input name="checkbox" class="checkbox" type="checkbox"
 							value='<s:property value="#w.wid" />' /></td>
 						<td style="text-align: center;"><s:property
-								value="#w.commonUser.nickname" /></td>
+								value="#w.author.nickname" /></td>
 						<td><s:property value="#w.content" /></td>
-						<td><s:if test="#w.weiboTopicRelations == null">
+						<td><s:if test="#w.topics.size == 0">
 								<i>无</i>
 							</s:if>
 							<s:else>
 								<s:iterator var="topic"
-									value="#w.weiboTopicRelations.weiboTopic">
+									value="#w.topics">
 									<s:property value="#topic.title" />&nbsp;&nbsp;
 							</s:iterator>
 							</s:else></td>
@@ -106,7 +106,7 @@
 									<s:property value="#w.wid" />
 								</s:param>
 							</s:url> <s:a href="%{showurl}">查看</s:a> <s:url
-								action="weiboupdateStatus" id="updatestatusurl">
+								action="weiboaudit" id="updatestatusurl">
 								<s:param name="id">
 									<s:property value="#w.wid" />
 								</s:param>
@@ -172,25 +172,12 @@
 					<s:a href="%{mgrurl}">首页</s:a>
 				</s:if>
 				<s:if test="#request.pageCount > 1">
-					<s:a href="%{mgrurl}&p=%{pageCount-1}">上一页</s:a>
+					<s:a href="%{mgrurl}&p=%{prevP}&pageCount=%{pageCount-1}">上一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount < #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageCount+1}">下一页</s:a>
+				<s:if test="#request.nextP != null">
+					<s:a href="%{mgrurl}&p=%{nextP}&pageCount=%{pageCount+1}">下一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount != #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageSize}">尾页</s:a>
-				</s:if>
-				当前第
-				<s:property value="%{pageCount}" />
-				页 <input type="text" id="txtPage" class="txtPage" name="p"
-					style="width: 30px;" onkeypress="return txtPageKeyPress(event);" />
-				<s:submit id="goto" value="跳转" method="mgr"
-					onclick="return checkPage(%{pageSize});" />
-				共
-				<s:property value="%{pageSize}" />
-				页 总计
-				<s:property value="%{totalSize}" />
-				条记录
+				当前第<s:property value="%{pageCount}" />页
 			</div>
 		</s:form>
 	</div>

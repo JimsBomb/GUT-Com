@@ -42,9 +42,9 @@
 					<tr>
 						<td><input name="checkbox" class="checkbox" type="checkbox"
 							value='<s:property value="#r.rid" />' /></td>
-						<td><s:property value="#r.weiboContent.content" /></td>
+						<td><s:property value="#r.reportWeibo.content" /></td>
 						<td style="text-align: center;"><s:property
-								value="#r.commonUser.nickname" /></td>
+								value="#r.reportUser.nickname" /></td>
 						<td><s:property value="#r.reason" /></td>
 						<td><s:text name="format.datetime">
 								<s:param value="#r.dateline" />
@@ -60,6 +60,9 @@
 							<s:url action="wbReportupdateStatus" id="updatestatusurl">
 								<s:param name="id">
 									<s:property value="#r.rid" />
+								</s:param>
+								<s:param name="newStatus">
+									<s:property value="%{#r.status^1}" />
 								</s:param>
 							</s:url> <s:a href="%{updatestatusurl}">
 								标记已处理
@@ -98,20 +101,12 @@
 					<s:a href="%{mgrurl}">首页</s:a>
 				</s:if>
 				<s:if test="#request.pageCount > 1">
-					<s:a href="%{mgrurl}&p=%{pageCount-1}">上一页</s:a>
+					<s:a href="%{mgrurl}&p=%{prevP}&pageCount=%{pageCount-1}">上一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount < #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageCount+1}">下一页</s:a>
+				<s:if test="#request.nextP != null">
+					<s:a href="%{mgrurl}&p=%{nextP}&pageCount=%{pageCount+1}">下一页</s:a>
 				</s:if>
-				<s:if test="#request.pageCount != #request.pageSize">
-					<s:a href="%{mgrurl}&p=%{pageSize}">尾页</s:a>
-				</s:if>
-				当前第<s:property value="%{pageCount}" />页 <input type="text" id="txtPage" class="txtPage" name="p"
-					style="width: 30px;" onkeypress="return txtPageKeyPress(event);" />
-				<s:submit id="goto" value="跳转" method="mgr"
-					onclick="return checkPage(%{pageSize});" />
-				共<s:property value="%{pageSize}" />页
-				总计<s:property value="%{totalSize}" />条记录
+				当前第<s:property value="%{pageCount}" />页
 			</div>
 		</s:form>
 	</div>

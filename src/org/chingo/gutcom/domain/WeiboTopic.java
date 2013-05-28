@@ -1,5 +1,8 @@
 package org.chingo.gutcom.domain;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
+
 // Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 /**
@@ -100,4 +103,22 @@ public class WeiboTopic implements java.io.Serializable
 		this.lastpost = lastpost;
 	}
 
+	/**
+	 * 根据Result填充字段
+	 * @param rst 填充数据源Result
+	 */
+	public void fillByResult(Result rst)
+	{
+		this.setTitle(Bytes.toString(rst.getRow()));
+		this.setSponsorId(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("sponsorid"))));
+		this.setCount(Integer.parseInt(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("count")))));
+		this.setDateline(Long.parseLong(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("dateline")))));
+		this.setIsblock(Byte.parseByte(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("isblock")))));
+		this.setLastpost(Long.parseLong(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("lastpost")))));
+	}
 }

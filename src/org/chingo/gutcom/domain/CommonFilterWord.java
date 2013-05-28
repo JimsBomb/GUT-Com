@@ -1,5 +1,8 @@
 package org.chingo.gutcom.domain;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
+
 // Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 /**
@@ -40,4 +43,14 @@ public class CommonFilterWord implements java.io.Serializable
 		this.level = level;
 	}
 
+	/**
+	 * 根据Result填充字段
+	 * @param rst 填充数据源Result
+	 */
+	public void fillByResult(Result rst)
+	{
+		this.setWord(Bytes.toString(rst.getRow()));
+		this.setLevel(Byte.parseByte(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("level")))));
+	}
 }

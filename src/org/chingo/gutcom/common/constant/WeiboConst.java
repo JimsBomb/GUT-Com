@@ -27,4 +27,12 @@ public class WeiboConst
 	 */
 	public static final byte REPORT_DEALED = 1;
 	
+	/**
+	 * 话题屏蔽状态：1-已屏蔽
+	 */
+	public static final byte TOPIC_BLOCK = 1;
+	/**
+	 * 话题屏蔽状态：0-未屏蔽
+	 */
+	public static final byte TOPIC_NOT_BLOCK = 0;
 }

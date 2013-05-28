@@ -40,7 +40,10 @@ public class HBaseSupport
 		{
 			scan.setFilter(fl); // 设置过滤器
 		}
-		scan.setStartRow(Bytes.toBytes(startRow)); // 设置第一行row值
+		if(startRow != null)
+		{
+			scan.setStartRow(Bytes.toBytes(startRow)); // 设置第一行row值
+		}
 		/* 扫描表并返回结果 */
 		List<Result> rst = ht.find(table, scan, new RowMapper<Result>()
 		{
