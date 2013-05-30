@@ -12,6 +12,10 @@ public class SystemConst
 	 */
 	public static final String SESSION_USER = "user";
 	/**
+	 * Session令牌key值
+	 */
+	public static final String SESSION_TOKEN = "token";
+	/**
 	 * Session分页记录key值
 	 */
 	public static final String SESSION_PAGE = "page";

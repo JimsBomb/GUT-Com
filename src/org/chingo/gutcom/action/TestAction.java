@@ -1,7 +1,12 @@
 package org.chingo.gutcom.action;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.service.TestService;
@@ -16,10 +21,36 @@ public class TestAction extends ActionSupport
 	private static final long serialVersionUID = 1L;
 
 	private TestService ts;
+	private Map<String, Object> jsonRst = new HashMap<String, Object>();
 	
 	public void setTs(TestService ts)
 	{
 		this.ts = ts;
+	}
+	
+	public Map<String, Object> getJsonRst()
+	{
+		return this.jsonRst;
+	}
+	
+	public String test() throws Exception
+	{
+		Map<String, Object> m = new HashMap<String, Object>();
+		UserInfoBean userInfo = new UserInfoBean();
+		userInfo.setLatest(userInfo.new Latest());
+		Object tt = null;
+		m.put("a", 1);
+		m.put("b", 2);
+		m.put("c", tt);
+		List<Object> lst = new ArrayList<Object>();
+		lst.add("lst1");
+		lst.add("lst2");
+		lst.add("lst3");
+		m.put("lst", lst);
+		jsonRst.put("m", m);
+		jsonRst.put("aa", 11);
+		jsonRst.put("bb", 22);
+		return SUCCESS;
 	}
 	
 	public String addLog() throws Exception

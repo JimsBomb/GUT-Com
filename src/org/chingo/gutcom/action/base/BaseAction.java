@@ -12,11 +12,12 @@ import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.interceptor.SessionAware;
+import org.chingo.gutcom.common.constant.SystemConst;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * ÇëÇó¡¢ÏìÓ¦¡¢·þÎñÆ÷µÈ»ù±¾ÐÅÏ¢Ìá¹©Àà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È»ï¿½ï¿½ï¿½Ï¢ï¿½á¹©ï¿½ï¿½
  * @author Chingo.Org
  *
  */
@@ -36,7 +37,7 @@ ParameterAware, ApplicationAware, ServletRequestAware, ServletResponseAware {
 	
 	public Map<String, String> getConfigurations()
 	{
-		return (Map<String, String>) application.get("sysconf");
+		return (Map<String, String>) application.get(SystemConst.CONTEXT_CONF);
 	}
 
 	@Override

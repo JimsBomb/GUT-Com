@@ -3,6 +3,7 @@ package org.chingo.gutcom.service;
 import java.util.List;
 import java.util.Map;
 
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonUser;
 
@@ -85,8 +86,76 @@ public interface UserManager
 	 * @param studentnum 学号
 	 * @param pwd 密码
 	 * @param log 日志对象
-	 * @return List中第一个对象是用户信息对象，第二个是访问令牌，第三个是令牌有效时长（秒）。若登录失败，则返回null
+	 * @return List中第一个对象是UserInfoBean，第二个是访问令牌，第三个是令牌有效时长（秒）。若登录失败，则返回null
 	 */
 	public List<Object> checkLogin(String nickname, String email,
 			String studentnum, String pwd, CommonSyslog log);
+	
+	/**
+	 * 更新访问令牌
+	 * @param uid 用户ID
+	 * @param token 原令牌
+	 * @param log 日志对象
+	 * @return List中第一个对象是新令牌，第二个是有效时长（秒）。若更新失败，则返回null
+	 */
+	public List<Object> updateToken(String uid, String token, CommonSyslog log);
+	
+	/**
+	 * 检查昵称/邮箱是否可用
+	 * @param nickname 昵称
+	 * @param email 邮箱
+	 * @return List中第一个为昵称可用标记，第二个为邮箱可用标记，true-可用，false-不可用
+	 */
+	public List<Boolean> verifyId(String nickname, String email);
+	
+	/**
+	 * 用户注册
+	 * @param nickname 昵称
+	 * @param email 邮箱
+	 * @param password 密码
+	 * @param ip 注册IP
+	 * @param log 日志对象
+	 * @return true-注册成功，false-注册失败（用户名/邮箱重复）
+	 */
+	public boolean signup(String nickname, String email, 
+			String password, CommonSyslog log);
+	
+	/**
+	 * 绑定学号和相关信息
+	 * @param user 要绑定信息的用户对象
+	 * @param studentnum 学号
+	 * @param realname 真实姓名
+	 * @param college 所在学院
+	 * @param major 所读专业
+	 * @param classname 所在班级
+	 * @param log 日志对象
+	 * @return 绑定成功返回用户对象，否则（学号已被绑定）返回null
+	 */
+	public CommonUser updateStudentnum(CommonUser user, String studentnum, String realname,
+			String college, String major, String classname, CommonSyslog log);
+	
+	/**
+	 * 获取指定用户的信息，ID和昵称二选一，两个都存在时优先取ID
+	 * @param currentUid 当前登录用户的ID
+	 * @param uid 用户的ID，无则null
+	 * @param nickname 昵称，无则null
+	 * @return 用户信息Bean
+	 */
+	public UserInfoBean getUserInfo(String currentUid, String uid, String nickname);
+	
+	/**
+	 * 用户更新信息
+	 * @param uid 要更新信息的用户ID
+	 * @param nickname 新昵称
+	 * @param email 新邮箱
+	 * @param gender 新性别
+	 * @param birth 新生日
+	 * @param bloodtype 新血型
+	 * @param qq 新QQ
+	 * @param selfintro 新自我简介
+	 * @param log 日志对象
+	 * @return 更新后的用户信息Bean
+	 */
+	public UserInfoBean updateUserInfo(String uid, String nickname, String email, byte gender,
+			String birth, byte bloodtype, String qq, String selfintro, CommonSyslog log);
 }

@@ -10,13 +10,13 @@ import org.apache.hadoop.hbase.util.Bytes;
  */
 public class WeiboTopic implements java.io.Serializable
 {
-	private String title;
-	private int count;
-	private long dateline;
-	private byte isblock;
-	private String sponsorId;
-	private CommonUser sponsor;
-	private long lastpost;
+	private String title; // 标题，rowKey
+	private int count; // 下属微博总数
+	private long dateline; // 发起时间戳
+	private byte isblock; // 屏蔽标记，0-未屏蔽，1-已屏蔽
+	private String sponsorId; // 发起者ID
+	private CommonUser sponsor; // 发起者用户对象
+	private long lastpost; // 最后发表微博的时间戳
 
 	public WeiboTopic()
 	{

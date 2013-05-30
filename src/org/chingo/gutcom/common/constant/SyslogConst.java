@@ -133,4 +133,36 @@ public class SyslogConst
 	 * 日志描述：用户登录失败。
 	 */
 	public static final String DETAIL_USER_LOGIN_FAILED = "用户登录失败。";
+	/**
+	 * 日志描述：更新访问令牌。
+	 */
+	public static final String DETAIL_USER_TOKEN_UPDATE = "更新访问令牌。";
+	/**
+	 * 日志描述：更新访问令牌失败。
+	 */
+	public static final String DETAIL_USER_TOKEN_UPDATE_FAILED = "更新访问令牌失败。";
+	/**
+	 * 日志描述：新用户（%s）注册。
+	 */
+	public static final String DETAIL_USER_REG = "新用户（%s）注册。";
+	/**
+	 * 日志描述：新用户注册失败。
+	 */
+	public static final String DETAIL_USER_REG_FAILED = "新用户注册失败。";
+	/**
+	 * 日志描述：绑定（更新）学号。
+	 */
+	public static final String DETAIL_USER_STUDENTNUM_UPDATE = "绑定（更新）学号。";
+	/**
+	 * 日志描述：学号绑定失败。
+	 */
+	public static final String DETAIL_USER_STUDENTNUM_UPDATE_FAILED = "绑定（更新）学号失败，学号已被绑定。";
+	/**
+	 * 日志描述：更新用户信息。
+	 */
+	public static final String DETAIL_USER_INFO_UPDATE = "更新用户信息。";
+	/**
+	 * 日志描述：更新用户信息失败。
+	 */
+	public static final String DETAIL_USER_INFO_UPDATE_FAILED  = "更新用户信息失败。";
 }

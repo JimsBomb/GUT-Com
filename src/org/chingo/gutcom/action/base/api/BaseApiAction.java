@@ -4,7 +4,7 @@ import org.chingo.gutcom.action.base.BaseAction;
 
 public class BaseApiAction extends BaseAction
 {
-	private String access_token; // 访问令牌
+	protected String access_token; // 访问令牌
 	
 	public String getAccess_token()
 	{

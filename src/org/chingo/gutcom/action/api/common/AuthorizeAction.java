@@ -6,13 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.chingo.gutcom.action.base.api.AuthorizeBaseAction;
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
+import org.chingo.gutcom.common.util.ErrorCodeUtil;
 import org.chingo.gutcom.common.util.WebUtil;
 import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonToken;
+import org.chingo.gutcom.domain.CommonUser;
 
 public class AuthorizeAction extends AuthorizeBaseAction
 {
+	private String uid; // 用户ID
 	private String nickname; // 用户昵称
 	private String email; // 邮箱地址
 	private String studentnum; // 绑定学号
@@ -20,47 +25,50 @@ public class AuthorizeAction extends AuthorizeBaseAction
 	// 存放JSON响应数据
 	private Map<String, Object> jsonRst = new HashMap<String ,Object>();
 	
+	public String getUid()
+	{
+		return uid;
+	}
+
+	public void setUid(String uid)
+	{
+		this.uid = uid;
+	}
+
 	public String getNickname()
 	{
 		return nickname;
 	}
-
 
 	public void setNickname(String nickname)
 	{
 		this.nickname = WebUtil.decode(nickname);
 	}
 
-
 	public String getEmail()
 	{
 		return email;
 	}
-
 
 	public void setEmail(String email)
 	{
 		this.email = WebUtil.decode(email);
 	}
 
-
 	public String getStudentnum()
 	{
 		return studentnum;
 	}
-
 
 	public void setStudentnum(String studentnum)
 	{
 		this.studentnum = studentnum;
 	}
 
-
 	public String getPassword()
 	{
 		return password;
 	}
-
 
 	public void setPassword(String password)
 	{
@@ -72,31 +80,102 @@ public class AuthorizeAction extends AuthorizeBaseAction
 		return this.jsonRst;
 	}
 
+	/**
+	 * 登录Method
+	 * @return Action Result
+	 * @throws Exception
+	 */
 	public String login() throws Exception
 	{
-		List<Object> rst = null;
-		/* 创建日志对象 */
-		CommonSyslog log = new CommonSyslog();
-		log.setDateline(new Date().getTime());
-		log.setDetail(SyslogConst.DETAIL_USER_LOGIN);
-		log.setIp(WebUtil.getRemoteAddr(request));
-		log.setType(SyslogConst.TYPE_LOGIN_FRONT);
-		log.setUserid(SystemConst.USER_ID_NOT_LOGIN);
-		// 验证用户登录
-		rst = userMgr.checkLogin(nickname, email, studentnum, password, log);
 		jsonRst.clear(); // 清空响应数据
-		if(rst != null) // 登录成功时
+		if(WebUtil.getUser(session) != null)
 		{
-			jsonRst.put("access_token", rst.get(1)); // 令牌
-			jsonRst.put("expires_in", rst.get(2)); // 令牌时效
-			jsonRst.put("user", rst.get(0)); // 用户对象
-			session.put(SystemConst.SESSION_USER, rst.get(0)); // 更新SESSION
+			/* 创建日志对象 */
+			CommonSyslog log = new CommonSyslog();
+			log.setDateline(new Date().getTime());
+			log.setDetail(SyslogConst.DETAIL_USER_LOGIN);
+			log.setIp(WebUtil.getRemoteAddr(request));
+			log.setType(SyslogConst.TYPE_LOGIN_FRONT);
+			log.setUserid(nickname);
+			List<Object> rst = null;
+			// 验证用户登录
+			rst = userMgr.checkLogin(nickname, email, studentnum, password, log);
+			if(rst != null) // 登录成功时
+			{
+				UserInfoBean user = (UserInfoBean) rst.get(0); // 用户对象
+				String accessToken = (String) rst.get(1); // 令牌
+				int expiresIn = (int) rst.get(2); // 令牌有效时长（秒）
+				jsonRst.put("access_token", accessToken); // 令牌
+				jsonRst.put("expires_in", expiresIn); // 令牌时效
+				jsonRst.put("user", user); // 用户对象
+				session.put(SystemConst.SESSION_USER, user); // 更新用户SESSION
+				CommonToken token = new CommonToken();
+				token.setAccessToken(accessToken);
+				// 令牌过期时间戳（毫秒）
+				token.setExpiredTime(user.getLastlogin() + expiresIn * 1000);
+				token.setUserid(user.getUid());
+				session.put(SystemConst.SESSION_TOKEN, token); // 更新令牌SESSION
+			}
+			else // 失败时，返回错误信息
+			{
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20102,
+						WebUtil.getRequestAddr(request), null);
+			}
 		}
-		else // 失败时，返回错误信息
+		else
 		{
-			jsonRst.put("request", request.getRequestURI());
-			jsonRst.put("error_code", "20001");
-			jsonRst.put("error", "Login failed.");
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20103, 
+					WebUtil.getRequestAddr(request), null);
+		}
+		return SUCCESS;
+	}
+	
+	/**
+	 * 更新令牌Method
+	 * @return Action Result
+	 * @throws Exception
+	 */
+	public String update() throws Exception
+	{
+		jsonRst.clear();
+		CommonToken token = WebUtil.getToken(session); // 获取当前用户对象
+		CommonUser user = WebUtil.getUser(session); // 获取当前用户的令牌对象
+		// 检查参数和登录
+		if(uid!=null && access_token!=null 
+				&& user!=null && token!=null
+				&& uid.equals(user.getUid())
+				&& access_token.equals(token.getAccessToken()))
+		{
+			/* 创建日志对象 */
+			CommonSyslog log = new CommonSyslog();
+			log.setDateline(new Date().getTime());
+			log.setDetail(SyslogConst.DETAIL_USER_TOKEN_UPDATE);
+			log.setIp(WebUtil.getRemoteAddr(request));
+			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setUserid(WebUtil.getUser(session).getUid());
+			// 更新令牌
+			List<Object> rst = userMgr.updateToken(uid, access_token, log);
+			if(rst != null) // 更新成功时
+			{
+				String accessToken = (String) rst.get(0); // 令牌
+				int expiresIn = (int) rst.get(1); // 有效时长（秒）
+				jsonRst.put("access_token", accessToken); // 添加令牌
+				jsonRst.put("expires_in", expiresIn); // 添加有效时长
+				token.setAccessToken(accessToken);
+				// 设置过期时间戳（毫秒）
+				token.setExpiredTime(log.getDateline() + expiresIn * 1000);
+				session.put(SystemConst.SESSION_TOKEN, token); // 更新令牌SESSION
+			}
+			else // 系统错误
+			{
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10001,
+						WebUtil.getRequestAddr(request), null);
+			}
+		}
+		else // 参数错误
+		{
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008, 
+					WebUtil.getRequestAddr(request), null);
 		}
 		return SUCCESS;
 	}

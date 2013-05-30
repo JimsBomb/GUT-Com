@@ -1,5 +1,8 @@
 package org.chingo.gutcom.domain;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
+
 // Generated Apr 14, 2013 10:15:06 PM by Hibernate Tools 4.0.0
 
 /**
@@ -11,7 +14,7 @@ public class WeiboFollow implements java.io.Serializable
 	private String id; // rowKey， 关注ID
 	private String userId; // 关注用户的ID
 	private String followId; // 被关注用户的ID
-	private String groupName; // 关注分组名
+	private String groupName = ""; // 关注分组名
 	private String remark = ""; // 被关注用户的备注名
 
 	public WeiboFollow()
@@ -78,4 +81,20 @@ public class WeiboFollow implements java.io.Serializable
 		this.groupName = groupName;
 	}
 
+	/**
+	 * 根据Result填充字段
+	 * @param rst 填充数据源Result
+	 */
+	public void fillByResult(Result rst)
+	{
+		this.setId(Bytes.toString(rst.getRow()));
+		this.setUserId(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("userid"))));
+		this.setFollowId(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("followid"))));
+		this.setGroupName(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("groupname"))));
+		this.setRemark(Bytes.toString(rst.getValue(Bytes.toBytes("info"),
+				Bytes.toBytes("remark"))));
+	}
 }

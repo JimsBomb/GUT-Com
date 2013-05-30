@@ -16,7 +16,7 @@
     <constant name="struts.locale" value="zh_CN" />
     <constant name="struts.i18n.encoding" value="UTF-8" />
 
-    <package name="default" namespace="/" extends="struts-default">
+    <package name="default" namespace="/" extends="json-default">
 
         <!-- <default-action-ref name="index" />
 
@@ -28,7 +28,11 @@
             <exception-mapping exception="java.lang.Exception" result="error"/>
         </global-exception-mappings> -->
 
-        
+        <action name="test" class="org.chingo.gutcom.action.TestAction" method="test">
+            <result type="json">
+                <param name="root">jsonRst.m</param>
+            </result>
+        </action>
         
     </package>
 
@@ -153,10 +157,87 @@
 	</package>
 	
 	<!-- API映射设置BEGIN -->
-	<package name="api" namespace="/api/common/authorize" extends="json-default">
+	<!-- 验证授权API -->
+	<package name="apiAuth" namespace="/api/common/authorize" extends="json-default">
 	    <action name="login" class="authorizeApiAction" method="login">
 	        <result type="json">
 	            <param name="root">jsonRst</param>
+	        </result>
+	    </action>
+	</package>
+	
+	<!-- 注册API -->
+	<package name="apiReg" namespace="/api/common/register" extends="json-default">
+	    <action name="verify_id" class="registerApiAction" method="verifyId">
+	        <result type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </action>
+	    <action name="signup" class="registerApiAction" method="signup">
+	        <result type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </action>
+	</package>
+	
+	<!-- 账号API -->
+	<package name="apiAcco" namespace="/api/common/account" extends="json-default">
+	    <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error" type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </global-results>
+	    
+	    <action name="get_uid" class="accountApiAction" method="fetchUid">
+	        <result type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </action>
+	    <action name="update_stunum" class="accountApiAction" method="updateStunum">
+	        <result type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </action>
+	    <action name="logout" class="accountApiAction" method="logout">
+	        <result type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </action>
+	</package>
+	
+	<!-- 用户API -->
+	<package name="apiUser" namespace="/api/common/user" extends="json-default">
+	    <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error" type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </global-results>
+	    
+	    <action name="show" class="userApiAction" method="show">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst.root
+	            </param>
 	        </result>
 	    </action>
 	</package>

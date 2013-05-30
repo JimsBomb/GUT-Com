@@ -14,15 +14,19 @@ import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.constant.UserConst;
 import org.chingo.gutcom.common.util.FormatUtil;
 import org.chingo.gutcom.common.util.SecurityUtil;
+import org.chingo.gutcom.common.util.VerifyUtil;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonToken;
 import org.chingo.gutcom.domain.CommonUser;
+import org.chingo.gutcom.domain.WeiboContent;
+import org.chingo.gutcom.domain.WeiboFollow;
 import org.chingo.gutcom.service.UserManager;
 
 public class UserManagerImpl implements UserManager
@@ -30,6 +34,8 @@ public class UserManagerImpl implements UserManager
 	private BaseDao<CommonUser> userDao; // 用户DAO
 	private BaseDao<CommonSyslog> logDao; // 日志DAO
 	private BaseDao<CommonToken> tokenDao; // 令牌DAO
+	private BaseDao<WeiboFollow> wbFollowDao; // 微博关注DAO
+	private BaseDao<WeiboContent> weiboDao; // 微博DAO
 	
 	public void setUserDao(BaseDao<CommonUser> userDao)
 	{
@@ -44,6 +50,16 @@ public class UserManagerImpl implements UserManager
 	public void setTokenDao(BaseDao<CommonToken> tokenDao)
 	{
 		this.tokenDao = tokenDao;
+	}
+	
+	public void setWbFollowDao(BaseDao<WeiboFollow> wbFollowDao)
+	{
+		this.wbFollowDao = wbFollowDao;
+	}
+	
+	public void setWeiboDao(BaseDao<WeiboContent> weiboDao)
+	{
+		this.weiboDao = weiboDao;
 	}
 
 	@Override
@@ -285,7 +301,7 @@ public class UserManagerImpl implements UserManager
 			user.setLastip(log.getIp()); // 更新最后登录IP
 			user.setLastlogin(new Date().getTime()); // 更新最后登录时间戳
 			userDao.put(user); // 更新用户
-			rst.add(user); // 添加用户对象
+			rst.add(new UserInfoBean(user)); // 添加用户信息Bean对象
 			/* 令牌过滤器 */
 			FilterList tokenFl = new FilterList();
 			// 有效时长超过1小时的令牌过滤器
@@ -320,4 +336,287 @@ public class UserManagerImpl implements UserManager
 		return null;
 	}
 
+	@Override
+	public List<Object> updateToken(String uid, String token, CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志得rowKey
+		FilterList fl = new FilterList();
+		// 用户ID过滤器
+		fl.addFilter(new RowFilter(CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes(uid))));
+		// 令牌过滤器
+		fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), 
+				Bytes.toBytes("access_token"), CompareOp.EQUAL,
+				Bytes.toBytes(token)));
+		// 查询令牌关联记录
+		List<Result> results = tokenDao.findByPage("common_token", fl, null, 0);
+		if(results != null) // 存在关联时
+		{
+			List<Object> rst = new ArrayList<Object>(); // 存放结果列表
+			CommonToken tok = new CommonToken();
+			tok.fillByResult(results.get(0)); // 填充令牌字段
+			tok.setAccessToken(SecurityUtil.createAccessToken()); // 创建新令牌
+			// 更新令牌过期时间戳
+			tok.setExpiredTime(new Date().getTime() + 
+					SystemConst.ACCESS_TOKEN_EFFECTIVE_TIME * 1000);
+			tokenDao.put(tok); // 更新令牌
+			rst.add(tok.getAccessToken()); // 添加令牌到结果列表
+			rst.add(SystemConst.ACCESS_TOKEN_EFFECTIVE_TIME); // 添加有效时长
+			
+			logDao.put(log);// 记录日志
+			return rst; // 返回结果列表
+		}
+		log.setDetail(SyslogConst.DETAIL_USER_TOKEN_UPDATE_FAILED); // 更新失败信息
+		logDao.put(log); // 记录日志
+		return null;
+	}
+
+	@Override
+	public List<Boolean> verifyId(String nickname, String email)
+	{
+		// 存在结果，默认为false-不可用
+		List<Boolean> rst = new ArrayList<Boolean>();
+		rst.add(false);
+		rst.add(false);
+		// 昵称非空且匹配格式时
+		if(nickname != null && VerifyUtil.checkNickname(nickname))
+		{
+			FilterList fl = new FilterList();
+			// 昵称过滤器
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("nickname"), CompareOp.EQUAL,
+					Bytes.toBytes(nickname)));
+			// 查询用户
+			List<Result> results = userDao.findByPage("common_user", fl, null, 0);
+			if(results == null) // 用户不存在时
+			{
+				rst.set(0, true); // 昵称可用
+			}
+		}
+		// 邮箱非空且匹配格式时
+		if(email!=null && VerifyUtil.checkEmail(email))
+		{
+			FilterList fl = new FilterList();
+			// 邮箱过滤器
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("email"), CompareOp.EQUAL,
+					Bytes.toBytes(email)));
+			// 查询用户
+			List<Result> results = userDao.findByPage("common_user", fl, null, 0);
+			if(results == null) // 用户不存在时
+			{
+				rst.set(1, true); // 邮箱可用
+			}
+		}
+		
+		return rst;
+	}
+
+	@Override
+	public boolean signup(String nickname, String email,
+			String password, CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
+		// 验证昵称/邮箱可用性
+		List<Boolean> verifyRst = verifyId(nickname, email);
+		// 昵称/邮箱都可用时
+		if(true==verifyRst.get(0) && true==verifyRst.get(1))
+		{
+			CommonUser user = new CommonUser();
+			user.setUid(FormatUtil.createRowKey()); // 创建用户的rowKey
+			user.setNickname(nickname);
+			user.setEmail(email);
+			user.setPassword(SecurityUtil.md5(password));
+			user.setRegip(log.getIp());
+			user.setRegdate(log.getDateline());
+			userDao.put(user); // 追加用户数据
+			logDao.put(log); // 记录日志
+			return true;
+		}
+		// 设置注册失败日志描述
+		log.setDetail(String.format(SyslogConst.DETAIL_USER_TOKEN_UPDATE_FAILED,
+				nickname));
+		logDao.put(log); // 记录日志
+		return false;
+	}
+
+	@Override
+	public CommonUser updateStudentnum(CommonUser user, String studentnum, String realname,
+			String college, String major, String classname, CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
+		FilterList fl = new FilterList();
+		// 排除当前用户过滤器
+		fl.addFilter(new RowFilter(CompareOp.NOT_EQUAL, new BinaryComparator(
+				Bytes.toBytes(user.getUid()))));
+		// 绑定学号过滤器
+		fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+				Bytes.toBytes("studentnum"), CompareOp.EQUAL,
+				Bytes.toBytes(studentnum)));
+		// 查询学号是否已被使用
+		List<Result> results = userDao.findByPage("common_user", fl, null, 0);
+		if(results == null) // 学号未被绑定时
+		{
+			user.setStudentnum(studentnum);
+			user.setRealname(realname);
+			user.setCollege(college);
+			user.setMajor(major);
+			user.setClassname(classname);
+			userDao.put(user); // 更新用户
+			logDao.put(log); // 记录日志
+			
+			return user;
+		}
+		// 设置绑定失败信息
+		log.setDetail(SyslogConst.DETAIL_USER_STUDENTNUM_UPDATE_FAILED);
+		logDao.put(log); // 记录日志
+		return null;
+	}
+
+	@Override
+	public UserInfoBean getUserInfo(String currentUid, String uid, String nickname)
+	{
+		FilterList fl = new FilterList();
+		if(uid != null) // 用户ID非空时
+		{
+			// 用户ID过滤器
+			fl.addFilter(new RowFilter(CompareOp.EQUAL, 
+					new BinaryComparator(Bytes.toBytes(uid))));
+		}
+		else if(nickname != null) // 昵称非空时
+		{
+			// 昵称过滤器
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("nickname"), CompareOp.EQUAL,
+					Bytes.toBytes(nickname)));
+		}
+		// 查询用户
+		List<Result> results = userDao.findByPage("common_user", fl, null, 0);
+		if(results != null) // 用户存在时
+		{
+			CommonUser user = new CommonUser();
+			user.fillByResult(results.get(0)); // 填充字段
+			UserInfoBean userInfo = new UserInfoBean(user); // 新建并填充字段
+			/* 关注关联数据处理 */
+			FilterList followFl = new FilterList();
+			// 用户ID过滤器
+			followFl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("userid"), CompareOp.EQUAL,
+					Bytes.toBytes(currentUid)));
+			// 关注用户ID过滤器
+			followFl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("followid"), CompareOp.EQUAL,
+					Bytes.toBytes(user.getUid())));
+			// 查询关注记录
+			List<Result> followRsts = wbFollowDao.findByPage("weibo_follow", followFl, null, 0);
+			if(followRsts != null) // 存在关注记录时
+			{
+				Result followRst = followRsts.get(0);
+				// 设置备注名
+				userInfo.setRemark(Bytes.toString(followRst.getValue(Bytes.toBytes("info"),
+						Bytes.toBytes("remark"))));
+			}
+			/* 最后发表微博数据处理 */
+			FilterList weiboFl = new FilterList();
+			// 作者ID过滤器
+			weiboFl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("authorid"), CompareOp.EQUAL,
+					Bytes.toBytes(user.getUid())));
+			weiboFl.addFilter(new PageFilter(1L)); // 只查询1条记录
+			// 查询微博
+			List<Result> weiboRsts = weiboDao.findByPage("weibo_content", weiboFl, null, 1);
+			if(weiboRsts != null) // 微博存在时
+			{
+				Result weiboRst = weiboRsts.get(0);
+				UserInfoBean.Latest latest = userInfo.new Latest();
+				// 设置微博ID
+				latest.setWid(Bytes.toString(weiboRst.getRow()));
+				// 设置微博内容
+				latest.setContent(Bytes.toString(weiboRst.getValue(Bytes.toBytes("info"),
+						Bytes.toBytes("content"))));
+				userInfo.setLatest(latest); // 设置最后发表微博对象
+			}
+			
+			return userInfo; // 返回用户信息Bean
+		}
+		return null;
+	}
+
+	@Override
+	public UserInfoBean updateUserInfo(String uid, String nickname,
+			String email, byte gender, String birth, byte bloodtype, String qq,
+			String selfintro, CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志对象的rowKey
+		CommonUser user = getUser(uid); // 获取用户
+		if(user != null) // 用户存在时
+		{
+			if(nickname != null) // 昵称非空时更新
+			{
+				user.setNickname(nickname);
+			}
+			if(email != null) // 邮箱非空时更新
+			{
+				user.setEmail(email);
+			}
+			if(gender >= 0) // 性别有值时更新
+			{
+				user.setGender(gender);
+			}
+			if(birth != null) // 生日日期非空时更新
+			{
+				String[] birthDate = birth.split("-");
+				int year = Integer.parseInt(birthDate[0]);
+				byte month = Byte.parseByte(birthDate[1]);
+				byte day = Byte.parseByte(birthDate[2]);
+				// 生日改变时
+				if(year!=user.getBirthyear() && month!=user.getBirthmonth()
+						&& day!=user.getBirthday())
+				{
+					user.setBirthyear(year);
+					user.setBirthmonth(month);
+					user.setBirthday(day);
+					user.setZodiac(FormatUtil.calcZodiac(year)); // 生肖
+					user.setConstellation(FormatUtil.calcConstellation(month, day)); // 星座
+				}
+			}
+			if(bloodtype >= 0) // 血型有值时更新
+			{
+				String bloodType = "其它";
+				switch(bloodtype)
+				{
+				case UserConst.BLOODTYPE_OTHER:
+					break;
+				case UserConst.BLOODTYPE_A:
+					bloodType = "A型";
+					break;
+				case UserConst.BLOODTYPE_B:
+					bloodType = "B型";
+					break;
+				case UserConst.BLOODTYPE_AB:
+					bloodType = "AB型";
+					break;
+				case UserConst.BLOODTYPE_O:
+					bloodType = "O型";
+					break;
+				}
+				user.setBloodtype(bloodType);
+			}
+			if(qq != null) // QQ非空时更新
+			{
+				user.setQq(qq);
+			}
+			if(selfintro != null) // 自我简介非空时更新
+			{
+				user.setSelfintro(selfintro);
+			}
+			userDao.put(user); // 更新用户
+			logDao.put(log); // 记录日志
+			UserInfoBean userInfo = new UserInfoBean(user); // 创建用户Bean并填充字段
+			return userInfo; // 返回用户信息Bean
+		}
+		// 设置更新失败描述
+		log.setDetail(SyslogConst.DETAIL_USER_INFO_UPDATE_FAILED);
+		logDao.put(log); // 记录日志
+		return null;
+	}
 }

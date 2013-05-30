@@ -37,7 +37,7 @@ public class SecurityUtil
 	public final static String createAccessToken()
 	{
 		// 使用UUID生成令牌，去处-
-		String result = UUID.randomUUID().toString().replace("-", "");
+		String result = UUID.randomUUID().toString().replace("-", "").toUpperCase();
 		return result;
 	}
 }

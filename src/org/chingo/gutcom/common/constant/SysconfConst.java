@@ -35,4 +35,13 @@ public class SysconfConst
 	 * 日志保留时间字段
 	 */
 	public static final String LOG_LIFECYCLE = "LOG_LIFECYCLE";
+	
+	/**
+	 * 系统服务状态："1"-开启
+	 */
+	public static final String SERVER_STATUS_OPEN = "1";
+	/**
+	 * 系统服务状态："0"-关闭
+	 */
+	public static final String SERVER_STATUS_CLOSE = "0";
 }
