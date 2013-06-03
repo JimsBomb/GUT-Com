@@ -14,6 +14,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.chingo.gutcom.bean.MessageBean;
 import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.MsgConst;
+import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.util.FormatUtil;
 import org.chingo.gutcom.dao.BaseDao;
 import org.chingo.gutcom.domain.CommonMsgRecv;
@@ -128,7 +129,7 @@ public class MsgManagerImpl implements MsgManager
 					Bytes.toBytes("senduserid"), CompareOp.EQUAL,
 					Bytes.toBytes(uid)));
 			// 查询发送消息
-			results = msgRecvDao.findByPage("common_msg_send", fl, startRow, pageSize+1);
+			results = msgSendDao.findByPage("common_msg_send", fl, startRow, pageSize+1);
 			if(results != null) // 消息存在时
 			{
 				List<Object> rst = new ArrayList<Object>();
@@ -166,6 +167,166 @@ public class MsgManagerImpl implements MsgManager
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public MessageBean showMsg(String mid, byte type)
+	{
+		Result result = null;
+		if(type == MsgConst.TYPE_RECV) // 查询接收消息时
+		{
+			// 查询消息
+			result = msgRecvDao.get(mid, null, null);
+			if(result != null) // 消息非空时
+			{
+				CommonMsgRecv msg = new CommonMsgRecv();
+				msg.fillByResult(result); // 填充消息字段
+				MessageBean msgBean = new MessageBean(msg); // 创建消息Bean并填充字段
+				// 查询发送用户
+				Result userRst = userDao.get(msg.getSenduserId(), null, null);
+				if(userRst != null) // 用户存在时
+				{
+					CommonUser user = new CommonUser();
+					user.fillByResult(userRst); // 填充用户字段
+					msgBean.setUser(new UserInfoBean(user)); // 设置发送用户Bean
+				}
+				return msgBean; // 返回消息Bean
+			}
+		}
+		else if(type == MsgConst.TYPE_SEND) // 查询发送消息时
+		{
+			// 查询消息
+			result = msgSendDao.get(mid, null, null);
+			if(result != null) // 消息存在时
+			{
+				CommonMsgSend msg = new CommonMsgSend();
+				msg.fillByResult(result); // 填充消息字段
+				MessageBean msgBean = new MessageBean(msg); // 创建消息Bean并填充字段
+				// 查询接收用户
+				Result userRst = userDao.get(msg.getRecvuserId(), null, null);
+				if(userRst != null) // 用户存在时
+				{
+					CommonUser user = new CommonUser();
+					user.fillByResult(userRst); // 填充用户字段
+					msgBean.setUser(new UserInfoBean(user)); // 设置接收用户Bean
+				}
+				return msgBean; // 返回消息Bean
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public MessageBean sendMsg(String uid, String nickname, String content,
+			CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
+		FilterList fl = new FilterList();
+		fl.addFilter(new PageFilter(1L)); // 只查询一条记录
+		if(uid != null) // 用户ID非空时
+		{
+			// 用户ID过滤器
+			fl.addFilter(new RowFilter(CompareOp.EQUAL, 
+					new BinaryComparator(Bytes.toBytes(uid))));
+		}
+		else if(nickname != null) // 否则昵称非空时
+		{
+			// 昵称过滤器
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("nickname"), CompareOp.EQUAL,
+					Bytes.toBytes(nickname)));
+		}
+		// 查询接收用户
+		List<Result> results = userDao.findByPage("common_user", fl, null, 0);
+		if(results != null) // 用户存在时
+		{
+			Result result = results.get(0);
+			CommonUser user = new CommonUser();
+			user.fillByResult(result); // 填充用户字段
+			/* 创建接收消息对象 */
+			CommonMsgRecv msgRecv = new CommonMsgRecv();
+			msgRecv.setMid(FormatUtil.createRowKey());
+			msgRecv.setContent(content);
+			msgRecv.setDateline(log.getDateline());
+			msgRecv.setIsread(MsgConst.FLAG_NOT_READ);
+			msgRecv.setRecvuserId(user.getUid());
+			msgRecv.setSenduserId(log.getUserid());
+			msgRecvDao.put(msgRecv); // 追加数据
+			/* 创建发送消息对象 */
+			CommonMsgSend msgSend = new CommonMsgSend();
+			msgSend.setMid(FormatUtil.createRowKey());
+			msgSend.setContent(content);
+			msgSend.setDateline(log.getDateline());
+			msgSend.setRecvuserId(user.getUid());
+			msgSend.setSenduserId(log.getUserid());
+			msgSendDao.put(msgSend);
+			user.setNewmsg(user.getNewmsg() + 1);
+			userDao.put(user); // 追加数据
+			// 格式化并设置日志描述
+			log.setDetail(String.format(SyslogConst.DETAIL_USER_MSG_SEND, user.getNickname()));
+			logDao.put(log); // 记录日志
+			// 创建消息Bean并填充字段
+			MessageBean msgBean = new MessageBean(msgSend);
+			msgBean.setUser(new UserInfoBean(user)); // 设置接收消息用户Bean
+			return msgBean; // 返回消息Bean
+		}
+		log.setDetail(String.format(SyslogConst.DETAIL_USER_MSG_SEND_FAILED,
+				uid==null?nickname:"ID:"+uid)); // 格式化并设置失败描述
+		logDao.put(log); // 记录日志
+		return null;
+	}
+
+	@Override
+	public List<Object> dropMsgs(List<String> rows, byte type, CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
+		String[] tmp = (String[]) rows.toArray(); // 用于遍历
+		int len = tmp.length; // 记录数组长度
+		if(type == MsgConst.TYPE_RECV) // 删除接收消息时
+		{
+			/* 遍历检查消息是否属于请求用户 */
+			for(int i=0; i<len; i++)
+			{
+				FilterList fl = new FilterList();
+				// 消息ID过滤器
+				fl.addFilter(new RowFilter(CompareOp.EQUAL, 
+						new BinaryComparator(Bytes.toBytes(tmp[i]))));
+				// 接收用户ID过滤器
+				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+						Bytes.toBytes("recvuserid"), CompareOp.EQUAL,
+						Bytes.toBytes(log.getLid())));
+				// 消息不属于请求用户时
+				if(msgRecvDao.findByPage("common_msg_recv", fl, null, 0) == null)
+				{
+					rows.remove(i); // 移除消息ID
+				}
+			}
+			msgRecvDao.delete(rows); // 执行删除
+		}
+		else if(type == MsgConst.TYPE_SEND) // 删除发送消息时
+		{
+			/* 遍历检查消息是否属于请求用户 */
+			for(int i=0; i<len; i++)
+			{
+				FilterList fl = new FilterList();
+				// 消息ID过滤器
+				fl.addFilter(new RowFilter(CompareOp.EQUAL, 
+						new BinaryComparator(Bytes.toBytes(tmp[i]))));
+				// 发送用户ID过滤器
+				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+						Bytes.toBytes("senduserid"), CompareOp.EQUAL,
+						Bytes.toBytes(log.getLid())));
+				// 消息不属于请求用户时
+				if(msgRecvDao.findByPage("common_msg_send", fl, null, 0) == null)
+				{
+					rows.remove(i); // 移除消息ID
+				}
+			}
+			msgSendDao.delete(rows); // 执行删除
+		}
+		logDao.put(log); // 记录日志
+		return listMsg(log.getUserid(), type, 20, null); // 返回余下消息List
 	}
 
 }

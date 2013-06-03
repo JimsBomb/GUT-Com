@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.chingo.gutcom.action.base.api.AuthorizeBaseAction;
+import org.chingo.gutcom.action.base.api.common.AuthorizeBaseAction;
 import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;

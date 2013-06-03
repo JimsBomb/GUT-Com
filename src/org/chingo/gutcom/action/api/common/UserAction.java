@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.chingo.gutcom.action.base.api.UserBaseAction;
+import org.chingo.gutcom.action.base.api.common.UserBaseAction;
 import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.util.ErrorCodeUtil;

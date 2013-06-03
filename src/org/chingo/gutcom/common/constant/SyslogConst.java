@@ -165,4 +165,40 @@ public class SyslogConst
 	 * 日志描述：更新用户信息失败。
 	 */
 	public static final String DETAIL_USER_INFO_UPDATE_FAILED  = "更新用户信息失败。";
+	/**
+	 * 日志描述：发送消息给%s。
+	 */
+	public static final String DETAIL_USER_MSG_SEND = "发送消息给 %s 。";
+	/**
+	 * 日志描述：发送消息给%s失败。
+	 */
+	public static final String DETAIL_USER_MSG_SEND_FAILED = "发送消息给 %s 失败。";
+	/**
+	 * 日志描述：删除消息。
+	 */
+	public static final String DETAIL_USER_MSG_DROP = "删除消息。";
+	/**
+	 * 日志描述：清零未读信息计数。
+	 */
+	public static final String DETAIL_USER_CNT_NEW_RESET = "清零未读信息计数。";
+	/**
+	 * 日志描述：清零未读信息计数失败（可能用户不存在）。
+	 */
+	public static final String DETAIL_USER_CNT_NEW_RESET_FAILED = "清零未读信息计数失败（可能用户不存在）。";
+	/**
+	 * 日志描述：发表新微博。
+	 */
+	public static final String DETAIL_USER_WEIBO_POST = "发表新微博。";
+	/**
+	 * 日志描述：发表新微博失败。
+	 */
+	public static final String DETAIL_USER_WEIBO_POST_FAILED = "发表新微博失败。";
+	/**
+	 * 日志描述：删除微博。
+	 */
+	public static final String DETAIL_USER_WEIBO_DROP = "删除微博。";
+	/**
+	 * 日志描述：删除微博失败。
+	 */
+	public static final String DETAIL_USER_WEIBO_DROP_FAILED = "删除微博失败。";
 }

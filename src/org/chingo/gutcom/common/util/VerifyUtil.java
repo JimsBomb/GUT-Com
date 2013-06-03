@@ -26,6 +26,14 @@ public class VerifyUtil
 	 * QQ号格式校验正则表达式
 	 */
 	private static final String REGX_QQ = "^[0-9]{1,12}$";
+	/**
+	 * 消息内容格式校验正则表达式
+	 */
+	private static final String REGX_MSG_CONTENT = "^.{1,300}$";
+	/**
+	 * 微博内容格式校验正则表达式
+	 */
+	private static final String REGX_WEIBO_CONTENT = "^.{1,140}$";
 	
 	/**
 	 * 检查密码格式
@@ -120,6 +128,34 @@ public class VerifyUtil
 	public static final boolean checkSelfIntro(String selfintro)
 	{
 		if(selfintro.length() <= 200)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 检查消息内容格式
+	 * @param content 消息内容
+	 * @return true-格式正确，false-格式不正确
+	 */
+	public static final boolean checkMsgContent(String content)
+	{
+		if(content.matches(REGX_MSG_CONTENT))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 检查微博内容格式
+	 * @param content 微博内容
+	 * @return true-格式正确，false-格式不正确
+	 */
+	public static final boolean checkWeiboContent(String content)
+	{
+		if(content.matches(REGX_WEIBO_CONTENT))
 		{
 			return true;
 		}

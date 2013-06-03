@@ -22,6 +22,18 @@ public class TestAction extends ActionSupport
 
 	private TestService ts;
 	private Map<String, Object> jsonRst = new HashMap<String, Object>();
+	private String ids;
+	private Object[] ido;
+	
+	public void setIds(String ids)
+	{
+		this.ids = ids;
+	}
+	
+	public void setIdo(Object[] ido)
+	{
+		this.ido = ido;
+	}
 	
 	public void setTs(TestService ts)
 	{

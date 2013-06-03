@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.chingo.gutcom.action.base.api.RegisterBaseAction;
+import org.chingo.gutcom.action.base.api.common.RegisterBaseAction;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.util.ErrorCodeUtil;

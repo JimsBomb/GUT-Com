@@ -1,8 +1,9 @@
-package org.chingo.gutcom.action.base.api;
+package org.chingo.gutcom.action.base.api.common;
 
+import org.chingo.gutcom.action.base.api.BaseApiAction;
 import org.chingo.gutcom.service.UserManager;
 
-public class AuthorizeBaseAction extends BaseApiAction
+public class AccountBaseAction extends BaseApiAction
 {
 	protected UserManager userMgr;
 	

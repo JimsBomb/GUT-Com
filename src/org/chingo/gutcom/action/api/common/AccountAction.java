@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.chingo.gutcom.action.base.api.AccountBaseAction;
+import org.chingo.gutcom.action.base.api.common.AccountBaseAction;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.util.ErrorCodeUtil;
@@ -31,7 +31,7 @@ public class AccountAction extends AccountBaseAction
 
 	public void setStudentno(String studentno)
 	{
-		this.studentno = studentno;
+		this.studentno = WebUtil.decode(studentno);
 	}
 
 	public String getRealname()

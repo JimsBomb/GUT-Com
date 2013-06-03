@@ -18,7 +18,7 @@ public class WeiboContent implements java.io.Serializable
 	private String authorid; // 作者ID
 	private CommonUser author; // 作者用户对象
 	private String content; // 微博内容
-	private String sourceid = ""; // 源微博ID，转发或评论时可用
+	private String sourceid = "0"; // 源微博ID，转发或评论时可用
 	private WeiboContent source; // 源微博对象
 	private String sourceContent = ""; // 源微博内容
 	private byte type = 0; // 微博类型

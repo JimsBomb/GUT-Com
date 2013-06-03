@@ -19,4 +19,8 @@ public class FilterWordConst
 	 * 过滤级别，2-禁止
 	 */
 	public static final byte LEVEL_BAN = 2;
+	/**
+	 * 屏蔽替换字符串
+	 */
+	public static final String SCREEN_WORD = "*";
 }

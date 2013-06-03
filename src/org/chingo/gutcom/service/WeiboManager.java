@@ -3,6 +3,7 @@ package org.chingo.gutcom.service;
 import java.util.List;
 import java.util.Map;
 
+import org.chingo.gutcom.bean.WeiboInfoBean;
 import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.WeiboContent;
 import org.chingo.gutcom.domain.WeiboReport;
@@ -108,4 +109,91 @@ public interface WeiboManager
 	 * @return List中第一个对象为结果列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
 	 */
 	public List<Object> findWeiboReportByPage(Map<String, Object> values, String startRow, int pageSize);
+	
+	/**
+	 * 检索最新公共微博
+	 * @param pageSize 单页查询数量
+	 * @param trimUser 简化用户字段标记
+	 * @param trimSource 简化源微博字段标记
+	 * @return 微博Bean列表，无则返回null
+	 */
+	public List<WeiboInfoBean> fetchPublicWeibo(int pageSize, byte trimUser, byte trimSource);
+	
+	/**
+	 * 获取当前用户及其关注用户的最新微博列表
+	 * @param uid 用户ID，只查询关注用户的微博时则置null
+	 * @param timestamp 上次更新获取时间戳
+	 * @param startRow 查询起始行的rowKey
+	 * @param pageSize 单页查询数量
+	 * @return List中第一个对象为WeiboInfoBean列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
+	 */
+	public List<Object> fetchListWeibo(String uid, long timestamp, String startRow, int pageSize);
+	
+	/**
+	 * 获取当前用户的微博列表
+	 * @param uid 用户ID
+	 * @param timestamp 上次更新获取时间戳
+	 * @param startRow 查询起始行的rowKey
+	 * @param pageSize 单页查询数量
+	 * @return List中第一个对象为WeiboInfoBean列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
+	 */
+	public List<Object> fetchMyWeibo(String uid, long timestamp, String startRow, int pageSize);
+	
+	/**
+	 * 获取指定用户的微博列表，用户ID和昵称二选一，优先取用户ID的值
+	 * @param uid 用户ID
+	 * @param nickname 用户昵称
+	 * @param timestamp 上次更新获取时间戳
+	 * @param startRow 查询起始行的rowKey
+	 * @param pageSize 单页查询数量
+	 * @return List中第一个对象为WeiboInfoBean列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
+	 */
+	public List<Object> fetchOnesWeibo(String uid, String nickname,
+			long timestamp, String startRow, int pageSize);
+	
+	/**
+	 * 获取指定话题的最新微博列表
+	 * @param title 话题标题
+	 * @param timestamp 上次更新获取时间戳
+	 * @param startRow 查询起始行的rowKey
+	 * @param pageSize 单页查询数量
+	 * @return List中第一个对象为WeiboInfoBean列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
+	 */
+	public List<Object> fetchTopicWeibo(String title, long timestamp,
+			String startRow, int pageSize);
+	
+	/**
+	 * 获取指定ID的微博信息
+	 * @param wid 微博ID
+	 * @return 微博Bean
+	 */
+	public WeiboInfoBean fetchSingleWeibo(String wid);
+	
+	/**
+	 * 获取提及@当前用户的微博列表
+	 * @param uid 用户ID
+	 * @param timestamp 上次更新获取时间戳
+	 * @param startRow 查询起始行的rowKey
+	 * @param pageSize 单页查询数量
+	 * @return List中第一个对象为WeiboInfoBean列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
+	 */
+	public List<Object> fetchAtWeibo(String uid, long timestamp,
+			String startRow, int pageSize);
+	
+	/**
+	 * 发表一条新微博
+	 * @param weibo 微博对象
+	 * @param words 过滤关键词列表
+	 * @param log 日志对象
+	 * @return 微博Bean，发表失败则返回null
+	 */
+	public WeiboInfoBean postWeibo(WeiboContent weibo, Map<String, Byte> words, CommonSyslog log);
+	
+	/**
+	 * 根据微博ID删除指定微博
+	 * @param wid 要删除的微博ID
+	 * @param log 日志对象
+	 * @return true-删除成功，false-删除失败
+	 */
+	public boolean dropWeibo(String wid, CommonSyslog log);
 }

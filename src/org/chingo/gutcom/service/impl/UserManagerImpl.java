@@ -619,4 +619,88 @@ public class UserManagerImpl implements UserManager
 		logDao.put(log); // 记录日志
 		return null;
 	}
+
+	@Override
+	public boolean resetNewCount(String type, CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
+		CommonUser user = getUser(log.getUserid()); // 查询用户
+		if(user != null) // 用户存在时
+		{
+			switch(type) // 未读信息类型
+			{
+			case UserConst.CNT_NEWAT: // 清零新@提到
+				user.setNewat(0);
+				break;
+			case UserConst.CNT_NEWCOMMENT: // 清零新评论
+				user.setNewcomment(0);
+				break;
+			case UserConst.CNT_NEWFOLLOWER: // 清零新粉丝
+				user.setNewfollower(0);
+				break;
+			case UserConst.CNT_NEWMSG: // 清零新消息
+				user.setNewmsg(0);
+				break;
+			}
+			userDao.put(user); // 更新用户
+			logDao.put(log); // 记录日志
+			return true;
+		}
+		// 设置失败描述
+		log.setDetail(SyslogConst.DETAIL_USER_CNT_NEW_RESET_FAILED);
+		logDao.put(log); // 记录日志
+		return false;
+	}
+
+	@Override
+	public List<Object> searchUser(String keyword, byte type, byte trimUser,
+			int pageSize, String startRow)
+	{
+		FilterList fl = new FilterList();
+		fl.addFilter(new PageFilter(pageSize + 1)); // 单页查询数量过滤器
+		if(type == UserConst.SEARCH_TYPE_NICKNAME) // 按昵称查询时
+		{
+			// 昵称模糊匹配过滤器
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("nickname"), CompareOp.EQUAL,
+					new SubstringComparator(keyword)));
+		}
+		else if(type == UserConst.SEARCH_TYPE_MAJOR) // 按专业查询时
+		{
+			// 专业模糊匹配过滤器
+			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("major"), CompareOp.EQUAL,
+					new SubstringComparator(keyword)));
+		}
+		// 分页查询
+		List<Result> results = userDao.findByPage("common_user", fl, startRow, pageSize+1);
+		if(results != null) // 结果非空时
+		{
+			List<Object> rst = new ArrayList<Object>();
+			List<UserInfoBean> users = new ArrayList<UserInfoBean>();
+			int rstSize = results.size();
+			if(rstSize > pageSize) // 结果数量大于需要的数量，即存在下一页时
+			{
+				rstSize = pageSize; // 循环判断上限设置为单页数量
+			}
+			Result result;
+			/* 解析结果并添加到结果列表中 */
+			for(int i=0; i<rstSize; i++)
+			{
+				result = results.get(i);
+				CommonUser user = new CommonUser();
+				user.fillByResult(result); // 填充用户字段
+				UserInfoBean userBean = new UserInfoBean(user); // 创建用户Bean并填充字段
+				users.add(userBean); // 添加Bean到列表仲
+			}
+			rst.add(users); // 添加用户列表到返回结果列表中
+			if(results.size() > pageSize) // 存在更多记录时
+			{
+				// 添加下一页起始行的rowKey到结果列表中
+				rst.add(Bytes.toString(results.get(pageSize).getRow()));
+			}
+			return rst; // 返回结果列表
+		}
+		return null;
+	}
 }

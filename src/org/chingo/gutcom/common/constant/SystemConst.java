@@ -20,9 +20,17 @@ public class SystemConst
 	 */
 	public static final String SESSION_PAGE = "page";
 	/**
+	 * Session最后获取时间戳key值
+	 */
+	public static final String SESSION_LAST_FETCH_TIME = "lastFetchTime";
+	/**
 	 * Context系统配置key值
 	 */
 	public static final String CONTEXT_CONF = "sysconf";
+	/**
+	 * Context过滤关键词key值
+	 */
+	public static final String CONTEXT_FILTER_WORD = "filterword";
 	
 	/**
 	 * 未登录时的用户ID

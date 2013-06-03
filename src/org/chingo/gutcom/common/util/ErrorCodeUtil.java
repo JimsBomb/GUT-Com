@@ -94,6 +94,14 @@ public class ErrorCodeUtil
 	 */
 	public static final String CODE_20001 = "20001";
 	/**
+	 * 代码：20002-指定对象（用户/微博/消息/收藏等）不存在
+	 */
+	public static final String CODE_20002 = "20002";
+	/**
+	 * 代码：20003-（昵称/内容等）含有非法内容
+	 */
+	public static final String CODE_20003 = "20003";
+	/**
 	 * 代码：20101-注册/绑定失败，昵称/邮箱/学号已存在
 	 */
 	public static final String CODE_20101 = "20101";
@@ -186,6 +194,14 @@ public class ErrorCodeUtil
 	 */
 	private static final String INFO_20001 = "Not login.";
 	/**
+	 * 信息：20002-指定对象（用户/微博/消息/收藏等）不存在
+	 */
+	private static final String INFO_20002 = "Object not exists.";
+	/**
+	 * 信息：20003-（昵称/内容等）含有非法内容
+	 */
+	private static final String INFO_20003 = "Contains illegal content.";
+	/**
 	 * 信息：20101-注册/绑定失败，昵称/邮箱/学号已存在
 	 */
 	private static final String INFO_20101 = "NickName/email/studentnum already exists.";
@@ -272,6 +288,12 @@ public class ErrorCodeUtil
 			break;
 		case CODE_20001:
 			errorInfo = INFO_20001;
+			break;
+		case CODE_20002:
+			errorInfo = INFO_20002;
+			break;
+		case CODE_20003:
+			errorInfo = INFO_20003;
 			break;
 		case CODE_20101:
 			errorInfo = INFO_20101;

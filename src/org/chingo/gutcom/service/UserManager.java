@@ -158,4 +158,23 @@ public interface UserManager
 	 */
 	public UserInfoBean updateUserInfo(String uid, String nickname, String email, byte gender,
 			String birth, byte bloodtype, String qq, String selfintro, CommonSyslog log);
+	
+	/**
+	 * 清零单项未读信息计数
+	 * @param type 要清空的项目
+	 * @param log 日志对象
+	 * @return true-清零成功，false-清零失败
+	 */
+	public boolean resetNewCount(String type, CommonSyslog log);
+	
+	/**
+	 * 根据关键字搜索用户
+	 * @param keyword 关键字
+	 * @param type 搜索类型
+	 * @param pageSize 单页搜索数量
+	 * @param startRow 查询起始行的rowKey
+	 * @return List中第一个对象为UserInfoBean列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
+	 */
+	public List<Object> searchUser(String keyword, byte type, byte trimUser,
+			int pageSize, String startRow);
 }

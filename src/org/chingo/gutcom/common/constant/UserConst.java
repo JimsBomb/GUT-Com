@@ -39,6 +39,30 @@ public class UserConst
 	 */
 	public static final byte BLOODTYPE_O = 4;
 	/**
+	 * 未读信息类型：新粉丝
+	 */
+	public static final String CNT_NEWFOLLOWER = "follower";
+	/**
+	 * 未读信息类型：新消息
+	 */
+	public static final String CNT_NEWMSG = "msg";
+	/**
+	 * 未读信息类型：新@提到
+	 */
+	public static final String CNT_NEWAT = "at";
+	/**
+	 * 未读信息类型：新评论
+	 */
+	public static final String CNT_NEWCOMMENT = "cmt";
+	/**
+	 * 搜索用户依据：0-按昵称
+	 */
+	public static final byte SEARCH_TYPE_NICKNAME = 0;
+	/**
+	 * 搜索用户依据：1-按专业
+	 */
+	public static final byte SEARCH_TYPE_MAJOR = 1;
+	/**
 	 * 系统（管理员）ID
 	 */
 	public static final String SYSTEM_ID = "0";
