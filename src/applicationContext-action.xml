@@ -57,5 +57,26 @@
 	<bean name="authorizeApiAction" class="org.chingo.gutcom.action.api.common.AuthorizeAction" scope="prototype">
 	    <property name="userMgr" ref="userManager" />
 	</bean>
+	<bean name="registerApiAction" class="org.chingo.gutcom.action.api.common.RegisterAction" scope="prototype">
+	    <property name="userMgr" ref="userManager" />
+	</bean>
+	<bean name="accountApiAction" class="org.chingo.gutcom.action.api.common.AccountAction" scope="prototype">
+	    <property name="userMgr" ref="userManager" />
+	</bean>
+	<bean name="userApiAction" class="org.chingo.gutcom.action.api.common.UserAction" scope="prototype">
+	    <property name="userMgr" ref="userManager" />
+	</bean>
+	<bean name="messageApiAction" class="org.chingo.gutcom.action.api.common.MessageAction" scope="prototype">
+	    <property name="msgMgr" ref="msgManager" />
+	</bean>
+	<bean name="noticeApiAction" class="org.chingo.gutcom.action.api.common.NoticeAction" scope="prototype">
+	    <property name="userMgr" ref="userManager" />
+	</bean>
+	<bean name="searchApiAction" class="org.chingo.gutcom.action.api.common.SearchAction" scope="prototype">
+	    <property name="userMgr" ref="userManager" />
+	</bean>
+	<bean name="weiboApiAction" class="org.chingo.gutcom.action.api.weibo.WbAction" scope="prototype">
+	    <property name="weiboMgr" ref="weiboManager" />
+	</bean>
 	<!-- API END -->
 </beans>

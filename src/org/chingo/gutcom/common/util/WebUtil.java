@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.domain.CommonToken;
 import org.chingo.gutcom.domain.CommonUser;
@@ -21,15 +22,15 @@ public class WebUtil
 	private static final String ENCODE_CHAR = "UTF-8"; // 编码方式
 	
 	/**
-	 * 返回SESSION中当前用户对象
+	 * 返回SESSION中当前用户Bean
 	 * @param session Session映射Map
 	 * @return 当前用户对象，无则返回null
 	 */
-	public static final CommonUser getUser(Map session)
+	public static final UserInfoBean getUser(Map session)
 	{
 		if(session.containsKey(SystemConst.SESSION_USER))
 		{
-			return (CommonUser) session.get(SystemConst.SESSION_USER);
+			return (UserInfoBean) session.get(SystemConst.SESSION_USER);
 		}
 		return null;
 	}

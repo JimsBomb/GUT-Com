@@ -122,16 +122,16 @@ public interface UserManager
 	
 	/**
 	 * 绑定学号和相关信息
-	 * @param user 要绑定信息的用户对象
+	 * @param user 要绑定信息的用户Bean
 	 * @param studentnum 学号
 	 * @param realname 真实姓名
 	 * @param college 所在学院
 	 * @param major 所读专业
 	 * @param classname 所在班级
 	 * @param log 日志对象
-	 * @return 绑定成功返回用户对象，否则（学号已被绑定）返回null
+	 * @return 绑定成功返回用户Bean，否则（学号已被绑定）返回null
 	 */
-	public CommonUser updateStudentnum(CommonUser user, String studentnum, String realname,
+	public UserInfoBean updateStudentnum(UserInfoBean user, String studentnum, String realname,
 			String college, String major, String classname, CommonSyslog log);
 	
 	/**

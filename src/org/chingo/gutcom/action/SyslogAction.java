@@ -15,10 +15,7 @@ import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.util.WebUtil;
 import org.chingo.gutcom.domain.CommonSyslog;
-import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.exception.GcException;
-
-import com.opensymphony.xwork2.ActionContext;
 
 /**
  * 系统日志Action
@@ -268,7 +265,7 @@ public class SyslogAction extends SystemBaseAction
 		/* 生成日志对象 */
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
-		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setUserid(WebUtil.getUser(session).getUid());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_LOG_DEL);
 		log.setDateline(new Date().getTime());

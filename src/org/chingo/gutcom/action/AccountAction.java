@@ -3,6 +3,7 @@ package org.chingo.gutcom.action;
 import java.util.Date;
 
 import org.chingo.gutcom.action.base.AccountBaseAction;
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.ResultMsg;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
@@ -66,7 +67,7 @@ public class AccountAction extends AccountBaseAction
 		}
 		else // 登录成功
 		{
-			session.put(SystemConst.SESSION_USER, user); // 往session中存放用户信息
+			session.put(SystemConst.SESSION_USER, new UserInfoBean(user)); // 往session中存放用户信息
 			return SUCCESS;
 		}
 	}
@@ -78,7 +79,7 @@ public class AccountAction extends AccountBaseAction
 	 */
 	public String logout() throws Exception
 	{
-		session.remove(SystemConst.SESSION_USER); // 移除session中的用户信息
+		session.clear(); // session中的用户信息
 		this.resultMsg = ResultMsg.ACCOUNT_LOGOUT;
 		this.backTo = "/login.jsp";
 		return SUCCESS;
@@ -99,7 +100,7 @@ public class AccountAction extends AccountBaseAction
 				/* 生成日志对象 */
 				CommonSyslog log = new CommonSyslog();
 				log.setIp(WebUtil.getRemoteAddr(request));
-				log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+				log.setUserid(WebUtil.getUser(session).getUid());
 				log.setType(SyslogConst.TYPE_OP_ADMIN);
 				log.setDetail(SyslogConst.DETAIL_ADMIN_PW_UPDATE);
 				log.setDateline(new Date().getTime());

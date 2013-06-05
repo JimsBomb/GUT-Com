@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.chingo.gutcom.action.base.api.common.RegisterBaseAction;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
@@ -75,7 +77,8 @@ public class RegisterAction extends RegisterBaseAction
 	 */
 	public String signup() throws Exception
 	{
-		jsonRst.clear(); // 清空响应数据
+//		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 参数非空且密码格式正确时
 		if(nickname!=null && email!=null && password!=null 
 				&& VerifyUtil.checkPwd(password))
@@ -90,18 +93,25 @@ public class RegisterAction extends RegisterBaseAction
 			// 注册成功时
 			if(userMgr.signup(nickname, email, password, log) == true)
 			{
-				jsonRst.put("result", true); // 注册成功响应数据
+//				jsonRst.put("result", "true"); // 注册成功响应数据
+				jo.put("result", true);
+				request.setAttribute("data", jo.toString());
 			}
 			else // 否则返回注册失败错误数据
 			{
 				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20101, 
 						WebUtil.getRequestAddr(request), null);
+				jo.put("root", jsonRst);
+				request.setAttribute("data", jo.getJSONObject("root").toString());
 			}
 		}
 		else // 否则返回参数错误数据
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008, 
 					WebUtil.getRequestAddr(request), null);
+			
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}

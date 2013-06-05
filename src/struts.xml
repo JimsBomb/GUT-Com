@@ -30,7 +30,7 @@
 
         <action name="test" class="org.chingo.gutcom.action.TestAction" method="test">
             <result type="json">
-                <param name="root">jsonRst.m</param>
+                <param name="root">jsonRst</param>
             </result>
         </action>
         
@@ -164,19 +164,25 @@
 	            <param name="root">jsonRst</param>
 	        </result>
 	    </action>
+	    <action name="update" class="authorizeApiAction" method="update">
+	        <result type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </action>
 	</package>
 	
 	<!-- 注册API -->
 	<package name="apiReg" namespace="/api/common/register" extends="json-default">
 	    <action name="verify_id" class="registerApiAction" method="verifyId">
-	        <result type="json">
+	        <result name="success" type="json">
 	            <param name="root">jsonRst</param>
 	        </result>
 	    </action>
 	    <action name="signup" class="registerApiAction" method="signup">
-	        <result type="json">
+	        <!-- <result type="json">
 	            <param name="root">jsonRst</param>
-	        </result>
+	        </result>-->
+	        <result name="success">/data.jsp</result>
 	    </action>
 	</package>
 	
@@ -237,6 +243,241 @@
 	        <result type="json">
 	            <param name="root">
 	                jsonRst.root
+	            </param>
+	        </result>
+	    </action>
+	    <action name="counts" class="userApiAction" method="counts">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="update" class="userApiAction" method="update">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst.root
+	            </param>
+	        </result>
+	    </action>
+	    <action name="upload" class="userApiAction" method="upload">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	</package>
+	
+	<!-- 消息API -->
+	<package name="apiMessage" namespace="/api/common/message" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error" type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </global-results>
+	    
+	    <action name="list" class="messageApiAction" method="list">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="show" class="messageApiAction" method="show">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst.root
+	            </param>
+	        </result>
+	    </action>
+	    <action name="send" class="messageApiAction" method="send">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst.root
+	            </param>
+	        </result>
+	    </action>
+	    <action name="drop" class="messageApiAction" method="drop">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	</package>
+	
+	<!-- 提醒API -->
+	<package name="apiNotice" namespace="/api/common/notice" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error" type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </global-results>
+	    
+	    <action name="get_count" class="noticeApiAction" method="fetchCount">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="set_count" class="noticeApiAction" method="resetCount">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	</package>
+	
+	<!-- 搜索API -->
+	<package name="apiSearch" namespace="/api/common/search" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error" type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </global-results>
+	    
+	    <action name="user" class="searchApiAction" method="user">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	</package>
+	
+	<!-- 微博API -->
+	
+	<package name="apiWeibo" namespace="/api/weibo/wb" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error" type="json">
+	            <param name="root">jsonRst</param>
+	        </result>
+	    </global-results>
+	    
+	    <action name="fetch_public" class="weiboApiAction" method="fetchPublic">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="fetch_list" class="weiboApiAction" method="fetchList">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="fetch_follow" class="weiboApiAction" method="fetchFollow">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="fetch_mine" class="weiboApiAction" method="fetchMine">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="fetch_user" class="weiboApiAction" method="fetchUser">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="fetch_Topic" class="weiboApiAction" method="fetchTopic">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="fetch_id" class="weiboApiAction" method="fetchId">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst.root
+	            </param>
+	        </result>
+	    </action>
+	    <action name="fetch_at" class="weiboApiAction" method="fetchAt">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
+	            </param>
+	        </result>
+	    </action>
+	    <action name="post" class="weiboApiAction" method="post">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst.root
+	            </param>
+	        </result>
+	    </action>
+	    <action name="upload" class="weiboApiAction" method="upload">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst.root
+	            </param>
+	        </result>
+	    </action>
+	    <action name="repost" class="weiboApiAction" method="repost">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst.root
+	            </param>
+	        </result>
+	    </action>
+	    <action name="drop" class="weiboApiAction" method="drop">
+	        <result type="json">
+	            <param name="root">
+	                jsonRst
 	            </param>
 	        </result>
 	    </action>

@@ -111,9 +111,11 @@ public class UserManagerImpl implements UserManager
 			userDao.put(u); // 更新状态
 			logDao.put(log); // 记录日志
 		}
-		
-		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_STATUS_UPDATE_FAILED); // 设置更新失败描述
-		logDao.put(log); // 记录日志
+		else
+		{
+			log.setDetail(SyslogConst.DETAIL_ADMIN_USER_STATUS_UPDATE_FAILED); // 设置更新失败描述
+			logDao.put(log); // 记录日志
+		}
 	}
 
 	@Override
@@ -134,9 +136,11 @@ public class UserManagerImpl implements UserManager
 				userDao.put(u); // 更新状态
 				logDao.put(log); // 记录日志
 			}
-			
-			log.setDetail(SyslogConst.DETAIL_ADMIN_USER_STATUS_UPDATE_FAILED); // 设置更新失败描述
-			logDao.put(log); // 记录日志
+			else
+			{
+				log.setDetail(SyslogConst.DETAIL_ADMIN_USER_STATUS_UPDATE_FAILED); // 设置更新失败描述
+				logDao.put(log); // 记录日志
+			}
 		}
 	}
 
@@ -156,9 +160,11 @@ public class UserManagerImpl implements UserManager
 			userDao.put(u); // 更新用户
 			logDao.put(log); // 记录日志
 		}
-
-		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_PWD_UPDATE_FAILED); // 设置更新失败描述
-		logDao.put(log); // 记录日志
+		else
+		{
+			log.setDetail(SyslogConst.DETAIL_ADMIN_USER_PWD_UPDATE_FAILED); // 设置更新失败描述
+			logDao.put(log); // 记录日志
+		}
 	}
 
 	@Override
@@ -328,6 +334,7 @@ public class UserManagerImpl implements UserManager
 			
 			rst.add(token.getAccessToken()); // 添加访问令牌
 			rst.add((token.getExpiredTime() - user.getLastlogin()) / 1000); // 添加令牌有效时长，单位为秒
+			log.setUserid(user.getUid());
 			logDao.put(log); // 记录日志
 			return rst; // 返回结果列表
 		}
@@ -440,7 +447,7 @@ public class UserManagerImpl implements UserManager
 	}
 
 	@Override
-	public CommonUser updateStudentnum(CommonUser user, String studentnum, String realname,
+	public UserInfoBean updateStudentnum(UserInfoBean user, String studentnum, String realname,
 			String college, String major, String classname, CommonSyslog log)
 	{
 		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
@@ -461,10 +468,19 @@ public class UserManagerImpl implements UserManager
 			user.setCollege(college);
 			user.setMajor(major);
 			user.setClassname(classname);
-			userDao.put(user); // 更新用户
-			logDao.put(log); // 记录日志
-			
-			return user;
+			CommonUser u = getUser(user.getUid()); // 查询用户
+			if(u != null) // 用户存在时
+			{
+				u.setStudentnum(studentnum);
+				u.setRealname(realname);
+				u.setCollege(college);
+				u.setMajor(major);
+				u.setClassname(classname);
+				userDao.put(u); // 更新用户
+				logDao.put(log); // 记录日志
+
+				return user;
+			}
 		}
 		// 设置绑定失败信息
 		log.setDetail(SyslogConst.DETAIL_USER_STUDENTNUM_UPDATE_FAILED);

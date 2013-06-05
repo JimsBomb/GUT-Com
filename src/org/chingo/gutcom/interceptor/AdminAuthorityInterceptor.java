@@ -1,5 +1,6 @@
 package org.chingo.gutcom.interceptor;
 
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.constant.UserConst;
 import org.chingo.gutcom.domain.CommonUser;
@@ -24,7 +25,7 @@ public class AdminAuthorityInterceptor extends AbstractInterceptor
 		Object obj = ac.getSession().get(SystemConst.SESSION_USER); // 获取session中的用户信息
 		if(obj != null) // 非空时
 		{
-			CommonUser user = (CommonUser) obj;
+			UserInfoBean user = (UserInfoBean) obj;
 			if(user.getUid().equals(UserConst.SYSTEM_ID)) // 为管理员时
 			{
 				return invocation.invoke(); // 继续执行

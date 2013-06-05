@@ -27,12 +27,13 @@
 					<tr>
 						<td><input name="checkbox" class="checkbox" type="checkbox"
 							value='<s:property value="#u.uid" />' /></td>
-						<td><s:property value="#u.studentnum" /></td>
+						<td><s:if test="#u.studentnum==''"><i>未绑定</i></s:if>
+						<s:else><s:property value="#u.studentnum" /></s:else></td>
 						<td style="text-align: center;"><s:property
 								value="#u.nickname" /></td>
-						<td><s:if test="#u.commonUserProfile.gender==0">保密</s:if>
+						<td><s:if test="#u.gender==0">保密</s:if>
 							<s:elseif test="#u.status==1">男</s:elseif> <s:elseif
-								test="#u.commonUserProfile.gender==2">女</s:elseif></td>
+								test="#u.gender==2">女</s:elseif></td>
 						<td><s:text name="format.datetime">
 								<s:param value="#u.regdate" />
 							</s:text></td>

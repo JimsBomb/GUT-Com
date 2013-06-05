@@ -5,11 +5,9 @@ import java.util.Date;
 import org.chingo.gutcom.action.base.MsgBaseAction;
 import org.chingo.gutcom.common.constant.MsgConst;
 import org.chingo.gutcom.common.constant.SyslogConst;
-import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.util.WebUtil;
 import org.chingo.gutcom.domain.CommonMsgRecv;
 import org.chingo.gutcom.domain.CommonSyslog;
-import org.chingo.gutcom.domain.CommonUser;
 
 public class MsgAction extends MsgBaseAction
 {
@@ -67,7 +65,7 @@ public class MsgAction extends MsgBaseAction
 		/* 生成日志对象 */
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
-		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setUserid(WebUtil.getUser(session).getUid());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_MSG_SEND);
 		log.setDateline(new Date().getTime());

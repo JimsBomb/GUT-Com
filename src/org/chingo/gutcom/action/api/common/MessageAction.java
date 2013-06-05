@@ -160,8 +160,8 @@ public class MessageAction extends MessageBaseAction
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
-					WebUtil.getRequestAddr(request), null);
+			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+					WebUtil.getRequestAddr(request), null));
 		}
 		return SUCCESS;
 	}
@@ -194,14 +194,14 @@ public class MessageAction extends MessageBaseAction
 			}
 			else // 返回指定对象不存在错误信息
 			{
-				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
-						WebUtil.getRequestAddr(request), null);
+				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+						WebUtil.getRequestAddr(request), null));
 			}
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
-					WebUtil.getRequestAddr(request), null);
+			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+					WebUtil.getRequestAddr(request), null));
 		}
 		return SUCCESS;
 	}

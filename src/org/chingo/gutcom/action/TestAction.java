@@ -59,9 +59,10 @@ public class TestAction extends ActionSupport
 		lst.add("lst2");
 		lst.add("lst3");
 		m.put("lst", lst);
-		jsonRst.put("m", m);
+//		jsonRst.put("m", m);
 		jsonRst.put("aa", 11);
 		jsonRst.put("bb", 22);
+		jsonRst.put("result", true);
 		return SUCCESS;
 	}
 	

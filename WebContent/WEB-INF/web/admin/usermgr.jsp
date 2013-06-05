@@ -59,8 +59,8 @@
 						<td><s:text name="format.datetime">
 								<s:param value="#u.regdate" />
 							</s:text></td>
-						<td><s:if test="#u.status==0">正常</s:if> <s:elseif
-								test="#u.status==1">禁止发表</s:elseif></td>
+						<td><s:if test="#u.status==0">禁止发表</s:if> <s:elseif
+								test="#u.status==1">正常</s:elseif></td>
 						<td><s:url action="usershow" id="showurl">
 								<s:param name="id">
 									<s:property value="#u.uid" />
@@ -81,8 +81,8 @@
 								</s:param>
 							</s:url> <s:a href="%{updatestatusurl}">
 								<s:if test="#u.status==0">
-						禁止发表</s:if>
-								<s:elseif test="#u.status==1">允许发表</s:elseif>
+						允许发表</s:if>
+								<s:elseif test="#u.status==1">禁止发表</s:elseif>
 							</s:a> <s:url action="userdel" id="delurl">
 								<s:param name="id">
 									<s:property value="#u.uid" />

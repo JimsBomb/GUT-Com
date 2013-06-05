@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.chingo.gutcom.action.base.api.weibo.WbBaseAction;
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.bean.WeiboInfoBean;
 import org.chingo.gutcom.common.constant.SysconfConst;
 import org.chingo.gutcom.common.constant.SyslogConst;
@@ -205,7 +206,7 @@ public class WbAction extends WbBaseAction
 	 * @return Action Result
 	 * @throws Exception
 	 */
-	public String list() throws Exception
+	public String fetchList() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
 		// 检查参数
@@ -272,7 +273,7 @@ public class WbAction extends WbBaseAction
 	 * @return Action Result
 	 * @throws Exception
 	 */
-	public String follow() throws Exception
+	public String fetchFollow() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
 		// 检查参数
@@ -339,7 +340,7 @@ public class WbAction extends WbBaseAction
 	 * @return Action Result
 	 * @throws Exception
 	 */
-	public String mine() throws Exception
+	public String fetchMine() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
 		// 检查参数
@@ -406,7 +407,7 @@ public class WbAction extends WbBaseAction
 	 * @return Action Result
 	 * @throws Exception
 	 */
-	public String user() throws Exception
+	public String fetchUser() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
 		// 检查参数
@@ -475,7 +476,7 @@ public class WbAction extends WbBaseAction
 	 * @return Action Result
 	 * @throws Exception
 	 */
-	public String topic() throws Exception
+	public String fetchTopic() throws Exception
 	{
 		jsonRst.clear();
 		if(title!=null && !title.isEmpty()
@@ -753,7 +754,7 @@ public class WbAction extends WbBaseAction
 			if(weiboBean != null) // 发表成功时
 			{
 				/* 更新用户计数信息 */
-				CommonUser user = WebUtil.getUser(session);
+				UserInfoBean user = WebUtil.getUser(session);
 				user.setWeibocnt(user.getWeibocnt()+1);
 				session.put(SystemConst.SESSION_USER, user);
 				jsonRst.put("root", weiboBean); // 响应数据
@@ -824,7 +825,7 @@ public class WbAction extends WbBaseAction
 			if(weiboBean != null) // 发表成功时
 			{
 				/* 更新用户计数信息 */
-				CommonUser user = WebUtil.getUser(session);
+				UserInfoBean user = WebUtil.getUser(session);
 				user.setWeibocnt(user.getWeibocnt()+1);
 				session.put(SystemConst.SESSION_USER, user);
 				jsonRst.put("root", weiboBean); // 响应数据

@@ -88,7 +88,7 @@ public class AuthorizeAction extends AuthorizeBaseAction
 	public String login() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
-		if(WebUtil.getUser(session) != null)
+		if(WebUtil.getUser(session) == null)
 		{
 			/* 创建日志对象 */
 			CommonSyslog log = new CommonSyslog();
@@ -96,7 +96,7 @@ public class AuthorizeAction extends AuthorizeBaseAction
 			log.setDetail(SyslogConst.DETAIL_USER_LOGIN);
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setType(SyslogConst.TYPE_LOGIN_FRONT);
-			log.setUserid(nickname);
+			log.setUserid(SystemConst.USER_ID_NOT_LOGIN);
 			List<Object> rst = null;
 			// 验证用户登录
 			rst = userMgr.checkLogin(nickname, email, studentnum, password, log);
@@ -104,7 +104,7 @@ public class AuthorizeAction extends AuthorizeBaseAction
 			{
 				UserInfoBean user = (UserInfoBean) rst.get(0); // 用户对象
 				String accessToken = (String) rst.get(1); // 令牌
-				int expiresIn = (int) rst.get(2); // 令牌有效时长（秒）
+				long expiresIn = (long) rst.get(2); // 令牌有效时长（秒）
 				jsonRst.put("access_token", accessToken); // 令牌
 				jsonRst.put("expires_in", expiresIn); // 令牌时效
 				jsonRst.put("user", user); // 用户对象
@@ -139,7 +139,7 @@ public class AuthorizeAction extends AuthorizeBaseAction
 	{
 		jsonRst.clear();
 		CommonToken token = WebUtil.getToken(session); // 获取当前用户对象
-		CommonUser user = WebUtil.getUser(session); // 获取当前用户的令牌对象
+		UserInfoBean user = WebUtil.getUser(session); // 获取当前用户的令牌对象
 		// 检查参数和登录
 		if(uid!=null && access_token!=null 
 				&& user!=null && token!=null

@@ -137,15 +137,15 @@ public class SysconfAction extends SystemBaseAction
 		mapConf.put(SysconfConst.SERVER_STATUS, serverStatus);
 		mapConf.put(SysconfConst.USER_VERIFY, userVerify);
 		mapConf.put(SysconfConst.WEIBO_VERIFY, weiboVerify);
-		mapConf.put(SysconfConst.SHARE_VERIFY, shareVerify);
-		mapConf.put(SysconfConst.SHARE_COMMENT_VERIFY, shareCommentVerify);
+//		mapConf.put(SysconfConst.SHARE_VERIFY, shareVerify);
+//		mapConf.put(SysconfConst.SHARE_COMMENT_VERIFY, shareCommentVerify);
 		mapConf.put(SysconfConst.RECORDS_PER_PAGE, recordsPerPage);
 		mapConf.put(SysconfConst.LOG_LIFECYCLE, logLifecycle);
 		
 		/* 生成日志对象 */
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
-		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setUserid(WebUtil.getUser(session).getUid());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_CONF_UPDATE);
 		log.setDateline(new Date().getTime());

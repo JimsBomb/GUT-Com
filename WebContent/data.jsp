@@ -8,10 +8,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<s:form action="test.do" namespace="/">
+<!--<s:form action="test.do" namespace="/">
 	<s:submit value="add" method="addLog" />
 	<s:submit value="del" method="delUser" />
 	<s:submit value="addUsers" method="addUsers" />
-</s:form>
+</s:form>-->
+${ data }
 </body>
 </html>

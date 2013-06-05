@@ -38,7 +38,7 @@ html {
 </head>
 <body>
 	<!--#header{{{-->
-	<div id="header" class="tc">header</div>
+	<div id="header" class="tc"><b>校园通管理系统</b></div>
 	<!--}}}#header-->
 	<!--#aside{{{-->
 	<div id="aside">
@@ -59,7 +59,7 @@ html {
 	</div>
 	<!--}}}#main-content-->
 	<!--#footer{{{-->
-	<div id="footer" class="tc">footer</div>
+	<div id="footer" class="tc">©2013 计本09-1班 陈豪 3099990019</div>
 	<!--}}}#footer-->
 </body>
 </html>

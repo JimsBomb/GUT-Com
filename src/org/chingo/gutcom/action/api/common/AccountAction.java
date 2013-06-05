@@ -5,16 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.chingo.gutcom.action.base.api.common.AccountBaseAction;
+import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.common.util.ErrorCodeUtil;
 import org.chingo.gutcom.common.util.WebUtil;
 import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonToken;
-import org.chingo.gutcom.domain.CommonUser;
 
 public class AccountAction extends AccountBaseAction
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -82935563654106735L;
 	private String studentno; // 学号
 	private String realname; // 真实姓名
 	private String college; //所在学院
@@ -79,11 +83,6 @@ public class AccountAction extends AccountBaseAction
 		return this.jsonRst;
 	}
 	
-	public void setJsonRst(Map<String, Object> jsonRst)
-	{
-		this.jsonRst = jsonRst;
-	}
-	
 	/**
 	 * 获取当前登录用户ID Method
 	 * @return Action Result
@@ -146,7 +145,7 @@ public class AccountAction extends AccountBaseAction
 			log.setType(SyslogConst.TYPE_OP_FRONT);
 			log.setUserid(WebUtil.getUser(session).getUid());
 			// 绑定
-			CommonUser user = userMgr.updateStudentnum(WebUtil.getUser(session), 
+			UserInfoBean user = userMgr.updateStudentnum(WebUtil.getUser(session), 
 					studentno, realname, college, major, classname, log);
 			if(user != null) // 绑定成功时
 			{
@@ -176,8 +175,7 @@ public class AccountAction extends AccountBaseAction
 	public String logout() throws Exception
 	{
 		jsonRst.clear(); //清空响应数据
-		session.remove(SystemConst.SESSION_USER); // 移除SESSION中用户信息
-		session.remove(SystemConst.SESSION_TOKEN); // 移除SESSION中令牌信息
+		session.clear(); // 清空SESSION
 		jsonRst.put("result", true); // 设置响应数据
 		return SUCCESS;
 	}

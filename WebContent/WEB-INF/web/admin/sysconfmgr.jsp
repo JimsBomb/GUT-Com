@@ -34,18 +34,6 @@
 							value="#application.sysconf.WEIBO_VERIFY" /></td>
 				</tr>
 				<tr>
-					<td>新分享审核：</td>
-					<td><s:radio list="#{'0':'关闭', '1':'开启'}" name="shareVerify"
-							listKey="key" listValue="value"
-							value="#application.sysconf.SHARE_VERIFY" /></td>
-				</tr>
-				<tr>
-					<td>新分享评论审核：</td>
-					<td><s:radio list="#{'0':'关闭', '1':'开启'}"
-							name="shareCommentVerify" listKey="key" listValue="value"
-							value="#application.sysconf.SHARE_COMMENT_VERIFY" /></td>
-				</tr>
-				<tr>
 					<td>后台内容列表单页显示记录数：</td>
 					<td><s:textfield name="recordsPerPage"
 							value="%{#application.sysconf.RECORDS_PER_PAGE}" /></td>

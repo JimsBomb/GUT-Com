@@ -19,8 +19,6 @@ import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.exception.GcException;
 
-import com.opensymphony.xwork2.ActionContext;
-
 /**
  * 用户Action
  * @author Chingo.Org
@@ -168,12 +166,12 @@ public class UserAction extends UserBaseAction
 			/* 用户昵称非空则获取 */
 			if(nickname!=null && nickname.isEmpty()==false)
 			{
-				values.put("nickname", "%" + nickname + "%");
+				values.put("nickname", nickname);
 			}
 			/* 学号非空则获取 */
 			if(studentnum!=null && studentnum.isEmpty()==false)
 			{
-				values.put("studentnum", "%" + studentnum + "%");
+				values.put("studentnum", studentnum);
 			}
 			/* 注册时间非空则获取 */
 			if(createTime!=null && createTime.isEmpty()==false)
@@ -274,7 +272,7 @@ public class UserAction extends UserBaseAction
 		/* 生成日志对象 */
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
-		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setUserid(WebUtil.getUser(session).getUid());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_DEL);
 		log.setDateline(new Date().getTime());
@@ -308,7 +306,7 @@ public class UserAction extends UserBaseAction
 		/* 生成日志对象 */
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
-		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setUserid(WebUtil.getUser(session).getUid());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_STATUS_UPDATE);
 		log.setDateline(new Date().getTime());
@@ -409,7 +407,7 @@ public class UserAction extends UserBaseAction
 		/* 生成日志对象 */
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
-		log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+		log.setUserid(WebUtil.getUser(session).getUid());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_AUDIT);
 		log.setDateline(new Date().getTime());
@@ -447,7 +445,7 @@ public class UserAction extends UserBaseAction
 			/* 生成日志对象 */
 			CommonSyslog log = new CommonSyslog();
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+			log.setUserid(WebUtil.getUser(session).getUid());
 			log.setType(SyslogConst.TYPE_OP_ADMIN);
 			log.setDetail(SyslogConst.DETAIL_ADMIN_USER_ADD);
 			log.setDateline(new Date().getTime());
@@ -513,7 +511,7 @@ public class UserAction extends UserBaseAction
 			/* 生成日志对象 */
 			CommonSyslog log = new CommonSyslog();
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setUserid(((CommonUser)session.get(SystemConst.SESSION_USER)).getUid());
+			log.setUserid(WebUtil.getUser(session).getUid());
 			log.setType(SyslogConst.TYPE_OP_ADMIN);
 			log.setDetail(SyslogConst.DETAIL_ADMIN_USER_PWD_UPDATE);
 			log.setDateline(new Date().getTime());
