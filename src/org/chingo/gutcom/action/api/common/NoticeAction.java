@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import net.sf.json.JSONObject;
+
 import org.chingo.gutcom.action.base.api.common.NoticeBaseAction;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.UserConst;
@@ -47,20 +49,24 @@ public class NoticeAction extends NoticeBaseAction
 	public String fetchCount() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 查询用户
 		CommonUser user = userMgr.getUser(WebUtil.getUser(session).getUid());
 		if(user != null) // 用户存在时
 		{
 			/* 设置响应数据 */
-			jsonRst.put("newfollower", user.getNewfollower());
-			jsonRst.put("newmsg", user.getNewmsg());
-			jsonRst.put("newat", user.getNewat());
-			jsonRst.put("newcomment", user.getNewcomment());
+			jo.put("newfollower", user.getNewfollower());
+			jo.put("newmsg", user.getNewmsg());
+			jo.put("newat", user.getNewat());
+			jo.put("newcomment", user.getNewcomment());
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回用户不存在错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -73,6 +79,7 @@ public class NoticeAction extends NoticeBaseAction
 	public String resetCount() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(type!=null && (type.equals(UserConst.CNT_NEWAT)
 				|| type.equals(UserConst.CNT_NEWCOMMENT)
@@ -89,18 +96,23 @@ public class NoticeAction extends NoticeBaseAction
 			// 清零成功时
 			if(userMgr.resetNewCount(type, log) == true)
 			{
-				jsonRst.put("result", true);
+				jo.put("result", true);
+				request.setAttribute("data", jo.toString());
 			}
 			else // 否则返回对象不存在错误信息
 			{
 				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
 						WebUtil.getRequestAddr(request), null);
+				jo.put("root", jsonRst);
+				request.setAttribute("data", jo.getJSONObject("root").toString());
 			}
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}

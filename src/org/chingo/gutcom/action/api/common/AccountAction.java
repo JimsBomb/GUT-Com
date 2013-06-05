@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.chingo.gutcom.action.base.api.common.AccountBaseAction;
 import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SyslogConst;
@@ -91,37 +93,10 @@ public class AccountAction extends AccountBaseAction
 	public String fetchUid() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
-		if(WebUtil.getUser(session) == null) // 用户未登录时，返回未登录错误数据
-		{
-			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20001, 
-					WebUtil.getRequestAddr(request), null);
-		}
-		else
-		{
-			// 获取SESSION中的令牌对象
-			CommonToken token = WebUtil.getToken(session);
-			// 检查参数和令牌
-			if(access_token!=null && token!=null 
-					&& access_token.equals(token.getAccessToken()))
-			{
-				// 返回用户ID
-				jsonRst.put("uid", token.getUserid());
-			}
-			else // 参数错误时，返回参数错误数据
-			{
-				if(access_token == null) // 无access_token参数
-				{
-					jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10006, 
-							WebUtil.getRequestAddr(request), null);
-				}
-				else // 令牌无效/过期
-				{
-					jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10005, 
-							WebUtil.getRequestAddr(request), null);
-				}
-			}
-		}
-		
+		JSONObject jo = new JSONObject();
+		// 返回用户ID
+		jo.put("uid", WebUtil.getUser(session).getUid());
+		request.setAttribute("data", jo.toString());
 		return SUCCESS;
 	}
 	
@@ -133,6 +108,7 @@ public class AccountAction extends AccountBaseAction
 	public String updateStunum() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(studentno!=null && !studentno.isEmpty()&& realname!=null 
 				&& college!=null && major!=null && classname!=null)
@@ -150,12 +126,15 @@ public class AccountAction extends AccountBaseAction
 			if(user != null) // 绑定成功时
 			{
 				session.put(SystemConst.SESSION_USER, user); // 更新SESSION中的用户信息
-				jsonRst.put("result", true); // 设置响应数据
+				jo.put("result", true); // 设置响应数据
+				request.setAttribute("data", jo.toString());
 			}
 			else // 否则返回错误信息
 			{
 				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20101, 
 						WebUtil.getRequestAddr(request), null);
+				jo.put("root", jsonRst);
+				request.setAttribute("data", jo.getJSONObject("root").toString());
 			}
 		}
 		else // 否则返回参数错误信息
@@ -163,6 +142,8 @@ public class AccountAction extends AccountBaseAction
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10013, 
 					WebUtil.getRequestAddr(request), new String[]{
 					"studentno/realname/college/major/classname"});
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -176,7 +157,9 @@ public class AccountAction extends AccountBaseAction
 	{
 		jsonRst.clear(); //清空响应数据
 		session.clear(); // 清空SESSION
-		jsonRst.put("result", true); // 设置响应数据
+		JSONObject jo = new JSONObject();
+		jo.put("result", true); // 设置响应数据
+		request.setAttribute("data", jo.toString());
 		return SUCCESS;
 	}
 }

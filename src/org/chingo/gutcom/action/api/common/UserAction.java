@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.chingo.gutcom.action.base.api.common.UserBaseAction;
 import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.constant.SyslogConst;
@@ -134,6 +136,7 @@ public class UserAction extends UserBaseAction
 	public String show() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if((uid!=null && !uid.isEmpty()) 
 				|| (nickname!=null && !nickname.isEmpty()))
@@ -143,13 +146,23 @@ public class UserAction extends UserBaseAction
 					uid, nickname);
 			if(userInfo != null) // 用户存在时
 			{
-				jsonRst.put("root", userInfo); // 响应数据
+				jo.put("root", userInfo); // 响应数据
+				request.setAttribute("data", jo.toString());
+			}
+			else // 返回对象不存在错误信息
+			{
+				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+						WebUtil.getRequestAddr(request), null));
+				jo.put("root", jsonRst);
+				request.setAttribute("data", jo.getJSONObject("root").toString());
 			}
 		}
 		else // 否则返回参数错误信息
 		{
 			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null));
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -162,6 +175,7 @@ public class UserAction extends UserBaseAction
 	public String counts() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if((uid!=null && !uid.isEmpty()) 
 				|| (nickname!=null && !nickname.isEmpty()))
@@ -172,16 +186,26 @@ public class UserAction extends UserBaseAction
 			if(userInfo != null) // 用户存在时
 			{
 				/* 响应数据 */
-				jsonRst.put("uid", userInfo.getUid());
-				jsonRst.put("weibocnt", userInfo.getWeibocnt());
-				jsonRst.put("follower", userInfo.getFollower());
-				jsonRst.put("following", userInfo.getFollowing());
+				jo.put("uid", userInfo.getUid());
+				jo.put("weibocnt", userInfo.getWeibocnt());
+				jo.put("follower", userInfo.getFollower());
+				jo.put("following", userInfo.getFollowing());
+				request.setAttribute("data", jo.toString());
+			}
+			else // 返回对象不存在错误信息
+			{
+				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+						WebUtil.getRequestAddr(request), null));
+				jo.put("root", jsonRst);
+				request.setAttribute("data", jo.getJSONObject("root").toString());
 			}
 		}
 		else // 否则返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -194,6 +218,7 @@ public class UserAction extends UserBaseAction
 	public String update() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if((nickname!=null && VerifyUtil.checkNickname(nickname))
 				|| (email!=null && VerifyUtil.checkEmail(email))
@@ -215,19 +240,22 @@ public class UserAction extends UserBaseAction
 					nickname, email, gender, birth, bloodtype, qq, selfintro, log);
 			if(userInfo != null) // 更新成功时
 			{
-				jsonRst.put("root", userInfo); // 响应数据
+				jo.put("root", userInfo); // 响应数据
 			}
 			else // 失败时，返回错误信息
 			{
 				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10001, 
 						WebUtil.getRequestAddr(request), null));
+				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008, 
 					WebUtil.getRequestAddr(request), null));
+			jo.put("root", jsonRst);
 		}
+		request.setAttribute("data", jo.getJSONObject("root").toString());
 		return SUCCESS;
 	}
 	

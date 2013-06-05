@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.chingo.gutcom.action.base.api.common.SearchBaseAction;
 import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.common.util.ErrorCodeUtil;
@@ -76,6 +78,7 @@ public class SearchAction extends SearchBaseAction
 	public String user() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(keyword!=null && keyword.length()<=300
 				&& type>=0 && type<=1
@@ -89,28 +92,31 @@ public class SearchAction extends SearchBaseAction
 			{
 				/* 设置响应数据 */
 				List<UserInfoBean> users = (List<UserInfoBean>) rst.get(0);
-				jsonRst.put("statuses", users);
-				jsonRst.put("page_num", users.size());
+				jo.put("statuses", users);
+				jo.put("page_num", users.size());
 				if(rst.size() > 1) // 有下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1));
+					jo.put("nextrow", rst.get(1));
 				}
 				else // 否则置null
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 无结果则返回null
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", null);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", null);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008, 
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}

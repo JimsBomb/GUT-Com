@@ -159,30 +159,27 @@
 	<!-- API映射设置BEGIN -->
 	<!-- 验证授权API -->
 	<package name="apiAuth" namespace="/api/common/authorize" extends="json-default">
+	    <global-results>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
+	    </global-results>
+	    
 	    <action name="login" class="authorizeApiAction" method="login">
-	        <result type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
 	    </action>
 	    <action name="update" class="authorizeApiAction" method="update">
-	        <result type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
 	    </action>
 	</package>
 	
 	<!-- 注册API -->
 	<package name="apiReg" namespace="/api/common/register" extends="json-default">
+	    <global-results>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
+	    </global-results>
+	    
 	    <action name="verify_id" class="registerApiAction" method="verifyId">
-	        <result name="success" type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
 	    </action>
 	    <action name="signup" class="registerApiAction" method="signup">
-	        <!-- <result type="json">
-	            <param name="root">jsonRst</param>
-	        </result>-->
-	        <result name="success">/data.jsp</result>
 	    </action>
 	</package>
 	
@@ -199,25 +196,15 @@
 	    <default-interceptor-ref name="userStack" />
 	    
 	    <global-results>
-	        <result name="error" type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
 	    </global-results>
 	    
 	    <action name="get_uid" class="accountApiAction" method="fetchUid">
-	        <result type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
 	    </action>
 	    <action name="update_stunum" class="accountApiAction" method="updateStunum">
-	        <result type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
 	    </action>
 	    <action name="logout" class="accountApiAction" method="logout">
-	        <result type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
 	    </action>
 	</package>
 	
@@ -234,38 +221,17 @@
 	    <default-interceptor-ref name="userStack" />
 	    
 	    <global-results>
-	        <result name="error" type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
 	    </global-results>
 	    
 	    <action name="show" class="userApiAction" method="show">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst.root
-	            </param>
-	        </result>
 	    </action>
 	    <action name="counts" class="userApiAction" method="counts">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="update" class="userApiAction" method="update">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst.root
-	            </param>
-	        </result>
 	    </action>
 	    <action name="upload" class="userApiAction" method="upload">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	</package>
 	
@@ -282,38 +248,17 @@
 	    <default-interceptor-ref name="userStack" />
 	    
 	    <global-results>
-	        <result name="error" type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
 	    </global-results>
 	    
 	    <action name="list" class="messageApiAction" method="list">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="show" class="messageApiAction" method="show">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst.root
-	            </param>
-	        </result>
 	    </action>
 	    <action name="send" class="messageApiAction" method="send">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst.root
-	            </param>
-	        </result>
 	    </action>
 	    <action name="drop" class="messageApiAction" method="drop">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	</package>
 	
@@ -330,24 +275,13 @@
 	    <default-interceptor-ref name="userStack" />
 	    
 	    <global-results>
-	        <result name="error" type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
 	    </global-results>
 	    
 	    <action name="get_count" class="noticeApiAction" method="fetchCount">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="set_count" class="noticeApiAction" method="resetCount">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	</package>
 	
@@ -364,17 +298,11 @@
 	    <default-interceptor-ref name="userStack" />
 	    
 	    <global-results>
-	        <result name="error" type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
 	    </global-results>
 	    
 	    <action name="user" class="searchApiAction" method="user">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	</package>
 	
@@ -392,94 +320,33 @@
 	    <default-interceptor-ref name="userStack" />
 	    
 	    <global-results>
-	        <result name="error" type="json">
-	            <param name="root">jsonRst</param>
-	        </result>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
 	    </global-results>
 	    
 	    <action name="fetch_public" class="weiboApiAction" method="fetchPublic">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="fetch_list" class="weiboApiAction" method="fetchList">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="fetch_follow" class="weiboApiAction" method="fetchFollow">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="fetch_mine" class="weiboApiAction" method="fetchMine">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="fetch_user" class="weiboApiAction" method="fetchUser">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="fetch_Topic" class="weiboApiAction" method="fetchTopic">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="fetch_id" class="weiboApiAction" method="fetchId">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst.root
-	            </param>
-	        </result>
 	    </action>
 	    <action name="fetch_at" class="weiboApiAction" method="fetchAt">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	    <action name="post" class="weiboApiAction" method="post">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst.root
-	            </param>
-	        </result>
 	    </action>
 	    <action name="upload" class="weiboApiAction" method="upload">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst.root
-	            </param>
-	        </result>
 	    </action>
 	    <action name="repost" class="weiboApiAction" method="repost">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst.root
-	            </param>
-	        </result>
 	    </action>
 	    <action name="drop" class="weiboApiAction" method="drop">
-	        <result type="json">
-	            <param name="root">
-	                jsonRst
-	            </param>
-	        </result>
 	    </action>
 	</package>
 	<!-- API映射设置END -->

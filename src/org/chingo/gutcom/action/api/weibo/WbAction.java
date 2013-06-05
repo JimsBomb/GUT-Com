@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.chingo.gutcom.action.base.api.weibo.WbBaseAction;
 import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.bean.WeiboInfoBean;
@@ -175,6 +177,7 @@ public class WbAction extends WbBaseAction
 	public String fetchPublic() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(count>0 && count<=100 
 				&& trim_user>=0 && trim_user<=1
@@ -184,19 +187,22 @@ public class WbAction extends WbBaseAction
 			List<WeiboInfoBean> weibos = weiboMgr.fetchPublicWeibo(count, trim_user, trim_source);
 			if(weibos != null) // 微博存在时
 			{
-				jsonRst.put("statuses", weibos);
-				jsonRst.put("page_num", weibos.size());
+				jo.put("statuses", weibos);
+				jo.put("page_num", weibos.size());
 			}
 			else // 无微博时
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", null);
+				jo.put("statuses", null);
+				jo.put("page_num", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -209,6 +215,7 @@ public class WbAction extends WbBaseAction
 	public String fetchList() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(count>0 && count<=100 
 				&& trim_user>=0 && trim_user<=1
@@ -242,28 +249,31 @@ public class WbAction extends WbBaseAction
 			if(rst != null) // 列表非空时，设置响应数据
 			{
 				List<WeiboInfoBean> weibos = (List<WeiboInfoBean>) rst.get(0);
-				jsonRst.put("statuses", weibos);
-				jsonRst.put("page_num", weibos.size());
+				jo.put("statuses", weibos);
+				jo.put("page_num", weibos.size());
 				if(rst.size() > 1) // 有下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1));
+					jo.put("nextrow", rst.get(1));
 				}
 				else
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 无数据时
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", 0);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", 0);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -276,6 +286,7 @@ public class WbAction extends WbBaseAction
 	public String fetchFollow() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(count>0 && count<=100 
 				&& trim_user>=0 && trim_user<=1
@@ -309,28 +320,31 @@ public class WbAction extends WbBaseAction
 			if(rst != null) // 列表非空时，设置响应数据
 			{
 				List<WeiboInfoBean> weibos = (List<WeiboInfoBean>) rst.get(0);
-				jsonRst.put("statuses", weibos);
-				jsonRst.put("page_num", weibos.size());
+				jo.put("statuses", weibos);
+				jo.put("page_num", weibos.size());
 				if(rst.size() > 1) // 有下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1));
+					jo.put("nextrow", rst.get(1));
 				}
 				else
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 无数据时
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", 0);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", 0);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -343,6 +357,7 @@ public class WbAction extends WbBaseAction
 	public String fetchMine() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(count>0 && count<=100 
 				&& trim_user>=0 && trim_user<=1
@@ -376,28 +391,31 @@ public class WbAction extends WbBaseAction
 			if(rst != null) // 列表非空时，设置响应数据
 			{
 				List<WeiboInfoBean> weibos = (List<WeiboInfoBean>) rst.get(0);
-				jsonRst.put("statuses", weibos);
-				jsonRst.put("page_num", weibos.size());
+				jo.put("statuses", weibos);
+				jo.put("page_num", weibos.size());
 				if(rst.size() > 1) // 有下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1));
+					jo.put("nextrow", rst.get(1));
 				}
 				else
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 无数据时
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", 0);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", 0);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -410,6 +428,7 @@ public class WbAction extends WbBaseAction
 	public String fetchUser() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if((uid!=null&&!uid.isEmpty())
 				||(nickname!=null&&!nickname.isEmpty()) 
@@ -445,28 +464,31 @@ public class WbAction extends WbBaseAction
 			if(rst != null) // 列表非空时，设置响应数据
 			{
 				List<WeiboInfoBean> weibos = (List<WeiboInfoBean>) rst.get(0);
-				jsonRst.put("statuses", weibos);
-				jsonRst.put("page_num", weibos.size());
+				jo.put("statuses", weibos);
+				jo.put("page_num", weibos.size());
 				if(rst.size() > 1) // 有下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1));
+					jo.put("nextrow", rst.get(1));
 				}
 				else
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 无数据时
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", 0);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", 0);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -478,7 +500,9 @@ public class WbAction extends WbBaseAction
 	 */
 	public String fetchTopic() throws Exception
 	{
-		jsonRst.clear();
+		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
+		// 检查参数
 		if(title!=null && !title.isEmpty()
 				&& count>0 && count<=100 
 				&& trim_user>=0 && trim_user<=1
@@ -513,28 +537,31 @@ public class WbAction extends WbBaseAction
 			if(rst != null) // 列表非空时，设置响应数据
 			{
 				List<WeiboInfoBean> weibos = (List<WeiboInfoBean>) rst.get(0);
-				jsonRst.put("statuses", weibos);
-				jsonRst.put("page_num", weibos.size());
+				jo.put("statuses", weibos);
+				jo.put("page_num", weibos.size());
 				if(rst.size() > 1) // 有下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1));
+					jo.put("nextrow", rst.get(1));
 				}
 				else
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 无数据时
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", 0);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", 0);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -547,6 +574,7 @@ public class WbAction extends WbBaseAction
 	public String fetchId() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(wid!=null && !wid.isEmpty())
 		{
@@ -554,19 +582,22 @@ public class WbAction extends WbBaseAction
 			WeiboInfoBean weibo = weiboMgr.fetchSingleWeibo(wid);
 			if(weibo != null) // 微博存在时
 			{
-				jsonRst.put("root", weibo); // 设置响应数据
+				jo.put("root", weibo); // 设置响应数据
 			}
 			else // 否则返回对象不存在错误信息
 			{
 				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
 						WebUtil.getRequestAddr(request), null));
+				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null));
+			jo.put("root", jsonRst);
 		}
+		request.setAttribute("data", jo.getJSONObject("root").toString());
 		return SUCCESS;
 	}
 	
@@ -578,6 +609,7 @@ public class WbAction extends WbBaseAction
 	public String fetchAt() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(count>0 && count<=100 
 				&& trim_user>=0 && trim_user<=1
@@ -609,28 +641,31 @@ public class WbAction extends WbBaseAction
 			if(rst != null) // 列表非空时，设置响应数据
 			{
 				List<WeiboInfoBean> weibos = (List<WeiboInfoBean>) rst.get(0);
-				jsonRst.put("statuses", weibos);
-				jsonRst.put("page_num", weibos.size());
+				jo.put("statuses", weibos);
+				jo.put("page_num", weibos.size());
 				if(rst.size() > 1) // 有下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1));
+					jo.put("nextrow", rst.get(1));
 				}
 				else
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 无数据时
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", 0);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", 0);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -643,6 +678,7 @@ public class WbAction extends WbBaseAction
 	public String post() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(status!=null && VerifyUtil.checkWeiboContent(status)
 				&& (visibility==WeiboConst.VISIBILITY_ALL
@@ -684,19 +720,22 @@ public class WbAction extends WbBaseAction
 			WeiboInfoBean weiboBean = weiboMgr.postWeibo(weibo, words, log);
 			if(weiboBean != null) // 发表成功时
 			{
-				jsonRst.put("root", weiboBean);
+				jo.put("root", weiboBean);
 			}
 			else // 失败时返回错误信息
 			{
 				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
 						WebUtil.getRequestAddr(request), null));
+				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null));
+			jo.put("root", jsonRst);
 		}
+		request.setAttribute("data", jo.getJSONObject("root").toString());
 		return SUCCESS;
 	}
 	
@@ -708,6 +747,7 @@ public class WbAction extends WbBaseAction
 	public String upload() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(status!=null && VerifyUtil.checkWeiboContent(status)
 				&& pic!=null && !pic.isEmpty()
@@ -757,19 +797,23 @@ public class WbAction extends WbBaseAction
 				UserInfoBean user = WebUtil.getUser(session);
 				user.setWeibocnt(user.getWeibocnt()+1);
 				session.put(SystemConst.SESSION_USER, user);
-				jsonRst.put("root", weiboBean); // 响应数据
+				jo.put("root", weiboBean); // 响应数据
 			}
 			else // 失败时返回错误信息
 			{
 				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
 						WebUtil.getRequestAddr(request), null));
+				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null));
+			jo.put("root", jsonRst);
 		}
+
+		request.setAttribute("data", jo.getJSONObject("root").toString());
 		return SUCCESS;
 	}
 	
@@ -781,6 +825,7 @@ public class WbAction extends WbBaseAction
 	public String repost() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(status!=null && VerifyUtil.checkWeiboContent(status)
 				&& (visibility==WeiboConst.VISIBILITY_ALL
@@ -828,19 +873,22 @@ public class WbAction extends WbBaseAction
 				UserInfoBean user = WebUtil.getUser(session);
 				user.setWeibocnt(user.getWeibocnt()+1);
 				session.put(SystemConst.SESSION_USER, user);
-				jsonRst.put("root", weiboBean); // 响应数据
+				jo.put("root", weiboBean); // 响应数据
 			}
 			else // 失败时返回错误信息
 			{
 				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
 						WebUtil.getRequestAddr(request), null));
+				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null));
+			jo.put("root", jsonRst);
 		}
+		request.setAttribute("data", jo.getJSONObject("root").toString());
 		return SUCCESS;
 	}
 	
@@ -852,6 +900,7 @@ public class WbAction extends WbBaseAction
 	public String drop() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(wid!=null && !wid.isEmpty())
 		{
@@ -864,18 +913,23 @@ public class WbAction extends WbBaseAction
 			log.setUserid(WebUtil.getUser(session).getUid());
 			if(weiboMgr.dropWeibo(wid, log) == true) // 删除成功时
 			{
-				jsonRst.put("result", true);
+				jo.put("result", true);
+				request.setAttribute("data", jo.toString());
 			}
 			else // 删除失败时
 			{
 				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
 						WebUtil.getRequestAddr(request), null);
+				jo.put("root", jsonRst);
+				request.setAttribute("data", jo.getJSONObject("root").toString());
 			}
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}

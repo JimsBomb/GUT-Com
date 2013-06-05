@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONObject;
+
 import org.apache.struts2.ServletActionContext;
 import org.chingo.gutcom.common.constant.SysconfConst;
 import org.chingo.gutcom.common.util.ErrorCodeUtil;
@@ -47,9 +49,12 @@ public class SystemStatusInterceptor extends AbstractInterceptor
 			String status = confs.get(SysconfConst.SERVER_STATUS);
 			if(status.equals(SysconfConst.SERVER_STATUS_CLOSE)) // 系统服务状态为关闭时
 			{
+				JSONObject jo = new JSONObject();
 				// 返回服务暂停错误信息
 				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10002,
 						WebUtil.getRequestAddr(request), null);
+				jo.put("root", jsonRst);
+				request.setAttribute("data", jo.getJSONObject("root").toString());
 				return Action.ERROR;
 			}
 		}

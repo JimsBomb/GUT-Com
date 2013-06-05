@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.chingo.gutcom.action.base.api.common.MessageBaseAction;
 import org.chingo.gutcom.bean.MessageBean;
 import org.chingo.gutcom.common.constant.SyslogConst;
@@ -99,6 +101,7 @@ public class MessageAction extends MessageBaseAction
 	public String list() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(type>=0 && type<=1
 				&& count>0 && count<=100)
@@ -110,28 +113,31 @@ public class MessageAction extends MessageBaseAction
 			{
 				/* 设置响应数据 */
 				List<MessageBean> msgBeans = (List<MessageBean>) rst.get(0);
-				jsonRst.put("statuses", msgBeans); // 消息Bean数组
-				jsonRst.put("page_num", msgBeans.size()); // 消息Bean数量
+				jo.put("statuses", msgBeans); // 消息Bean数组
+				jo.put("page_num", msgBeans.size()); // 消息Bean数量
 				if(rst.size() > 1) // 存在下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1)); // 下一页首条记录rowKey
+					jo.put("nextrow", rst.get(1)); // 下一页首条记录rowKey
 				}
 				else // 否则置null
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 返回null
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", null);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", null);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008, 
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
@@ -144,6 +150,7 @@ public class MessageAction extends MessageBaseAction
 	public String show() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(mid!=null && !mid.isEmpty() && type>=0 && type<=1)
 		{
@@ -151,18 +158,22 @@ public class MessageAction extends MessageBaseAction
 			MessageBean msg = msgMgr.showMsg(mid, type);
 			if(msg != null) // 消息存在时
 			{
-				jsonRst.put("root", msg);
+				jo.put("root", msg);
 			}
 			else // 不存在时置null
 			{
-				jsonRst.put("root", null);
+				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+						WebUtil.getRequestAddr(request), null));
+				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null));
+			jo.put("root", jsonRst);
 		}
+		request.setAttribute("data", jo.getJSONObject("root").toString());
 		return SUCCESS;
 	}
 	
@@ -174,6 +185,7 @@ public class MessageAction extends MessageBaseAction
 	public String send() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if((recvuser!=null && !recvuser.isEmpty())
 				|| (recvusername!=null && VerifyUtil.checkNickname(recvusername))
@@ -190,19 +202,20 @@ public class MessageAction extends MessageBaseAction
 			MessageBean msg = msgMgr.sendMsg(recvuser, recvusername, content, log);
 			if(msg != null) // 发送成功时
 			{
-				jsonRst.put("root", msg); // 设置消息Bean为响应数据
+				jo.put("root", msg); // 设置消息Bean为响应数据
 			}
 			else // 返回指定对象不存在错误信息
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+				jo.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
 						WebUtil.getRequestAddr(request), null));
 			}
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+			jo.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null));
 		}
+		request.setAttribute("data", jo.getJSONObject("root").toString());
 		return SUCCESS;
 	}
 	
@@ -214,6 +227,7 @@ public class MessageAction extends MessageBaseAction
 	public String drop() throws Exception
 	{
 		jsonRst.clear(); // 清空响应数据
+		JSONObject jo = new JSONObject();
 		// 检查参数
 		if(mid!=null && !mid.isEmpty() && type>=0 && type<=1)
 		{
@@ -237,28 +251,31 @@ public class MessageAction extends MessageBaseAction
 			{
 				/* 设置响应数据 */
 				List<MessageBean> msgs = (List<MessageBean>) rst.get(0);
-				jsonRst.put("statuses", msgs);
-				jsonRst.put("page_num", msgs.size());
+				jo.put("statuses", msgs);
+				jo.put("page_num", msgs.size());
 				if(rst.size() > 1) // 有下一页时
 				{
-					jsonRst.put("nextrow", rst.get(1));
+					jo.put("nextrow", rst.get(1));
 				}
 				else
 				{
-					jsonRst.put("nextrow", null);
+					jo.put("nextrow", null);
 				}
 			}
 			else // 否则置空
 			{
-				jsonRst.put("statuses", null);
-				jsonRst.put("page_num", 0);
-				jsonRst.put("nextrow", null);
+				jo.put("statuses", null);
+				jo.put("page_num", 0);
+				jo.put("nextrow", null);
 			}
+			request.setAttribute("data", jo.toString());
 		}
 		else // 返回参数错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
 					WebUtil.getRequestAddr(request), null);
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}

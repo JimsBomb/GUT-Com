@@ -56,16 +56,20 @@ public class RegisterAction extends RegisterBaseAction
 	public String verifyId() throws Exception
 	{
 		jsonRst.clear();
+		JSONObject jo = new JSONObject();
 		if(nickname!=null || email!=null) // 有参数时
 		{
 			List<Boolean> rst = userMgr.verifyId(nickname, email);
-			jsonRst.put("nickname_is_legal", rst.get(0));
-			jsonRst.put("email_is_legal", rst.get(1));
+			jo.put("nickname_is_legal", rst.get(0));
+			jo.put("email_is_legal", rst.get(1));
+			request.setAttribute("data", jo.toString());
 		}
 		else // 否则返回缺少参数的错误信息
 		{
 			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10013, 
 					WebUtil.getRequestAddr(request), new String[]{"nickname/email"});
+			jo.put("root", jsonRst);
+			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
 		return SUCCESS;
 	}
