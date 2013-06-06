@@ -63,6 +63,14 @@ public class UserConst
 	 */
 	public static final byte SEARCH_TYPE_MAJOR = 1;
 	/**
+	 * 关注标识：1-已关注
+	 */
+	public static final byte IS_FOLLOWED_YES = 1;
+	/**
+	 * 关注标识：0-未关注
+	 */
+	public static final byte IS_FOLLOWED_NO = 0;
+	/**
 	 * 系统（管理员）ID
 	 */
 	public static final String SYSTEM_ID = "0";

@@ -34,9 +34,11 @@ import org.chingo.gutcom.domain.CommonSyslog;
 import org.chingo.gutcom.domain.CommonUser;
 import org.chingo.gutcom.domain.WeiboAt;
 import org.chingo.gutcom.domain.WeiboContent;
+import org.chingo.gutcom.domain.WeiboFav;
 import org.chingo.gutcom.domain.WeiboFollow;
 import org.chingo.gutcom.domain.WeiboReport;
 import org.chingo.gutcom.domain.WeiboTopic;
+import org.chingo.gutcom.domain.WeiboTopicFollow;
 import org.chingo.gutcom.domain.WeiboTopicRelation;
 import org.chingo.gutcom.service.WeiboManager;
 
@@ -51,6 +53,7 @@ public class WeiboManagerImpl implements WeiboManager
 	private BaseDao<CommonSyslog> logDao; // 日志DAO
 	private BaseDao<CommonMsgRecv> msgRecvDao; // 消息接收DAO
 	private BaseDao<WeiboFollow> wbFollowDao; // 关注DAO
+	private BaseDao<WeiboFav> wbFavDao; // 微博收藏DAO
 	
 	public void setWeiboDao(BaseDao<WeiboContent> weiboDao)
 	{
@@ -95,6 +98,11 @@ public class WeiboManagerImpl implements WeiboManager
 	public void setWbFollowDao(BaseDao<WeiboFollow> wbFollowDao)
 	{
 		this.wbFollowDao = wbFollowDao;
+	}
+
+	public void setWbFavDao(BaseDao<WeiboFav> wbFavDao)
+	{
+		this.wbFavDao = wbFavDao;
 	}
 
 	@Override
@@ -767,7 +775,8 @@ public class WeiboManagerImpl implements WeiboManager
 						|| (followRsts!=null 
 						&& followRsts.contains(result.getRow())))
 				{
-					if(cnt < pageSize) // 未达到单页数量上限时，添加到微博Bean列表
+					cnt++; // 计数+1
+					if(cnt <= pageSize) // 未超过单页数量上限时，添加到微博Bean列表
 					{
 						WeiboContent weibo = fillWeiboByResult(result);
 						weiboBeans.add(new WeiboInfoBean(weibo));
@@ -1152,6 +1161,96 @@ public class WeiboManagerImpl implements WeiboManager
 		log.setDetail(SyslogConst.DETAIL_USER_WEIBO_DROP_FAILED); // 删除失败描述
 		logDao.put(log); // 记录日志
 		return false;
+	}
+
+	@Override
+	public boolean reportWeibo(String wid, String reason, CommonSyslog log)
+	{
+		log.setLid(FormatUtil.createRowKey()); // 创建日志对象的rowKey
+		Result result = weiboDao.get(wid, null, null);
+		if(result != null)
+		{
+			/* 构造举报对象 */
+			WeiboReport report = new WeiboReport();
+			report.setRid(FormatUtil.createRowKey());
+			report.setDateline(log.getDateline());
+			report.setReason(reason);
+			report.setReportUserId(log.getUserid());
+			report.setReportWeiboId(wid);
+			report.setStatus(WeiboConst.REPORT_NOT_DEALED);
+			reportDao.put(report); // 追加举报数据
+			logDao.put(log); // 记录日志
+			return true; // 举报成功
+		}
+		log.setDetail(SyslogConst.DETAIL_USER_WEIBO_REPORT_FAILED); // 举报失败描述
+		logDao.put(log); // 记录日志
+		return false; // 举报失败
+	}
+
+	@Override
+	public List<Object> searchWeibo(String uid, Map<String, Object> values,
+			String startRow, int pageSize)
+	{
+		// 获取搜索结果列表
+		List<Object> rst = findWeiboByPage(values, startRow, pageSize);
+		if(rst != null) // 列表非空时
+		{
+			/* 通过微博对象构造微博Bean并添加到列表中 */
+			List<WeiboContent> weibos = (List<WeiboContent>) rst.get(0);
+			List<WeiboInfoBean> weiboBeans = new ArrayList<WeiboInfoBean>();
+			for(WeiboContent weibo : weibos)
+			{
+				// 根据微博对象构造微博Bean
+				WeiboInfoBean weiboBean = new WeiboInfoBean(weibo);
+				/* 查询并设置微博收藏标识 */
+				FilterList fl = new FilterList();
+				// 用户ID过滤器
+				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+					Bytes.toBytes("userid"), CompareOp.EQUAL, 
+					Bytes.toBytes(uid)));
+				// 微博ID过滤器
+				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
+						Bytes.toBytes("weiboid"), CompareOp.EQUAL, 
+						Bytes.toBytes(weibo.getWid())));
+				// 查询收藏记录
+				List<Result> relaRsts = wbFavDao.findByPage("weibo_fav", fl, null, 0);
+				if(relaRsts != null) // 有记录时设置已收藏
+				{
+					weiboBean.setFav(WeiboConst.FAV_YES);
+				}
+				else // 否则设置未收藏
+				{
+					weiboBean.setFav(WeiboConst.FAV_NO);
+				}
+				weiboBeans.add(weiboBean);
+			}
+			rst.set(0, weiboBeans); // 替换结果列表中的微博对象为微博Bean
+			
+			return rst; // 返回结果列表
+		}
+		return null;
+	}
+
+	@Override
+	public List<Object> searchTopic(String uid, Map<String, Object> values,
+			String startRow, int pageSize)
+	{
+		// 获取搜索结果列表
+		List<Object> rst = findTopicByPage(values, startRow, pageSize);
+		if(rst != null) // 列表非空时
+		{
+			/* 通过话题对象构造话题Bean并添加到列表中 */
+			List<WeiboTopic> topics = (List<WeiboTopic>) rst.get(0);
+			List<WeiboTopicBean> topicBeans = new ArrayList<WeiboTopicBean>();
+			for(WeiboTopic topic : topics)
+			{
+				topicBeans.add(new WeiboTopicBean(topic));
+			}
+			rst.set(0, topicBeans); // 替换结果列表中的话题对象为话题Bean
+
+			return rst; // 返回结果列表
+		}
+		return null;
 	}
 
 }

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>校园通管理系统</title>
 <link rel="stylesheet" href="css/style.css" media="all">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.9.1.js"></script>

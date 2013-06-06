@@ -44,4 +44,20 @@ public class SysconfConst
 	 * 系统服务状态："0"-关闭
 	 */
 	public static final String SERVER_STATUS_CLOSE = "0";
+	/**
+	 * 用户审核开关："1"-开启
+	 */
+	public static final String USER_VERIFY_ON = "1";
+	/**
+	 * 用户审核开关："0"-关闭
+	 */
+	public static final String USER_VERIFY_OFF = "0";
+	/**
+	 * 微博审核开关："1"-开启
+	 */
+	public static final String WEIBO_VERIFY_ON = "1";
+	/**
+	 * 微博审核开关："0"-关闭
+	 */
+	public static final String WEIBO_VERIFY_OFF = "0";
 }

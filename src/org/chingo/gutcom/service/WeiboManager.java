@@ -196,4 +196,33 @@ public interface WeiboManager
 	 * @return true-删除成功，false-删除失败
 	 */
 	public boolean dropWeibo(String wid, CommonSyslog log);
+	
+	/**
+	 * 举报微博
+	 * @param wid 举报的微博的ID
+	 * @param reason 举报理由
+	 * @param log 日志对象
+	 * @return true-举报成功，false-举报失败（对象不存在）
+	 */
+	public boolean reportWeibo(String wid, String reason, CommonSyslog log);
+	
+	/**
+	 * 按条件分页查询微博
+	 * @param uid 发起搜索的用户的ID
+	 * @param values 条件集
+	 * @param startRow 查询起始行的rowKey
+	 * @param pageSize 每页显示记录数
+	 * @return List中第一个对象为WeiboInfoBean结果列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
+	 */
+	public List<Object> searchWeibo(String uid, Map<String, Object> values, String startRow, int pageSize);
+	
+	/**
+	 * 按条件分页查询话题
+	 * @param uid 发起搜索的用户的ID
+	 * @param values 条件集
+	 * @param startRow 查询起始行的rowKey
+	 * @param pageSize 每页显示记录数
+	 * @return List中第一个对象为WeiboTopicBean结果列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
+	 */
+	public List<Object> searchTopic(String uid, Map<String, Object> values, String startRow, int pageSize);
 }

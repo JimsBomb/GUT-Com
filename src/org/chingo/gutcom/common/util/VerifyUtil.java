@@ -34,6 +34,18 @@ public class VerifyUtil
 	 * 微博内容格式校验正则表达式
 	 */
 	private static final String REGX_WEIBO_CONTENT = "^.{1,140}$";
+	/**
+	 * 关注用户备注名格式校验正则表达式
+	 */
+	private static final String REGX_FOLLOW_REMARK = "^.{1,10}$";
+	/**
+	 * 举报理由格式校验正则表达式
+	 */
+	private static final String REGX_REPORT_REASON = "^.{1,10}$";
+	/**
+	 * 搜索关键词格式校验正则表达式
+	 */
+	private static final String REGX_SEARCH_KEYWORD = "^.{1,100}$";
 	
 	/**
 	 * 检查密码格式
@@ -156,6 +168,48 @@ public class VerifyUtil
 	public static final boolean checkWeiboContent(String content)
 	{
 		if(content.matches(REGX_WEIBO_CONTENT))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 检查关注用户的备注名格式
+	 * @param remark 备注名
+	 * @return true-格式正确，false-格式不正确
+	 */
+	public static final boolean checkRemark(String remark)
+	{
+		if(remark.matches(REGX_FOLLOW_REMARK))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 检查举报理由格式
+	 * @param reason 举报理由
+	 * @return true-格式正确，false-格式不正确
+	 */
+	public static final boolean checkReportReason(String reason)
+	{
+		if(reason.matches(REGX_REPORT_REASON))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 检查搜索关键词格式
+	 * @param keyword 关键词
+	 * @return true-格式正确，false-格式不正确
+	 */
+	public static final boolean checkSearchKeyword(String keyword)
+	{
+		if(keyword.matches(REGX_SEARCH_KEYWORD))
 		{
 			return true;
 		}

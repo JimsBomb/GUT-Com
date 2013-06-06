@@ -54,6 +54,14 @@ public class WeiboConst
 	 * 微博类型：2-评论微博
 	 */
 	public static final byte TYPE_COMM = 2;
+	/**
+	 * 微博收藏标识：1-已收藏
+	 */
+	public static final byte FAV_YES = 1;
+	/**
+	 * 微博收藏标识：0-未收藏
+	 */
+	public static final byte FAV_NO = 0;
 	
 	/**
 	 * 话题屏蔽状态：1-已屏蔽
@@ -63,4 +71,12 @@ public class WeiboConst
 	 * 话题屏蔽状态：0-未屏蔽
 	 */
 	public static final byte TOPIC_NOT_BLOCK = 0;
+	/**
+	 * 话题关注标识：1-已关注
+	 */
+	public static final byte TOPIC_FOLLOWED_YES = 1;
+	/**
+	 * 话题关注标识：0-未关注
+	 */
+	public static final byte TOPIC_FOLLOWED_NO = 0;
 }

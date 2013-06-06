@@ -54,6 +54,7 @@
 	</bean>
 	
 	<!-- API BEGIN -->
+	<!-- 公共API -->
 	<bean name="authorizeApiAction" class="org.chingo.gutcom.action.api.common.AuthorizeAction" scope="prototype">
 	    <property name="userMgr" ref="userManager" />
 	</bean>
@@ -75,7 +76,23 @@
 	<bean name="searchApiAction" class="org.chingo.gutcom.action.api.common.SearchAction" scope="prototype">
 	    <property name="userMgr" ref="userManager" />
 	</bean>
+	<!-- 微博API -->
 	<bean name="weiboApiAction" class="org.chingo.gutcom.action.api.weibo.WbAction" scope="prototype">
+	    <property name="weiboMgr" ref="weiboManager" />
+	</bean>
+	<bean name="wbCommApiAction" class="org.chingo.gutcom.action.api.weibo.CommentAction" scope="prototype">
+	    <property name="wbCommMgr" ref="wbCommManager" />
+	</bean>
+	<bean name="wbFavApiAction" class="org.chingo.gutcom.action.api.weibo.FavouriteAction" scope="prototype">
+	    <property name="wbFavMgr" ref="wbFavManager" />
+	</bean>
+	<bean name="wbRelaApiAction" class="org.chingo.gutcom.action.api.weibo.RelationAction" scope="prototype">
+	    <property name="urMgr" ref="userRelaManager" />
+	</bean>
+	<bean name="wbReportApiAction" class="org.chingo.gutcom.action.api.weibo.ReportAction" scope="prototype">
+	    <property name="weiboMgr" ref="weiboManager" />
+	</bean>
+	<bean name="wbSearchApiAction" class="org.chingo.gutcom.action.api.weibo.SearchAction" scope="prototype">
 	    <property name="weiboMgr" ref="weiboManager" />
 	</bean>
 	<!-- API END -->

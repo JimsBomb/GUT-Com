@@ -110,15 +110,11 @@ public interface UserManager
 	
 	/**
 	 * 用户注册
-	 * @param nickname 昵称
-	 * @param email 邮箱
-	 * @param password 密码
-	 * @param ip 注册IP
+	 * @param user 注册用户对象
 	 * @param log 日志对象
 	 * @return true-注册成功，false-注册失败（用户名/邮箱重复）
 	 */
-	public boolean signup(String nickname, String email, 
-			String password, CommonSyslog log);
+	public boolean signup(CommonUser user, CommonSyslog log);
 	
 	/**
 	 * 绑定学号和相关信息

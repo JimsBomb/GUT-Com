@@ -3,6 +3,8 @@ package org.chingo.gutcom.common.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +49,40 @@ public class WebUtil
 			return (CommonToken) session.get(SystemConst.SESSION_TOKEN);
 		}
 		return null;
+	}
+	
+	/**
+	 * 获取session中指定key的最后查询时间戳
+	 * @param session Session映射Map
+	 * @param key 最后查询时间戳的项目key
+	 * @return
+	 */
+	public static final long getTimestamp(Map session, String key)
+	{
+		long timestamp; // 存放上次查询时间戳
+		/* SESSION中存在上次查询时间戳时取出，否则新建 */
+		if(session.containsKey(SystemConst.SESSION_LAST_FETCH_TIME))
+		{
+			Map<String, Long> lastTime = 
+					(Map<String, Long>) session.get(SystemConst.SESSION_LAST_FETCH_TIME);
+			if(lastTime.containsKey(key))
+			{
+				timestamp = lastTime.get(key);
+			}
+			else
+			{
+				timestamp = new Date().getTime();
+				lastTime.put(key, timestamp);
+			}
+		}
+		else
+		{
+			Map<String, Long> lastTime = new HashMap<String, Long>();
+			timestamp = new Date().getTime();
+			lastTime.put(key, timestamp);
+		}
+		
+		return timestamp;
 	}
 	
 	/**

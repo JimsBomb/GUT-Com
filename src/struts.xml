@@ -156,7 +156,8 @@
 		</action>
 	</package>
 	
-	<!-- API映射设置BEGIN -->
+	<!-- *****API映射设置 BEGIN***** -->
+	<!-- 公共API BEGIN -->
 	<!-- 验证授权API -->
 	<package name="apiAuth" namespace="/api/common/authorize" extends="json-default">
 	    <global-results>
@@ -305,9 +306,10 @@
 	    <action name="user" class="searchApiAction" method="user">
 	    </action>
 	</package>
+	<!-- 公共API END -->
 	
+	<!-- 微博API BEGIN -->
 	<!-- 微博API -->
-	
 	<package name="apiWeibo" namespace="/api/weibo/wb" extends="json-default">
 	     <interceptors>
 	        <interceptor name="userAuth"
@@ -349,5 +351,130 @@
 	    <action name="drop" class="weiboApiAction" method="drop">
 	    </action>
 	</package>
-	<!-- API映射设置END -->
+	<!-- 微博评论API -->
+	<package name="apiWbComm" namespace="/api/weibo/comment" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
+	    </global-results>
+	    
+	    <action name="fetch_user_recv" class="wbCommApiAction" method="fetchUserRecv">
+	    </action>
+	    <action name="fetch_user_post" class="wbCommApiAction" method="fetchUserPost">
+	    </action>
+	    <action name="fetch_weibo" class="wbCommApiAction" method="fetchWeibo">
+	    </action>
+	    <action name="post" class="wbCommApiAction" method="post">
+	    </action>
+	    <action name="drop" class="wbCommApiAction" method="drop">
+	    </action>
+	</package>
+	<!-- 微博收藏API -->
+	<package name="apiWbFav" namespace="/api/weibo/favourite" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
+	    </global-results>
+	    
+	    <action name="list" class="wbFavApiAction" method="list">
+	    </action>
+	    <action name="show" class="wbFavApiAction" method="show">
+	    </action>
+	    <action name="create" class="wbFavApiAction" method="create">
+	    </action>
+	    <action name="drop" class="wbFavApiAction" method="drop">
+	    </action>
+	</package>
+	<!-- 微博关系API -->
+	<package name="apiWbRela" namespace="/api/weibo/relation" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
+	    </global-results>
+	    
+	    <action name="fetch_following" class="wbRelaApiAction" method="fetchFollowing">
+	    </action>
+	    <action name="fetch_follower" class="wbRelaApiAction" method="fetchFollower">
+	    </action>
+	    <action name="follow" class="wbRelaApiAction" method="follow">
+	    </action>
+	    <action name="drop" class="wbRelaApiAction" method="drop">
+	    </action>
+	    <action name="remark" class="wbRelaApiAction" method="remark">
+	    </action>
+	</package>
+	<!-- 微博举报API -->
+	<package name="apiWbReport" namespace="/api/weibo/report" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
+	    </global-results>
+	    
+	    <action name="post" class="wbReportApiAction" method="post">
+	    </action>
+	</package>
+	<!-- 微博搜索API -->
+	<package name="apiWbSearch" namespace="/api/weibo/search" extends="json-default">
+	     <interceptors>
+	        <interceptor name="userAuth"
+				class="org.chingo.gutcom.interceptor.UserAuthorityInterceptor" />
+	        <interceptor-stack name="userStack">
+	            <interceptor-ref name="defaultStack" />
+	            <interceptor-ref name="userAuth" />
+	        </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="userStack" />
+	    
+	    <global-results>
+	        <result name="error">/WEB-INF/web/apidata.jsp</result>
+	        <result name="success">/WEB-INF/web/apidata.jsp</result>
+	    </global-results>
+	    
+	    <action name="weibo" class="wbSearchApiAction" method="weibo">
+	    </action>
+	    <action name="topic" class="wbSearchApiAction" method="topic">
+	    </action>
+	</package>
+	<!-- 微博API END -->
+	<!-- *****API映射设置 END***** -->
 </struts>

@@ -46,6 +46,12 @@
 	<bean name="atDao" class="org.chingo.gutcom.dao.impl.WeiboAtDaoImpl">
 	   <property name="ht" ref="htemplate" />
 	</bean>
+	<bean name="wbFollowDao" class="org.chingo.gutcom.dao.impl.WeiboFollowDaoImpl">
+	    <property name="ht" ref="htemplate" />
+	</bean>
+	<bean name="wbFavDao" class="org.chingo.gutcom.dao.impl.WeiboFavDaoImpl">
+	    <property name="ht" ref="htemplate" />
+	</bean>
 	<bean name="weiboReportDao" class="org.chingo.gutcom.dao.impl.WeiboReportDaoImpl">
 	   <property name="ht" ref="htemplate" />
 	</bean>
@@ -66,6 +72,8 @@
 		<property name="userDao" ref="userDao" />
 		<property name="logDao" ref="syslogDao" />
 		<property name="tokenDao" ref="tokenDao" />
+		<property name="wbFollowDao" ref="wbFollowDao" />
+		<property name="weiboDao" ref="weiboDao" />
 	</bean>
 	<bean name="weiboManager" class="org.chingo.gutcom.service.impl.WeiboManagerImpl">
 	    <property name="weiboDao" ref="weiboDao" />
@@ -76,6 +84,8 @@
 	    <property name="atDao" ref="atDao" />
 	    <property name="logDao" ref="syslogDao" />
 	    <property name="msgRecvDao" ref="msgRecvDao" />
+	    <property name="wbFollowDao" ref="wbFollowDao" />
+	    <property name="wbFavDao" ref="wbFavDao" />
 	</bean>
 	<bean name="msgManager" class="org.chingo.gutcom.service.impl.MsgManagerImpl">
 	    <property name="msgRecvDao" ref="msgRecvDao" />
@@ -85,6 +95,27 @@
 	</bean>
 	<bean name="accManager" class="org.chingo.gutcom.service.impl.AccountManagerImpl">
 	    <property name="userDao" ref="userDao" />
+	    <property name="logDao" ref="syslogDao" />
+	</bean>
+	<bean name="userRelaManager" class="org.chingo.gutcom.service.impl.UserRelationManagerImpl">
+	    <property name="weiboDao" ref="weiboDao" />
+	    <property name="followDao" ref="wbFollowDao" />
+	    <property name="userDao" ref="userDao" />
+	    <property name="logDao" ref="syslogDao" />
+	</bean>
+	<bean name="wbCommManager" class="org.chingo.gutcom.service.impl.WbCommManagerImpl">
+	    <property name="weiboDao" ref="weiboDao" />
+	    <property name="topicDao" ref="topicDao" />
+	    <property name="userDao" ref="userDao" />
+	    <property name="topicRelaDao" ref="topicRelaDao" />
+	    <property name="atDao" ref="atDao" />
+	    <property name="logDao" ref="syslogDao" />
+	</bean>
+	<bean name="wbFavManager" class="org.chingo.gutcom.service.impl.WeiboFavManagerImpl">
+	    <property name="weiboDao" ref="weiboDao" />
+	    <property name="topicDao" ref="topicDao" />
+	    <property name="userDao" ref="userDao" />
+	    <property name="wbFavDao" ref="wbFavDao" />
 	    <property name="logDao" ref="syslogDao" />
 	</bean>
 	

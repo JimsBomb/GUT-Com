@@ -201,4 +201,70 @@ public class SyslogConst
 	 * 日志描述：删除微博失败。
 	 */
 	public static final String DETAIL_USER_WEIBO_DROP_FAILED = "删除微博失败。";
+	/**
+	 * 日志描述：发表评论。
+	 */
+	public static final String DETAIL_USER_WEIBO_COMM = "发表评论。";
+	/**
+	 * 日志描述：发表评论失败。
+	 */
+	public static final String DETAIL_USER_WEIBO_COMM_FAILED = "发表评论失败（源微博不存在或用户不存在）。";
+	/**
+	 * 日志描述：删除评论。
+	 */
+	public static final String DETAIL_USER_WEIBO_COMM_DROP = "删除评论。";
+	/**
+	 * 日志描述：删除评论失败。
+	 */
+	public static final String DETAIL_USER_WEIBO_COMM_DROP_FAILED = "删除评论失败。";
+	/**
+	 * 日志描述：举报微博（%s）。
+	 */
+	public static final String DETAIL_USER_WEIBO_REPORT = "举报微博（%s）。";
+	/**
+	 * 日志描述：举报微博（%s）失败。
+	 */
+	public static final String DETAIL_USER_WEIBO_REPORT_FAILED = "举报微博（%s）失败，可能是指定对象不存在。";
+	/**
+	 * 日志描述：收藏微博（%s）。
+	 */
+	public static final String DETAIL_USER_WEIBO_FAV = "收藏微博（%s）。";
+	/**
+	 * 日志描述：收藏微博（%s）失败。
+	 */
+	public static final String DETAIL_USER_WEIBO_FAV_FAILED = "收藏微博（%s）失败，可能是对象不存在。";
+	/**
+	 * 日志描述：删除微博收藏（%s）。
+	 */
+	public static final String DETAIL_USER_WEIBO_FAV_DROP = "删除微博收藏（%s）。";
+	/**
+	 * 日志描述：删除微博收藏（%s）失败。
+	 */
+	public static final String DETAIL_USER_WEIBO_FAV_DROP_FAILED = "删除微博收藏（%s）失败，可能是对象不存在。";
+	/**
+	 * 日志描述：关注用户（%s）。
+	 */
+	public static final String DETAIL_USER_FOLLOW = "关注用户（%s）。";
+	/**
+	 * 日志描述：关注用户（%s）失败，可能是用户不存在。
+	 */
+	public static final String DETAIL_USER_FOLLOW_FAILED = "关注用户（%s）失败，可能是用户不存在。";
+	/**
+	 * 日志描述：取消关注用户（%s）。
+	 */
+	public static final String DETAIL_USER_FOLLOW_DROP = "取消关注用户（%s）。";
+	/**
+	 * 日志描述：取消关注用户（%s）失败。
+	 */
+	public static final String DETAIL_USER_FOLLOW_DROP_FAILED = "取消关注用户（%s）失败，可能是用户不存在。";
+	/**
+	 * 日志描述：更新关注用户（%s）的备注名。
+	 */
+	public static final String DETAIL_USER_FOLLOW_REMARK = "更新关注用户（%s）的备注名。";
+	/**
+	 * 日志描述：更新关注用户（%s）的备注名失败。
+	 */
+	public static final String DETAIL_USER_FOLLOW_REMARK_FAILED = "更新关注用户（%s）的备注名失败，可能是用户不存在。";
+	
+	
 }

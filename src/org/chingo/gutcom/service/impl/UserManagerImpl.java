@@ -419,29 +419,22 @@ public class UserManagerImpl implements UserManager
 	}
 
 	@Override
-	public boolean signup(String nickname, String email,
-			String password, CommonSyslog log)
+	public boolean signup(CommonUser user, CommonSyslog log)
 	{
 		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
 		// 验证昵称/邮箱可用性
-		List<Boolean> verifyRst = verifyId(nickname, email);
+		List<Boolean> verifyRst = verifyId(user.getNickname(), user.getEmail());
 		// 昵称/邮箱都可用时
 		if(true==verifyRst.get(0) && true==verifyRst.get(1))
 		{
-			CommonUser user = new CommonUser();
 			user.setUid(FormatUtil.createRowKey()); // 创建用户的rowKey
-			user.setNickname(nickname);
-			user.setEmail(email);
-			user.setPassword(SecurityUtil.md5(password));
-			user.setRegip(log.getIp());
-			user.setRegdate(log.getDateline());
 			userDao.put(user); // 追加用户数据
 			logDao.put(log); // 记录日志
 			return true;
 		}
 		// 设置注册失败日志描述
 		log.setDetail(String.format(SyslogConst.DETAIL_USER_TOKEN_UPDATE_FAILED,
-				nickname));
+				user.getNickname()));
 		logDao.put(log); // 记录日志
 		return false;
 	}

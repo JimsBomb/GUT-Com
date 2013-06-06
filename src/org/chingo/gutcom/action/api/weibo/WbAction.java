@@ -706,7 +706,8 @@ public class WbAction extends WbBaseAction
 						.get(SystemConst.CONTEXT_CONF);
 				if(confs.containsKey(SysconfConst.WEIBO_VERIFY))
 				{
-					weibo.setStatus(Byte.parseByte(confs.get(SysconfConst.WEIBO_VERIFY)));
+					weibo.setStatus(Byte.parseByte(String.valueOf(
+							Byte.parseByte(confs.get(SysconfConst.WEIBO_VERIFY)) ^ 1)));
 				}
 			}
 			/* 获取过滤词列表 */

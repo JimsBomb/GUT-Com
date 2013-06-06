@@ -8,12 +8,16 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 
 import org.chingo.gutcom.action.base.api.common.RegisterBaseAction;
+import org.chingo.gutcom.common.constant.SysconfConst;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
+import org.chingo.gutcom.common.constant.UserConst;
 import org.chingo.gutcom.common.util.ErrorCodeUtil;
+import org.chingo.gutcom.common.util.SecurityUtil;
 import org.chingo.gutcom.common.util.VerifyUtil;
 import org.chingo.gutcom.common.util.WebUtil;
 import org.chingo.gutcom.domain.CommonSyslog;
+import org.chingo.gutcom.domain.CommonUser;
 
 public class RegisterAction extends RegisterBaseAction
 {
@@ -94,8 +98,27 @@ public class RegisterAction extends RegisterBaseAction
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setType(SyslogConst.TYPE_OP_FRONT);
 			log.setUserid(SystemConst.USER_ID_NOT_LOGIN);
+			/* 构造用户对象 */
+			CommonUser user = new CommonUser();
+			user.setNickname(nickname);
+			user.setEmail(email);
+			user.setPassword(SecurityUtil.md5(password));
+			user.setRegdate(log.getDateline());
+			user.setRegip(log.getIp());
+			Map<String, String> confs = WebUtil.getConfigurations(application);
+			if(confs!=null && confs.containsKey(SysconfConst.USER_VERIFY))
+			{
+				if(confs.get(SysconfConst.USER_VERIFY).equals(SysconfConst.USER_VERIFY_ON))
+				{
+					user.setStatus(UserConst.STATUS_FORBIT);
+				}
+				else
+				{
+					user.setStatus(UserConst.STATUS_NORMAL);
+				}
+			}
 			// 注册成功时
-			if(userMgr.signup(nickname, email, password, log) == true)
+			if(userMgr.signup(user, log) == true)
 			{
 //				jsonRst.put("result", "true"); // 注册成功响应数据
 				jo.put("result", true);
