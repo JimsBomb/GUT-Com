@@ -30,6 +30,13 @@
 		</s:form>
 		<s:form action="filterupload.do" namespace="/admin" enctype="multipart/form-data">
 			批量添加<img src="${pageContext.request.contextPath}/images/helpicon.gif" />：<s:file name="importFile" /><s:submit value="导入" />
+			<p>
+			文件格式：关键词=*，每行一个。
+			<br />
+			其中，*可以为数值0（屏蔽）、1（审核）或2（禁止发表），只有关键词时则默认为0（屏蔽）。
+			<br />
+			例如：“屏蔽=0”则“屏蔽”一词将被屏蔽（替换为*），“审核=1”则包含“审核”一词的内容将被审核，“和谐”则该词默认被屏蔽。
+			</p>
 		</s:form>
 	</div>
 	<div class="search">

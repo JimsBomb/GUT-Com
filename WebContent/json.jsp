@@ -21,5 +21,8 @@
 			<s:submit value="登录" />
 		</p>
 	</s:form>
+	<s:form action="/api/common/user/upload.json" namespace="/api/common/user" enctype="multipart/form-data">
+			上传：<s:file name="avatar" /><s:submit value="导入" />
+		</s:form>
 </body>
 </html>

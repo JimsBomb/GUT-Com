@@ -120,6 +120,7 @@ public class AccountAction extends AccountBaseAction
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setType(SyslogConst.TYPE_OP_FRONT);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 绑定
 			UserInfoBean user = userMgr.updateStudentnum(WebUtil.getUser(session), 
 					studentno, realname, college, major, classname, log);

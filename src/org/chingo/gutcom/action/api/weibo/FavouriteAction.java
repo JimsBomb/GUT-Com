@@ -165,8 +165,9 @@ public class FavouriteAction extends FavouriteBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_FAV);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 收藏成功时
 			if(wbFavMgr.createFav(wid, log) == true)
 			{
@@ -208,8 +209,9 @@ public class FavouriteAction extends FavouriteBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_FAV_DROP);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 收藏成功时
 			if(wbFavMgr.dropFav(wid, log) == true)
 			{

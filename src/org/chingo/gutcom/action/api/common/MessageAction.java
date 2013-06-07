@@ -162,15 +162,15 @@ public class MessageAction extends MessageBaseAction
 			}
 			else // 不存在时置null
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
-						WebUtil.getRequestAddr(request), null));
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+						WebUtil.getRequestAddr(request), null);
 				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
-					WebUtil.getRequestAddr(request), null));
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+					WebUtil.getRequestAddr(request), null);
 			jo.put("root", jsonRst);
 		}
 		request.setAttribute("data", jo.getJSONObject("root").toString());
@@ -198,6 +198,7 @@ public class MessageAction extends MessageBaseAction
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setType(SyslogConst.TYPE_OP_FRONT);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 发送消息
 			MessageBean msg = msgMgr.sendMsg(recvuser, recvusername, content, log);
 			if(msg != null) // 发送成功时
@@ -245,6 +246,7 @@ public class MessageAction extends MessageBaseAction
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setType(SyslogConst.TYPE_OP_FRONT);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 删除消息
 			List<Object> rst = msgMgr.dropMsgs(rows, type, log);
 			if(rst != null) // 余下消息非空时

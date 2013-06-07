@@ -34,7 +34,6 @@
 	}
 	function emailVerify(id) {
 		var txt  = document.getElementById(id);
-		alert(txt.value);
 		var msg = document.getElementById("emailMsg");
 		var reg =  new RegExp("^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\.[A-Za-z0-9-]+)*((\.[A-Za-z0-9]{2,})|(\.[A-Za-z0-9]{2,}\.[A-Za-z0-9]{2,}))$");
 		if(!reg.test(txt.value)) {

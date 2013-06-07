@@ -52,6 +52,8 @@ public class WeiboContentDaoImpl extends HBaseSupport implements BaseDao<WeiboCo
 								, Bytes.toBytes(instance.getSourceid()));
 						p.add(Bytes.toBytes("info"), Bytes.toBytes("source_content")
 								, Bytes.toBytes(instance.getSourceContent()));
+						p.add(Bytes.toBytes("info"), Bytes.toBytes("topic_titles")
+								, Bytes.toBytes(instance.getTopicTitles()));
 						htable.put(p);
 						return null;
 					}

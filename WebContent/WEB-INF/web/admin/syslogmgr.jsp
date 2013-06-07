@@ -63,12 +63,12 @@ $(function(){
 								id="userfilter">
 								<s:param name="searchMode">1</s:param>
 								<s:param name="username">
-									<s:property value="#log.user.nickname" />
+									<s:property value="#log.nickname" />
 								</s:param>
-							</s:url><s:if test="#log.user==null">
+							</s:url><s:if test="#log.nickname==''">
 							<i>无</i></s:if><s:else> 
 							<s:a href="%{userfilter}" title="只查看该用户">
-								<s:property value="#log.user.nickname" />
+								<s:property value="#log.nickname" />
 							</s:a></s:else></td>
 						<td><s:property value="#log.detail" /></td>
 						<td><s:property value="#log.ip" /></td>

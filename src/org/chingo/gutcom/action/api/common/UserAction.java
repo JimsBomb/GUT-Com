@@ -151,16 +151,16 @@ public class UserAction extends UserBaseAction
 			}
 			else // 返回对象不存在错误信息
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
-						WebUtil.getRequestAddr(request), null));
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+						WebUtil.getRequestAddr(request), null);
 				jo.put("root", jsonRst);
 				request.setAttribute("data", jo.getJSONObject("root").toString());
 			}
 		}
 		else // 否则返回参数错误信息
 		{
-			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
-					WebUtil.getRequestAddr(request), null));
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+					WebUtil.getRequestAddr(request), null);
 			jo.put("root", jsonRst);
 			request.setAttribute("data", jo.getJSONObject("root").toString());
 		}
@@ -194,8 +194,8 @@ public class UserAction extends UserBaseAction
 			}
 			else // 返回对象不存在错误信息
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
-						WebUtil.getRequestAddr(request), null));
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+						WebUtil.getRequestAddr(request), null);
 				jo.put("root", jsonRst);
 				request.setAttribute("data", jo.getJSONObject("root").toString());
 			}
@@ -235,6 +235,7 @@ public class UserAction extends UserBaseAction
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setType(SyslogConst.TYPE_OP_FRONT);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 更新
 			UserInfoBean userInfo = userMgr.updateUserInfo(WebUtil.getUser(session).getUid(),
 					nickname, email, gender, birth, bloodtype, qq, selfintro, log);
@@ -244,15 +245,15 @@ public class UserAction extends UserBaseAction
 			}
 			else // 失败时，返回错误信息
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10001, 
-						WebUtil.getRequestAddr(request), null));
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10001, 
+						WebUtil.getRequestAddr(request), null);
 				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008, 
-					WebUtil.getRequestAddr(request), null));
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008, 
+					WebUtil.getRequestAddr(request), null);
 			jo.put("root", jsonRst);
 		}
 		request.setAttribute("data", jo.getJSONObject("root").toString());

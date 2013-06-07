@@ -152,9 +152,12 @@ public class WeiboManagerImpl implements WeiboManager
 			topicTitles.append("#"); // 添加话题标题分隔符
 			cnt = mtr.end(); // 设置索引为匹配串后的第一个字符的索引
 		}
-		weibo.setTopics(topics); // 设置话题对象列表
-		// 移除最后一个#，设置话题标题
-		weibo.setTopicTitles(topicTitles.substring(0, topicTitles.length()-1));
+		if(topics.size() != 0)
+		{
+			weibo.setTopics(topics); // 设置话题对象列表
+			// 移除最后一个#，设置话题标题
+			weibo.setTopicTitles(topicTitles.substring(0, topicTitles.length()-1));
+		}
 		/* 解析@提到 */
 		ptn = Pattern.compile("@[^@#\\s]+"); // @提到过滤正则表达式
 		mtr = ptn.matcher(content); // 获取匹配器
@@ -205,6 +208,7 @@ public class WeiboManagerImpl implements WeiboManager
 		user.fillByResult(result); // 填充用户字段
 		user.setWeibocnt(user.getWeibocnt() + 1); // 已发微博计数+1
 		userDao.put(user); // 更新用户
+		weibo.setAuthor(user); // 设置微博对象的作者对象
 		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
 		logDao.put(log); // 记录日志
 		
@@ -274,7 +278,7 @@ public class WeiboManagerImpl implements WeiboManager
 				}
 			}
 			// 存在所属话题时
-			if(weibo.getTopicTitles()!=null || !weibo.getTopicTitles().isEmpty())
+			if(weibo.getTopicTitles()!=null && !weibo.getTopicTitles().isEmpty())
 			{
 				Set<WeiboTopic> topics = weibo.getTopics();
 				// 多个话题时拆分
@@ -331,7 +335,7 @@ public class WeiboManagerImpl implements WeiboManager
 					Bytes.toBytes("nickname"), CompareOp.EQUAL, 
 					Bytes.toBytes((String.valueOf(values.get("author"))))));
 			// 查询用户
-			List<Result> results = userDao.findByPage("common_user", null, null, 1);
+			List<Result> results = userDao.findByPage("common_user", tmpFl, null, 1);
 			if(results != null) // 用户存在时
 			{
 				// 用户ID过滤器
@@ -740,7 +744,7 @@ public class WeiboManagerImpl implements WeiboManager
 	}
 
 	@Override
-	public List<Object> fetchListWeibo(String uid, long timestamp, String startRow, int pageSize)
+	public List<Object> fetchListWeibo(String uid, int type, long timestamp, String startRow, int pageSize)
 	{
 		FilterList fl = new FilterList();
 		// 用户ID过滤器
@@ -749,31 +753,43 @@ public class WeiboManagerImpl implements WeiboManager
 				Bytes.toBytes(uid)));
 		// 查询关注用户列表
 		List<Result> followRsts = wbFollowDao.findByPage("weibo_follow", fl, null, 0);
+		Set<String> followRows = new HashSet<String>(); // 存放关注用户ID列表
+		if(followRsts != null) // 关注列表非空时，存放用户ID到Set中
+		{
+			for(Result followRst : followRsts)
+			{
+				followRows.add(Bytes.toString(followRst.getValue(
+						Bytes.toBytes("info"), Bytes.toBytes("followid"))));
+			}
+		}
 		FilterList weiboFl = new FilterList(); // 微博过滤器
 		if(startRow == null) // 当查询最新列表时
 		{
 			// 时间戳过滤器，只查询上次查询时间戳后的数据
-			weiboFl.addFilter(new RowFilter(CompareOp.GREATER, 
+			weiboFl.addFilter(new RowFilter(CompareOp.LESS, 
 					new BinaryComparator(Bytes.toBytes(
 							String.valueOf(Long.MAX_VALUE - timestamp)))));
 		}
+		String myId = Bytes.toString(Bytes.toBytes(uid));
 		// 查询所有微博，优化由配置文件设置
 		List<Result> results = weiboDao.findByPage("weibo_content", weiboFl, startRow, 0);
 		if(results != null) // 微博存在时
 		{
 			int cnt = 0; // 计数
-			byte[] myId = Bytes.toBytes(uid); // 当前用户ID
 			// 存放结果列表
 			List<Object> rst = new ArrayList<Object>();
 			// 存放微博Bean列表
 			List<WeiboInfoBean> weiboBeans = new ArrayList<WeiboInfoBean>();
+			String nextrow = null; // 存放下一页首行rowKey
 			// 嵌套循环进行连接查询
 			for(Result result : results)
 			{
-				// 匹配当前用户ID和所关注用户ID时
-				if((result.getRow().equals(myId))
-						|| (followRsts!=null 
-						&& followRsts.contains(result.getRow())))
+				// 微博作者ID
+				String userId = Bytes.toString(result.getValue(Bytes.toBytes("info"),
+						Bytes.toBytes("authorid")));
+				// 匹配(当前用户ID和)所关注用户ID时
+				if((type==0 && userId.equals(myId))
+						|| (followRows.contains(userId)))
 				{
 					cnt++; // 计数+1
 					if(cnt <= pageSize) // 未超过单页数量上限时，添加到微博Bean列表
@@ -781,13 +797,20 @@ public class WeiboManagerImpl implements WeiboManager
 						WeiboContent weibo = fillWeiboByResult(result);
 						weiboBeans.add(new WeiboInfoBean(weibo));
 					}
-					else // 否则添加微博Bean列表和下页首行rowKey到结果列表中
+					else // 否则存储下页首行rowKey
 					{
-						rst.add(weiboBeans);
-						rst.add(Bytes.toString(result.getRow()));
+						nextrow = Bytes.toString(result.getRow());
 						break;
 					}
 				}
+			}
+			if(weiboBeans.size() > 0)
+			{
+				rst.add(weiboBeans);
+			}
+			if(nextrow != null)
+			{
+				rst.add(nextrow);
 			}
 			
 			return rst.size()==0?null:rst; // 存在数据则返回结果列表
@@ -809,7 +832,7 @@ public class WeiboManagerImpl implements WeiboManager
 		if(startRow == null) // 当查询最新列表时
 		{
 			// 时间戳过滤器，只查询上次查询时间戳后的数据
-			fl.addFilter(new RowFilter(CompareOp.GREATER, 
+			fl.addFilter(new RowFilter(CompareOp.LESS, 
 					new BinaryComparator(Bytes.toBytes(
 							String.valueOf(Long.MAX_VALUE - timestamp)))));
 		}
@@ -877,7 +900,7 @@ public class WeiboManagerImpl implements WeiboManager
 		if(startRow == null) // 当查询最新列表时
 		{
 			// 时间戳过滤器，只查询上次查询时间戳后的数据
-			fl.addFilter(new RowFilter(CompareOp.GREATER, 
+			fl.addFilter(new RowFilter(CompareOp.LESS, 
 					new BinaryComparator(Bytes.toBytes(
 							String.valueOf(Long.MAX_VALUE - timestamp)))));
 		}
@@ -941,7 +964,7 @@ public class WeiboManagerImpl implements WeiboManager
 			}
 		}
 		// 存在所属话题时
-		if(weibo.getTopicTitles()!=null || !weibo.getTopicTitles().isEmpty())
+		if(weibo.getTopicTitles()!=null && !weibo.getTopicTitles().isEmpty())
 		{
 			Set<WeiboTopic> topics = weibo.getTopics();
 			// 多个话题时拆分
@@ -991,7 +1014,7 @@ public class WeiboManagerImpl implements WeiboManager
 				if(startRow == null) // 当查询最新列表时
 				{
 					// 时间戳过滤器，只查询上次查询时间戳后的数据
-					fl.addFilter(new RowFilter(CompareOp.GREATER, 
+					fl.addFilter(new RowFilter(CompareOp.LESS, 
 							new BinaryComparator(Bytes.toBytes(
 									String.valueOf(Long.MAX_VALUE - timestamp)))));
 				}
@@ -1058,7 +1081,7 @@ public class WeiboManagerImpl implements WeiboManager
 			if(startRow == null) // 当查询最新列表时
 			{
 				// 时间戳过滤器，只查询上次查询时间戳后的数据
-				fl.addFilter(new RowFilter(CompareOp.GREATER, 
+				fl.addFilter(new RowFilter(CompareOp.LESS, 
 						new BinaryComparator(Bytes.toBytes(
 								String.valueOf(Long.MAX_VALUE - timestamp)))));
 			}
@@ -1134,6 +1157,16 @@ public class WeiboManagerImpl implements WeiboManager
 		WeiboContent wb = putWeibo(weibo, log); // 插入微博
 		if(wb != null) // 插入成功时
 		{
+			if(wb.getSourceid().equals("0") == false)
+			{
+				Result result = weiboDao.get(wb.getSourceid(), null, null);
+				if(result != null)
+				{
+					WeiboContent srcWeibo = new WeiboContent();
+					srcWeibo.fillByResult(result);
+					wb.setSource(srcWeibo);
+				}
+			}
 			return new WeiboInfoBean(wb); // 返回微博Bean
 		}
 		return null;

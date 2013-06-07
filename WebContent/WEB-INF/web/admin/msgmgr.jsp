@@ -19,9 +19,9 @@
 				<tr>
 					<td>公告内容：<br /><s:textarea name="content" value="" style="width:300px; height:100px;" /></td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td>每次发送用户数：<s:textfield name="size" value="500" />（若发送失败请减少该值）</td>
-				</tr>
+				</tr> -->
 				<tr>
 					<td><s:submit value="开始发送" onClick="return confirm('用户较多时将需要消耗较长时间。确认开始发送？');" /></td>
 				</tr>

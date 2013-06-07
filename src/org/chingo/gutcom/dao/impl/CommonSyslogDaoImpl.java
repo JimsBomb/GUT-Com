@@ -34,6 +34,8 @@ public class CommonSyslogDaoImpl extends HBaseSupport implements BaseDao<CommonS
 								, Bytes.toBytes(instance.getIp()));
 						p.add(Bytes.toBytes("info"), Bytes.toBytes("userid")
 								, Bytes.toBytes(instance.getUserid()));
+						p.add(Bytes.toBytes("info"), Bytes.toBytes("nickname")
+								, Bytes.toBytes(instance.getNickname()));
 						p.add(Bytes.toBytes("info"), Bytes.toBytes("dateline")
 								, Bytes.toBytes(String.valueOf(instance.getDateline())));
 						p.add(Bytes.toBytes("info"), Bytes.toBytes("type")

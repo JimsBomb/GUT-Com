@@ -14,13 +14,17 @@
 		var pwd = document.getElementById("pwd");
 		var newPwd = document.getElementById("newPwd");
 		var confirmPwd = document.getElementById("confirmPwd");
+		var msg = document.getElementById("errorMsg");
 		if(pwd.value.length==0 || newPwd.value.length==0
 				|| confirmPwd.value.length==0) {
+			msg.innerHTML = "密码不能留空。";
 			return false;
 		}
 		if(newPwd.value != confirmPwd.value) {
+			msg.innerHTML = "两次输入的新密码不一致。";
 			return false;
 		}
+		msg.innerHTML = "";
 		return true;
 	}
 </script>
@@ -44,6 +48,7 @@
 				</tr>
 				<tr>
 					<td><s:submit value="更新" onclick="return pwdChangeCheck();" /></td>
+					<td><div id="errorMsg"></div></td>
 				</tr>
 			</table>
 		</s:form>

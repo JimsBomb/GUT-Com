@@ -291,6 +291,7 @@ public class TopicAction extends WeiboBaseAction
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
 		log.setUserid(WebUtil.getUser(session).getUid());
+		log.setNickname(WebUtil.getUser(session).getNickname());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_TOPIC_DEL);
 		log.setDateline(new Date().getTime());
@@ -339,6 +340,7 @@ public class TopicAction extends WeiboBaseAction
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
 		log.setUserid(WebUtil.getUser(session).getUid());
+		log.setNickname(WebUtil.getUser(session).getNickname());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_TOPIC_STATUS_UPDATE);
 		log.setDateline(new Date().getTime());

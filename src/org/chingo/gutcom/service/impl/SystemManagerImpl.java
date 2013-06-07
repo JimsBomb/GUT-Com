@@ -210,6 +210,11 @@ public class SystemManagerImpl implements SystemManager
 		FilterList fl = new FilterList();
 		if(values != null)
 		{
+			if(values.containsKey("username")) // 模糊匹配昵称
+			{
+				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("nickname"),
+						CompareOp.EQUAL, new SubstringComparator(String.valueOf(values.get("username")))));
+			}
 			if(values.containsKey("startTime")) // 起始时间
 			{
 				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("dateline"),
@@ -220,7 +225,7 @@ public class SystemManagerImpl implements SystemManager
 				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("dateline"),
 						CompareOp.LESS_OR_EQUAL, Bytes.toBytes(String.valueOf(values.get("endTime")))));
 			}
-			if(values.containsKey("type")) // 
+			if(values.containsKey("type")) // 匹配日志类型
 			{
 				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"), Bytes.toBytes("type"),
 						CompareOp.EQUAL, Bytes.toBytes(String.valueOf(values.get("type")))));

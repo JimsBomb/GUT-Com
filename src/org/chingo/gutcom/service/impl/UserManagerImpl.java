@@ -270,18 +270,24 @@ public class UserManagerImpl implements UserManager
 			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
 					Bytes.toBytes("nickname"), CompareOp.EQUAL,
 					Bytes.toBytes(nickname)));
+			log.setDetail(String.format(SyslogConst.DETAIL_USER_LOGIN,
+					"昵称："+nickname));
 		}
 		else if(email != null) // 邮箱非空时，设置邮箱过滤器
 		{
 			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
 					Bytes.toBytes("email"), CompareOp.EQUAL,
 					Bytes.toBytes(email)));
+			log.setDetail(String.format(SyslogConst.DETAIL_USER_LOGIN,
+					"邮箱："+email));
 		}
 		else if(studentnum != null) // 学号非空时，设置学号过滤器
 		{
 			fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
 					Bytes.toBytes("studentnum"), CompareOp.EQUAL,
 					Bytes.toBytes(studentnum)));
+			log.setDetail(String.format(SyslogConst.DETAIL_USER_LOGIN,
+					"学号："+studentnum));
 		}
 		else // 三个参数都为空时
 		{
@@ -310,6 +316,9 @@ public class UserManagerImpl implements UserManager
 			rst.add(new UserInfoBean(user)); // 添加用户信息Bean对象
 			/* 令牌过滤器 */
 			FilterList tokenFl = new FilterList();
+			// 用户过滤器
+			tokenFl.addFilter(new RowFilter(CompareOp.EQUAL, new BinaryComparator(
+					Bytes.toBytes(user.getUid()))));
 			// 有效时长超过1小时的令牌过滤器
 			tokenFl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
 				Bytes.toBytes("expired_time"), CompareOp.GREATER_OR_EQUAL,

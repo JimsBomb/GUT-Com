@@ -126,9 +126,9 @@ public class SyslogConst
 	public static final String DETAIL_ADMIN_WEIBO_REPORT_DEAL = "处理微博举报。";
 	
 	/**
-	 * 日志描述：用户登录。
+	 * 日志描述：用户（%s）登录。
 	 */
-	public static final String DETAIL_USER_LOGIN = "用户登录。";
+	public static final String DETAIL_USER_LOGIN = "用户（%s）登录。";
 	/**
 	 * 日志描述：用户登录失败。
 	 */

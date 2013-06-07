@@ -22,7 +22,7 @@ else
 String method = request.getParameter("method");
 if(method==null) {
 %>
-<jsp:forward page="/WEB-INF/web/test.jsp"/>
+<jsp:forward page="/WEB-INF/web/admincp.jsp"/>
 <%
 } else {
 	method="/WEB-INF/web/" + method;

@@ -57,8 +57,9 @@ public class ReportAction extends ReportBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_REPORT);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 举报成功时
 			if(weiboMgr.reportWeibo(wid, reason, log) == true)
 			{

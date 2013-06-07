@@ -273,6 +273,7 @@ public class UserAction extends UserBaseAction
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
 		log.setUserid(WebUtil.getUser(session).getUid());
+		log.setNickname(WebUtil.getUser(session).getNickname());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_DEL);
 		log.setDateline(new Date().getTime());
@@ -307,6 +308,7 @@ public class UserAction extends UserBaseAction
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
 		log.setUserid(WebUtil.getUser(session).getUid());
+		log.setNickname(WebUtil.getUser(session).getNickname());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_STATUS_UPDATE);
 		log.setDateline(new Date().getTime());
@@ -408,6 +410,7 @@ public class UserAction extends UserBaseAction
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
 		log.setUserid(WebUtil.getUser(session).getUid());
+		log.setNickname(WebUtil.getUser(session).getNickname());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_USER_AUDIT);
 		log.setDateline(new Date().getTime());
@@ -435,23 +438,30 @@ public class UserAction extends UserBaseAction
 			{
 				throw new GcException(ErrorMsg.INVALID_PARAM);
 			}
-			/* 学号为空时 */
-			if(user.getStudentnum()==null || user.getStudentnum().isEmpty())
+			// 检查昵称和邮箱是否可用
+			List<Boolean> check = userMgr.verifyId(user.getNickname(), user.getEmail());
+			if(check.get(0)==true && check.get(1)==true) // 昵称和邮箱可用时
 			{
-				user.setStudentnum("");
-			}
-			user.setRegdate(new Date().getTime());
-			user.setRegip(WebUtil.getRemoteAddr(request));
-			/* 生成日志对象 */
-			CommonSyslog log = new CommonSyslog();
-			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setUserid(WebUtil.getUser(session).getUid());
-			log.setType(SyslogConst.TYPE_OP_ADMIN);
-			log.setDetail(SyslogConst.DETAIL_ADMIN_USER_ADD);
-			log.setDateline(new Date().getTime());
-			userMgr.putUser(user, log); // 插入用户
+				/* 学号为空时 */
+				if(user.getStudentnum()==null || user.getStudentnum().isEmpty())
+				{
+					user.setStudentnum("");
+				}
+				user.setRegdate(new Date().getTime());
+				user.setRegip(WebUtil.getRemoteAddr(request));
+				/* 生成日志对象 */
+				CommonSyslog log = new CommonSyslog();
+				log.setIp(WebUtil.getRemoteAddr(request));
+				log.setUserid(WebUtil.getUser(session).getUid());
+				log.setNickname(WebUtil.getUser(session).getNickname());
+				log.setType(SyslogConst.TYPE_OP_ADMIN);
+				log.setDetail(SyslogConst.DETAIL_ADMIN_USER_ADD);
+				log.setDateline(new Date().getTime());
+				userMgr.putUser(user, log); // 插入用户
 
-			this.resultMsg = ResultMsg.USER_ADD;
+				this.resultMsg = ResultMsg.USER_ADD;
+			}
+			this.resultMsg = ResultMsg.USER_ADD_FAILED;
 			this.backTo = "usercreate.do";
 
 			return SUCCESS;
@@ -512,6 +522,7 @@ public class UserAction extends UserBaseAction
 			CommonSyslog log = new CommonSyslog();
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			log.setType(SyslogConst.TYPE_OP_ADMIN);
 			log.setDetail(SyslogConst.DETAIL_ADMIN_USER_PWD_UPDATE);
 			log.setDateline(new Date().getTime());

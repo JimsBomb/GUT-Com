@@ -13,6 +13,7 @@ public class CommonSyslog implements java.io.Serializable
 
 	private String lid; // rowKey，日志ID
 	private String userid; // 操作用户ID
+	private String nickname = ""; // 操作用户昵称
 	private CommonUser user; // 用户对象
 	private String detail; // 日志描述
 	private long dateline; // 生成时间戳
@@ -23,11 +24,12 @@ public class CommonSyslog implements java.io.Serializable
 	{
 	}
 
-	public CommonSyslog(String lid, String userid, String detail,
-			long dateline, String ip, byte type)
+	public CommonSyslog(String lid, String userid, String nickname
+			, String detail, long dateline, String ip, byte type)
 	{
 		this.lid = lid;
 		this.userid = userid;
+		this.nickname = nickname;
 		this.detail = detail;
 		this.dateline = dateline;
 		this.ip = ip;
@@ -52,6 +54,16 @@ public class CommonSyslog implements java.io.Serializable
 	public void setUserid(String userid)
 	{
 		this.userid = userid;
+	}
+
+	public String getNickname()
+	{
+		return nickname;
+	}
+
+	public void setNickname(String nickname)
+	{
+		this.nickname = nickname;
 	}
 
 	public CommonUser getUser()
@@ -115,6 +127,12 @@ public class CommonSyslog implements java.io.Serializable
 				Bytes.toBytes("detail"))));
 		this.setUserid(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 
 				Bytes.toBytes("userid"))));
+		// 存在用户昵称列时才填充，防止旧日志无该列而报错
+		if(rst.containsColumn(Bytes.toBytes("info"), Bytes.toBytes("nickname")))
+		{
+			this.setNickname(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 
+					Bytes.toBytes("nickname"))));
+		}
 		this.setIp(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 
 				Bytes.toBytes("ip"))));
 		this.setType(Byte.parseByte(Bytes.toString(rst.getValue(Bytes.toBytes("info"), 

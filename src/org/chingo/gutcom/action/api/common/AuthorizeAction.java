@@ -162,6 +162,7 @@ public class AuthorizeAction extends AuthorizeBaseAction
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setType(SyslogConst.TYPE_OP_FRONT);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 更新令牌
 			List<Object> rst = userMgr.updateToken(uid, access_token, log);
 			if(rst != null) // 更新成功时

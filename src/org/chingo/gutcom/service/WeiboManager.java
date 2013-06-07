@@ -121,13 +121,14 @@ public interface WeiboManager
 	
 	/**
 	 * 获取当前用户及其关注用户的最新微博列表
-	 * @param uid 用户ID，只查询关注用户的微博时则置null
+	 * @param uid 用户ID
+	 * @param type 0-查询当前用户及其关注用户的微博，1-只查询关注用户的微博
 	 * @param timestamp 上次更新获取时间戳
 	 * @param startRow 查询起始行的rowKey
 	 * @param pageSize 单页查询数量
 	 * @return List中第一个对象为WeiboInfoBean列表，第二个为下一页的起始行rowKey（如果有的话）。无则返回null
 	 */
-	public List<Object> fetchListWeibo(String uid, long timestamp, String startRow, int pageSize);
+	public List<Object> fetchListWeibo(String uid, int type, long timestamp, String startRow, int pageSize);
 	
 	/**
 	 * 获取当前用户的微博列表

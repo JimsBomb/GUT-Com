@@ -17,7 +17,7 @@ import org.chingo.gutcom.common.constant.SystemConst;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * ������Ӧ���������Ȼ���Ϣ�ṩ��
+ * Action基础类，用于注入Session、Cookies、Parameters、Application、Request和Respose
  * @author Chingo.Org
  *
  */

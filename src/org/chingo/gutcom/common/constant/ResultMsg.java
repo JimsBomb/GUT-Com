@@ -26,6 +26,7 @@ public class ResultMsg
 	public static final String USER_STATUS_UPDATE = "用户状态已成功更新。";
 	public static final String USER_AUDIT = "用户审核已成功。";
 	public static final String USER_ADD ="用户已成功添加。";
+	public static final String USER_ADD_FAILED = "用户添加失败，昵称或邮箱已被使用。";
 	public static final String USER_PWD_UPDATE = "用户密码已成功更新。";
 	
 	/* 微博管理操作信息 */

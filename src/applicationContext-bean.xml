@@ -19,6 +19,7 @@
 		<property name="userDao" ref="userDao"></property>
 	</bean> -->
 	
+	<!-- 数据访问对象Bean配置 BEGIN -->
 	<bean name="tokenDao" class="org.chingo.gutcom.dao.impl.CommonTokenDaoImpl">
 	    <property name="ht" ref="htemplate" />
 	</bean>
@@ -61,7 +62,9 @@
 	<bean name="msgSendDao" class="org.chingo.gutcom.dao.impl.CommonMsgSendDaoImpl">
 	   <property name="ht" ref="htemplate" />
 	</bean>
+	<!-- 数据访问对象Bean配置 END -->
 	
+	<!-- 业务逻辑Bean配置 BEGIN -->
 	<bean name="sysManager" class="org.chingo.gutcom.service.impl.SystemManagerImpl">
 		<property name="sysconfDao" ref="sysconfDao" />
 		<property name="syslogDao" ref="syslogDao" />
@@ -118,8 +121,48 @@
 	    <property name="wbFavDao" ref="wbFavDao" />
 	    <property name="logDao" ref="syslogDao" />
 	</bean>
+	<!-- 业务逻辑Bean配置 END -->
 	
+	<!-- 自启动Servlet Bean配置 BEGIN -->
 	<bean name="initServlet" class="org.chingo.gutcom.servlet.InitServlet">
 		<property name="sysMgr" ref="sysManager" />
+		<property name="weiboMgr" ref="weiboManager" />
 	</bean>
+	<!-- 自启动Servlet Bean配置 END -->
+	
+	<!-- Quartz自动调度Bean配置 BEGIN -->
+	<!-- 微博调度任务Bean配置 -->
+	<bean name="weiboQuartzJob" class="org.chingo.gutcom.schedule.job.WeiboJob">
+	    <property name="weiboMgr" ref="weiboManager" />
+	</bean>
+	<bean name="weiboQuartzDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="weiboQuartzJob" />
+		<property name="targetMethod" value="updatePublicWeibo" />
+	</bean>
+	<bean id="weiboCronTrigger" class="org.chingo.gutcom.schedule.trigger.WeiboTrigger">
+		<property name="jobDetail" ref="weiboQuartzDetail" />
+	</bean>
+	<!-- 系统调度任务Bean配置 -->
+	<bean name="systemQuartzJob" class="org.chingo.gutcom.schedule.job.SystemJob">
+	    <property name="logDao" ref="syslogDao" />
+	</bean>
+	<bean name="systemQuartzDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="systemQuartzJob" />
+		<property name="targetMethod" value="clearOldLogs" />
+	</bean>
+	<bean id="systemCronTrigger" class="org.chingo.gutcom.schedule.trigger.SystemTrigger">
+		<property name="jobDetail" ref="systemQuartzDetail" />
+	</bean>
+	
+	<!-- 触发器列表配置 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="weiboCronTrigger" />
+				<ref local="systemCronTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Quartz自动调度Bean配置 END -->
 </beans>

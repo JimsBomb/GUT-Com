@@ -20,11 +20,11 @@
 		<s:form action="weibomgr.do" namespace="/admin">
 			<table>
 				<tr>
-					<td>作者：</td>
+					<td><strong>作者：</strong></td>
 					<td><s:text name="weibo.author.nickname" /></td>
 				</tr>
 				<tr>
-					<td>发表时间：</td>
+					<td><strong>发表时间：</strong></td>
 					<td>
 						<s:text name="format.datetime">
 							<s:param value="#request.weibo.dateline" />
@@ -32,7 +32,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>所在话题：</td>
+					<td><strong>所在话题：</strong></td>
 					<td>
 						<s:if test="#request.weibo.topics.size == 0">
 							<i>无</i>
@@ -46,21 +46,21 @@
 					</td>
 				</tr>
 				<tr>
-					<td>状态：</td>
+					<td><strong>状态：</strong></td>
 					<td>
 						<s:if test="#request.weibo.status==0">未审核</s:if>
 						<s:elseif test="#request.weibo.status==1">已审核</s:elseif>
 					</td>
 				</tr>
 				<tr>
-					<td>可见性：</td>
+					<td><strong>可见性：</strong></td>
 					<td>
 						<s:if test="#request.weibo.visibility==0">公开</s:if>
 						<s:elseif test="#request.weibo.visibility==1">关注可见</s:elseif>
 					</td>
 				</tr>
 				<tr>
-					<td>微博类型：</td>
+					<td><strong>微博类型：</strong></td>
 					<td>
 						<s:if test="#request.weibo.type==0">普通微博</s:if>
 						<s:elseif test="#request.weibo.type==1">转发微博</s:elseif>
@@ -69,7 +69,7 @@
 				</tr>
 				<s:if test="#request.weibo.type!=0">
 					<tr>
-						<td>源微博：</td>
+						<td><strong>源微博：</strong></td>
 						<td>
 							<s:url action="weiboshow" id="showurl">
 								<s:param name="id">
@@ -80,14 +80,14 @@
 					</tr>
 				</s:if>
 				<tr>
-					<td>内容：</td>
+					<td><strong>内容：</strong></td>
 					<td>
 						<textarea readonly="readonly"><s:property value="#request.weibo.content" /></textarea>
 					</td>
 				</tr>
 				<s:if test="#request.weibo.middlePic.isEmpty()==false">
 					<tr>
-						<td>微博图片：</td>
+						<td><strong>微博图片：</strong></td>
 						<td>
 							<a href='<s:property value="#request.weibo.originalPic" />' title="查看原图" target="_blank">
 								<img src='<s:property value="#request.weibo.middlePic" />' />

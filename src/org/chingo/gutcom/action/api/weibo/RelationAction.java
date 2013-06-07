@@ -214,8 +214,9 @@ public class RelationAction extends RelationBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_FOLLOW);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 关注成功时
 			if(urMgr.follow(uid, nickname, remark, log) == true)
 			{
@@ -256,8 +257,9 @@ public class RelationAction extends RelationBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_FOLLOW_DROP);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 取消关注成功时
 			if(urMgr.drop(uid, nickname, log) == true)
 			{
@@ -300,8 +302,9 @@ public class RelationAction extends RelationBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_FOLLOW_REMARK);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 更新备注名
 			UserInfoBean userBean = urMgr.remark(uid, nickname, remark, log);
 			if(userBean != null) // 更新成功时

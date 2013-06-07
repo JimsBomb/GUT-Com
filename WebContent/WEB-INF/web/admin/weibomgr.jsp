@@ -29,7 +29,7 @@
 			<table>
 				<tr>
 					<td>微博状态：</td>
-					<td><s:select list="#{'-1':'不限', '0':'正常', '1':'禁止发表'}"
+					<td><s:select list="#{'-1':'不限', '1':'已审核', '0':'未审核'}"
 							name="status" listKey="key" listValue="value"
 							onchange="selectChanged(this.id)" /></td>
 				</tr>
@@ -39,10 +39,10 @@
 							name="visibility" listKey="key" listValue="value"
 							onchange="selectChanged(this.id)" /></td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td>作者昵称：</td>
 					<td><s:textfield name="author" /></td>
-				</tr>
+				</tr> -->
 				<tr>
 					<td>内容关键字：</td>
 					<td><s:textfield name="content" /></td>

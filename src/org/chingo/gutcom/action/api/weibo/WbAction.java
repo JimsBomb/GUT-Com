@@ -10,6 +10,7 @@ import net.sf.json.JSONObject;
 import org.chingo.gutcom.action.base.api.weibo.WbBaseAction;
 import org.chingo.gutcom.bean.UserInfoBean;
 import org.chingo.gutcom.bean.WeiboInfoBean;
+import org.chingo.gutcom.common.WeiboCache;
 import org.chingo.gutcom.common.constant.SysconfConst;
 import org.chingo.gutcom.common.constant.SyslogConst;
 import org.chingo.gutcom.common.constant.SystemConst;
@@ -183,10 +184,15 @@ public class WbAction extends WbBaseAction
 				&& trim_user>=0 && trim_user<=1
 				&& trim_source>=0 && trim_source<=1)
 		{
-			// 获取最新公共微博
-			List<WeiboInfoBean> weibos = weiboMgr.fetchPublicWeibo(count, trim_user, trim_source);
+			// 从内存中获取最新公共微博
+			List<WeiboInfoBean> weibos = WeiboCache.weibos; //WebUtil.getPublicWeibos(application);
 			if(weibos != null) // 微博存在时
 			{
+				if(weibos.size() > count) // 列表长度大于请求长度时
+				{
+					// 返回需要的长度
+					weibos = weibos.subList(0, count);
+				}
 				jo.put("statuses", weibos);
 				jo.put("page_num", weibos.size());
 			}
@@ -221,30 +227,11 @@ public class WbAction extends WbBaseAction
 				&& trim_user>=0 && trim_user<=1
 				&& trim_source>=0 && trim_source<=1)
 		{
-			long timestamp; // 存放上次查询时间戳
-			/* SESSION中存在上次查询时间戳时取出，否则新建 */
-			if(session.containsKey(SystemConst.SESSION_LAST_FETCH_TIME))
-			{
-				Map<String, Long> lastTime = 
-						(Map<String, Long>) session.get(SystemConst.SESSION_LAST_FETCH_TIME);
-				if(lastTime.containsKey("wbFetchList"))
-				{
-					timestamp = lastTime.get("wbFetchList");
-				}
-				else
-				{
-					timestamp = new Date().getTime();
-					lastTime.put("wbFetchList", timestamp);
-				}
-			}
-			else
-			{
-				Map<String, Long> lastTime = new HashMap<String, Long>();
-				timestamp = new Date().getTime();
-				lastTime.put("wbFetchList", timestamp);
-			}
+			// 存放上次查询时间戳
+			long timestamp = WebUtil.getTimestamp(session, "wbFetchList");
+			
 			// 获取微博列表
-			List<Object> rst = weiboMgr.fetchListWeibo(WebUtil.getUser(session).getUid(),
+			List<Object> rst = weiboMgr.fetchListWeibo(WebUtil.getUser(session).getUid(), 0,
 					timestamp, nextrow, count);
 			if(rst != null) // 列表非空时，设置响应数据
 			{
@@ -292,30 +279,11 @@ public class WbAction extends WbBaseAction
 				&& trim_user>=0 && trim_user<=1
 				&& trim_source>=0 && trim_source<=1)
 		{
-			long timestamp; // 存放上次查询时间戳
-			/* SESSION中存在上次查询时间戳时取出，否则新建 */
-			if(session.containsKey(SystemConst.SESSION_LAST_FETCH_TIME))
-			{
-				Map<String, Long> lastTime = 
-						(Map<String, Long>) session.get(SystemConst.SESSION_LAST_FETCH_TIME);
-				if(lastTime.containsKey("wbFetchFollow"))
-				{
-					timestamp = lastTime.get("wbFetchFollow");
-				}
-				else
-				{
-					timestamp = new Date().getTime();
-					lastTime.put("wbFetchFollow", timestamp);
-				}
-			}
-			else
-			{
-				Map<String, Long> lastTime = new HashMap<String, Long>();
-				timestamp = new Date().getTime();
-				lastTime.put("wbFetchFollow", timestamp);
-			}
+			// 存放上次查询时间戳
+			long timestamp = WebUtil.getTimestamp(session, "wbFetchFollow");
+			
 			// 获取微博列表
-			List<Object> rst = weiboMgr.fetchListWeibo(null,
+			List<Object> rst = weiboMgr.fetchListWeibo(WebUtil.getUser(session).getUid(), 1,
 					timestamp, nextrow, count);
 			if(rst != null) // 列表非空时，设置响应数据
 			{
@@ -363,28 +331,9 @@ public class WbAction extends WbBaseAction
 				&& trim_user>=0 && trim_user<=1
 				&& trim_source>=0 && trim_source<=1)
 		{
-			long timestamp; // 存放上次查询时间戳
-			/* SESSION中存在上次查询时间戳时取出，否则新建 */
-			if(session.containsKey(SystemConst.SESSION_LAST_FETCH_TIME))
-			{
-				Map<String, Long> lastTime = 
-						(Map<String, Long>) session.get(SystemConst.SESSION_LAST_FETCH_TIME);
-				if(lastTime.containsKey("wbFetchMine"))
-				{
-					timestamp = lastTime.get("wbFetchMine");
-				}
-				else
-				{
-					timestamp = new Date().getTime();
-					lastTime.put("wbFetchMine", timestamp);
-				}
-			}
-			else
-			{
-				Map<String, Long> lastTime = new HashMap<String, Long>();
-				timestamp = new Date().getTime();
-				lastTime.put("wbFetchMine", timestamp);
-			}
+			// 存放上次查询时间戳
+			long timestamp = WebUtil.getTimestamp(session, "wbFetchMine");
+			
 			// 获取微博列表
 			List<Object> rst = weiboMgr.fetchMyWeibo(WebUtil.getUser(session).getUid(),
 					timestamp, nextrow, count);
@@ -436,28 +385,9 @@ public class WbAction extends WbBaseAction
 				&& trim_user>=0 && trim_user<=1
 				&& trim_source>=0 && trim_source<=1)
 		{
-			long timestamp; // 存放上次查询时间戳
-			/* SESSION中存在上次查询时间戳时取出，否则新建 */
-			if(session.containsKey(SystemConst.SESSION_LAST_FETCH_TIME))
-			{
-				Map<String, Long> lastTime = 
-						(Map<String, Long>) session.get(SystemConst.SESSION_LAST_FETCH_TIME);
-				if(lastTime.containsKey("wbFetchMine"))
-				{
-					timestamp = lastTime.get("wbFetchMine");
-				}
-				else
-				{
-					timestamp = new Date().getTime();
-					lastTime.put("wbFetchMine", timestamp);
-				}
-			}
-			else
-			{
-				Map<String, Long> lastTime = new HashMap<String, Long>();
-				timestamp = new Date().getTime();
-				lastTime.put("wbFetchMine", timestamp);
-			}
+			// 存放上次查询时间戳
+			long timestamp = WebUtil.getTimestamp(session, "wbFetchMine");
+			
 			// 获取微博列表
 			List<Object> rst = weiboMgr.fetchOnesWeibo(uid, nickname,
 					timestamp, nextrow, count);
@@ -508,32 +438,13 @@ public class WbAction extends WbBaseAction
 				&& trim_user>=0 && trim_user<=1
 				&& trim_source>=0 && trim_source<=1)
 		{
-			long timestamp; // 存放上次查询时间戳
-			/* SESSION中存在上次查询时间戳时取出，否则新建 */
-			if(session.containsKey(SystemConst.SESSION_LAST_FETCH_TIME))
-			{
-				Map<String, Long> lastTime = 
-						(Map<String, Long>) session.get(SystemConst.SESSION_LAST_FETCH_TIME);
-				if(lastTime.containsKey("wbFetchTopic"))
-				{
-					timestamp = lastTime.get("wbFetchTopic");
-				}
-				else
-				{
-					timestamp = new Date().getTime();
-					lastTime.put("wbFetchTopic", timestamp);
-				}
-			}
-			else
-			{
-				Map<String, Long> lastTime = new HashMap<String, Long>();
-				timestamp = new Date().getTime();
-				lastTime.put("wbFetchTopic", timestamp);
-			}
+			// 存放上次查询时间戳
+			long timestamp = WebUtil.getTimestamp(session, "wbFetchTopic");
+			
 			// 获取微博列表
 			List<Object> rst = weiboMgr.fetchTopicWeibo(title, timestamp,
 					nextrow, count);
-			jsonRst.put("title", title); // 设置话题标题
+			jo.put("title", title); // 设置话题标题
 			if(rst != null) // 列表非空时，设置响应数据
 			{
 				List<WeiboInfoBean> weibos = (List<WeiboInfoBean>) rst.get(0);
@@ -586,15 +497,15 @@ public class WbAction extends WbBaseAction
 			}
 			else // 否则返回对象不存在错误信息
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
-						WebUtil.getRequestAddr(request), null));
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20002,
+						WebUtil.getRequestAddr(request), null);
 				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
-					WebUtil.getRequestAddr(request), null));
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+					WebUtil.getRequestAddr(request), null);
 			jo.put("root", jsonRst);
 		}
 		request.setAttribute("data", jo.getJSONObject("root").toString());
@@ -615,28 +526,9 @@ public class WbAction extends WbBaseAction
 				&& trim_user>=0 && trim_user<=1
 				&& trim_source>=0 && trim_source<=1)
 		{
-			long timestamp;
-			/* SESSION中存在上次查询时间戳时取出，否则新建 */
-			if(session.containsKey(SystemConst.SESSION_LAST_FETCH_TIME))
-			{
-				Map<String, Long> lastTime = 
-						(Map<String, Long>) session.get(SystemConst.SESSION_LAST_FETCH_TIME);
-				if(lastTime.containsKey("wbFetchAt"))
-				{
-					timestamp = lastTime.get("wbFetchAt");
-				}
-				else
-				{
-					timestamp = new Date().getTime();
-					lastTime.put("wbFetchAt", timestamp);
-				}
-			}
-			else
-			{
-				Map<String, Long> lastTime = new HashMap<String, Long>();
-				timestamp = new Date().getTime();
-				lastTime.put("wbFetchAt", timestamp);
-			}
+			// 存放上次查询时间戳
+			long timestamp = WebUtil.getTimestamp(session, "wbFetchAt");
+			// 获取@提到微博
 			List<Object> rst = weiboMgr.fetchAtWeibo(uid, timestamp, nextrow, count);
 			if(rst != null) // 列表非空时，设置响应数据
 			{
@@ -689,8 +581,9 @@ public class WbAction extends WbBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_POST);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			/* 创建微博对象 */
 			WeiboContent weibo = new WeiboContent();
 			weibo.setWid(FormatUtil.createRowKey());
@@ -725,15 +618,15 @@ public class WbAction extends WbBaseAction
 			}
 			else // 失败时返回错误信息
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
-						WebUtil.getRequestAddr(request), null));
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
+						WebUtil.getRequestAddr(request), null);
 				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
-					WebUtil.getRequestAddr(request), null));
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+					WebUtil.getRequestAddr(request), null);
 			jo.put("root", jsonRst);
 		}
 		request.setAttribute("data", jo.getJSONObject("root").toString());
@@ -760,8 +653,9 @@ public class WbAction extends WbBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_POST);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			/* 创建微博对象 */
 			WeiboContent weibo = new WeiboContent();
 			weibo.setWid(FormatUtil.createRowKey());
@@ -777,7 +671,8 @@ public class WbAction extends WbBaseAction
 						.get(SystemConst.CONTEXT_CONF);
 				if(confs.containsKey(SysconfConst.WEIBO_VERIFY))
 				{
-					weibo.setStatus(Byte.parseByte(confs.get(SysconfConst.WEIBO_VERIFY)));
+					weibo.setStatus(Byte.parseByte(String.valueOf(
+							Byte.parseByte(confs.get(SysconfConst.WEIBO_VERIFY)) ^ 1)));
 				}
 			}
 			
@@ -802,15 +697,15 @@ public class WbAction extends WbBaseAction
 			}
 			else // 失败时返回错误信息
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
-						WebUtil.getRequestAddr(request), null));
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
+						WebUtil.getRequestAddr(request), null);
 				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
-					WebUtil.getRequestAddr(request), null));
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+					WebUtil.getRequestAddr(request), null);
 			jo.put("root", jsonRst);
 		}
 
@@ -837,8 +732,9 @@ public class WbAction extends WbBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_POST);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			/* 创建微博对象 */
 			WeiboContent weibo = new WeiboContent();
 			weibo.setWid(FormatUtil.createRowKey());
@@ -856,7 +752,8 @@ public class WbAction extends WbBaseAction
 						.get(SystemConst.CONTEXT_CONF);
 				if(confs.containsKey(SysconfConst.WEIBO_VERIFY))
 				{
-					weibo.setStatus(Byte.parseByte(confs.get(SysconfConst.WEIBO_VERIFY)));
+					weibo.setStatus(Byte.parseByte(String.valueOf(
+							Byte.parseByte(confs.get(SysconfConst.WEIBO_VERIFY)) ^ 1)));
 				}
 			}
 			/* 获取过滤词列表 */
@@ -878,15 +775,15 @@ public class WbAction extends WbBaseAction
 			}
 			else // 失败时返回错误信息
 			{
-				jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
-						WebUtil.getRequestAddr(request), null));
+				jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_20003,
+						WebUtil.getRequestAddr(request), null);
 				jo.put("root", jsonRst);
 			}
 		}
 		else // 返回参数错误信息
 		{
-			jsonRst.put("root", ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
-					WebUtil.getRequestAddr(request), null));
+			jsonRst = ErrorCodeUtil.createErrorJsonRst(ErrorCodeUtil.CODE_10008,
+					WebUtil.getRequestAddr(request), null);
 			jo.put("root", jsonRst);
 		}
 		request.setAttribute("data", jo.getJSONObject("root").toString());
@@ -910,8 +807,9 @@ public class WbAction extends WbBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_DROP);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			if(weiboMgr.dropWeibo(wid, log) == true) // 删除成功时
 			{
 				jo.put("result", true);

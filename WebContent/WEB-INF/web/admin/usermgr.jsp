@@ -22,12 +22,12 @@
 			<table>
 			<tr>
 			<td>用户状态：<s:select
-				list="#{'-1':'不限', '0':'正常', '1':'禁止发表'}"
+				list="#{'-1':'不限', '1':'正常', '0':'禁止发表'}"
 				name="status" listKey="key" listValue="value" 
 				onchange="selectChanged(this.id)" /></td>
 			<td>用户昵称：<s:textfield name="nickname" /></td>
 			<td>学号：<s:textfield name="studentnum" /></td>
-			<td>注册时间：<s:textfield name="createTime" id="createTime" /></td>
+			<!-- <td>注册时间：<s:textfield name="createTime" id="createTime" /></td> -->
 			<td><s:submit value="查找" /></td>
 			</tr>
 			</table>

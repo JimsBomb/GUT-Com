@@ -29,7 +29,7 @@
 			<table>
 				<tr>
 					<td>话题状态：</td>
-					<td><s:select list="#{'-1':'不限', '0':'正常', '1':'禁止发表'}"
+					<td><s:select list="#{'-1':'不限', '0':'正常', '1':'屏蔽'}"
 							name="status" listKey="key" listValue="value"
 							onchange="selectChanged(this.id)" /></td>
 				</tr>

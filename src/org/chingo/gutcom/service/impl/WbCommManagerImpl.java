@@ -211,7 +211,7 @@ public class WbCommManagerImpl implements WbCommManager
 				if(startRow == null) // 当查询最新列表时
 				{
 					// 时间戳过滤器，只查询上次查询时间戳后的数据
-					commFl.addFilter(new RowFilter(CompareOp.GREATER, 
+					commFl.addFilter(new RowFilter(CompareOp.LESS, 
 							new BinaryComparator(Bytes.toBytes(
 									String.valueOf(Long.MAX_VALUE - timestamp)))));
 				}
@@ -281,7 +281,7 @@ public class WbCommManagerImpl implements WbCommManager
 		if(startRow == null) // 当查询最新列表时
 		{
 			// 时间戳过滤器，只查询上次查询时间戳后的数据
-			fl.addFilter(new RowFilter(CompareOp.GREATER, 
+			fl.addFilter(new RowFilter(CompareOp.LESS, 
 					new BinaryComparator(Bytes.toBytes(
 							String.valueOf(Long.MAX_VALUE - timestamp)))));
 		}
@@ -331,7 +331,7 @@ public class WbCommManagerImpl implements WbCommManager
 		if(startRow == null) // 当查询最新列表时
 		{
 			// 时间戳过滤器，只查询上次查询时间戳后的数据
-			fl.addFilter(new RowFilter(CompareOp.GREATER, 
+			fl.addFilter(new RowFilter(CompareOp.LESS, 
 					new BinaryComparator(Bytes.toBytes(
 							String.valueOf(Long.MAX_VALUE - timestamp)))));
 		}

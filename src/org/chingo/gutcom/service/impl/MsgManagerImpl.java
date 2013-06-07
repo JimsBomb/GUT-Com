@@ -63,8 +63,13 @@ public class MsgManagerImpl implements MsgManager
 			for(Result r : users)
 			{
 				msg.setMid(FormatUtil.createRowKey()); // 创建消息rowKey
-				msg.setRecvuserId(Bytes.toString(r.getRow()));
-				msgRecvDao.put(msg);
+				msg.setRecvuserId(Bytes.toString(r.getRow())); // 设置接收用户ID
+				msgRecvDao.put(msg); // 追加消息记录
+				/* 更新用户未读消息计数 */
+				CommonUser user = new CommonUser();
+				user.fillByResult(r);
+				user.setNewmsg(user.getNewmsg() + 1);
+				userDao.put(user);
 			}
 		}
 		log.setLid(FormatUtil.createRowKey()); // 创建日志rowKey
@@ -281,7 +286,7 @@ public class MsgManagerImpl implements MsgManager
 	public List<Object> dropMsgs(List<String> rows, byte type, CommonSyslog log)
 	{
 		log.setLid(FormatUtil.createRowKey()); // 创建日志的rowKey
-		String[] tmp = (String[]) rows.toArray(); // 用于遍历
+		Object[] tmp = rows.toArray(); // 用于遍历
 		int len = tmp.length; // 记录数组长度
 		if(type == MsgConst.TYPE_RECV) // 删除接收消息时
 		{
@@ -291,15 +296,15 @@ public class MsgManagerImpl implements MsgManager
 				FilterList fl = new FilterList();
 				// 消息ID过滤器
 				fl.addFilter(new RowFilter(CompareOp.EQUAL, 
-						new BinaryComparator(Bytes.toBytes(tmp[i]))));
+						new BinaryComparator(Bytes.toBytes(String.valueOf(tmp[i])))));
 				// 接收用户ID过滤器
 				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
 						Bytes.toBytes("recvuserid"), CompareOp.EQUAL,
-						Bytes.toBytes(log.getLid())));
+						Bytes.toBytes(log.getUserid())));
 				// 消息不属于请求用户时
 				if(msgRecvDao.findByPage("common_msg_recv", fl, null, 0) == null)
 				{
-					rows.remove(i); // 移除消息ID
+					rows.remove(rows.get(i)); // 移除消息ID
 				}
 			}
 			msgRecvDao.delete(rows); // 执行删除
@@ -312,15 +317,15 @@ public class MsgManagerImpl implements MsgManager
 				FilterList fl = new FilterList();
 				// 消息ID过滤器
 				fl.addFilter(new RowFilter(CompareOp.EQUAL, 
-						new BinaryComparator(Bytes.toBytes(tmp[i]))));
+						new BinaryComparator(Bytes.toBytes(String.valueOf(tmp[i])))));
 				// 发送用户ID过滤器
 				fl.addFilter(new SingleColumnValueFilter(Bytes.toBytes("info"),
 						Bytes.toBytes("senduserid"), CompareOp.EQUAL,
-						Bytes.toBytes(log.getLid())));
+						Bytes.toBytes(log.getUserid())));
 				// 消息不属于请求用户时
 				if(msgRecvDao.findByPage("common_msg_send", fl, null, 0) == null)
 				{
-					rows.remove(i); // 移除消息ID
+					rows.remove(rows.get(i)); // 移除消息ID
 				}
 			}
 			msgSendDao.delete(rows); // 执行删除

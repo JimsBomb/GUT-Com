@@ -93,6 +93,7 @@ public class NoticeAction extends NoticeBaseAction
 			log.setIp(WebUtil.getRemoteAddr(request));
 			log.setType(SyslogConst.TYPE_OP_FRONT);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			// 清零成功时
 			if(userMgr.resetNewCount(type, log) == true)
 			{

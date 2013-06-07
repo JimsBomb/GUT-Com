@@ -31,6 +31,10 @@ public class SystemConst
 	 * Context过滤关键词key值
 	 */
 	public static final String CONTEXT_FILTER_WORD = "filterword";
+	/**
+	 * Context最新公共微博key值
+	 */
+	public static final String CONTEXT_PUBLIC_WEIBO = "publicWeibo";
 	
 	/**
 	 * 未登录时的用户ID

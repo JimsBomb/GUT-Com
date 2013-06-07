@@ -258,8 +258,9 @@ public class CommentAction extends CommentBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_COMM);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			/* 创建微博对象 */
 			WeiboContent weibo = new WeiboContent();
 			weibo.setWid(FormatUtil.createRowKey());
@@ -324,8 +325,9 @@ public class CommentAction extends CommentBaseAction
 			log.setDateline(new Date().getTime());
 			log.setDetail(SyslogConst.DETAIL_USER_WEIBO_COMM_DROP);
 			log.setIp(WebUtil.getRemoteAddr(request));
-			log.setType(SyslogConst.TYPE_OP_FRONT);
+			log.setType(SyslogConst.TYPE_WEIBO);
 			log.setUserid(WebUtil.getUser(session).getUid());
+			log.setNickname(WebUtil.getUser(session).getNickname());
 			if(wbCommMgr.dropComment(wid, log) == true) // 删除评论成功时
 			{
 				jo.put("result", true);

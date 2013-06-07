@@ -5,11 +5,13 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.chingo.gutcom.bean.UserInfoBean;
+import org.chingo.gutcom.bean.WeiboInfoBean;
 import org.chingo.gutcom.common.constant.SystemConst;
 import org.chingo.gutcom.domain.CommonToken;
 import org.chingo.gutcom.domain.CommonUser;
@@ -32,7 +34,11 @@ public class WebUtil
 	{
 		if(session.containsKey(SystemConst.SESSION_USER))
 		{
-			return (UserInfoBean) session.get(SystemConst.SESSION_USER);
+			Object obj = session.get(SystemConst.SESSION_USER);
+			if(obj != null)
+			{
+				return (UserInfoBean) obj;
+			}
 		}
 		return null;
 	}
@@ -46,7 +52,11 @@ public class WebUtil
 	{
 		if(session.containsKey(SystemConst.SESSION_TOKEN))
 		{
-			return (CommonToken) session.get(SystemConst.SESSION_TOKEN);
+			Object obj = session.get(SystemConst.SESSION_TOKEN);
+			if(obj != null)
+			{
+				return (CommonToken) obj;
+			}
 		}
 		return null;
 	}
@@ -78,7 +88,7 @@ public class WebUtil
 		else
 		{
 			Map<String, Long> lastTime = new HashMap<String, Long>();
-			timestamp = new Date().getTime();
+			timestamp = 0;
 			lastTime.put(key, timestamp);
 		}
 		
@@ -96,6 +106,25 @@ public class WebUtil
 		{
 			return (Map<String, String>) application.get(SystemConst.CONTEXT_CONF);
 		}
+		return null;
+	}
+	
+	/**
+	 * 返回Application中的最新公共微博列表
+	 * @param application Application映射Map
+	 * @return 最新公共微博Bean列表，无则返回null
+	 */
+	public static final List<WeiboInfoBean> getPublicWeibos(Map application)
+	{
+		if(application.containsKey(SystemConst.CONTEXT_PUBLIC_WEIBO))
+		{
+			Object lst = application.get(SystemConst.CONTEXT_PUBLIC_WEIBO);
+			if(lst != null)
+			{
+				return (List<WeiboInfoBean>) lst;
+			}
+		}
+		
 		return null;
 	}
 	

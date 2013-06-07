@@ -102,6 +102,10 @@ public class ErrorCodeUtil
 	 */
 	public static final String CODE_20003 = "20003";
 	/**
+	 * 代码：20004-用户未审核/被禁止，无权操作
+	 */
+	public static final String CODE_20004 = "20004";
+	/**
 	 * 代码：20101-注册/绑定失败，昵称/邮箱/学号已存在
 	 */
 	public static final String CODE_20101 = "20101";
@@ -202,6 +206,10 @@ public class ErrorCodeUtil
 	 */
 	private static final String INFO_20003 = "Contains illegal content.";
 	/**
+	 * 信息：20004-用户未审核/被禁止，无权操作
+	 */
+	private static final String INFO_20004 = "User forbitted.";
+	/**
 	 * 信息：20101-注册/绑定失败，昵称/邮箱/学号已存在
 	 */
 	private static final String INFO_20101 = "NickName/email/studentnum already exists.";
@@ -294,6 +302,9 @@ public class ErrorCodeUtil
 			break;
 		case CODE_20003:
 			errorInfo = INFO_20003;
+			break;
+		case CODE_20004:
+			errorInfo = INFO_20004;
 			break;
 		case CODE_20101:
 			errorInfo = INFO_20101;

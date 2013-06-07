@@ -5,6 +5,8 @@ import java.util.Date;
 import org.chingo.gutcom.action.base.MsgBaseAction;
 import org.chingo.gutcom.common.constant.MsgConst;
 import org.chingo.gutcom.common.constant.SyslogConst;
+import org.chingo.gutcom.common.constant.SystemConst;
+import org.chingo.gutcom.common.constant.UserConst;
 import org.chingo.gutcom.common.util.WebUtil;
 import org.chingo.gutcom.domain.CommonMsgRecv;
 import org.chingo.gutcom.domain.CommonSyslog;
@@ -60,12 +62,14 @@ public class MsgAction extends MsgBaseAction
 		/* 封装消息 */
 		CommonMsgRecv msg = new CommonMsgRecv();
 		msg.setContent(content); // 内容
+		msg.setSenduserId(UserConst.SYSTEM_ID); // 发送者ID为管理员ID
 		msg.setDateline(new Date().getTime()); // 发送时间戳
 		msg.setIsread(MsgConst.FLAG_NOT_READ); // 未读标记
 		/* 生成日志对象 */
 		CommonSyslog log = new CommonSyslog();
 		log.setIp(WebUtil.getRemoteAddr(request));
 		log.setUserid(WebUtil.getUser(session).getUid());
+		log.setNickname(WebUtil.getUser(session).getNickname());
 		log.setType(SyslogConst.TYPE_OP_ADMIN);
 		log.setDetail(SyslogConst.DETAIL_ADMIN_MSG_SEND);
 		log.setDateline(new Date().getTime());
