@@ -8,6 +8,10 @@ package org.chingo.gutcom.common.util;
 public class VerifyUtil
 {
 	/**
+	 * 双字节字符匹配正则表达式
+	 */
+	private static final String REGX_DOUBLE_BYTE = "^[^\\x00-\\xff]{1}$";
+	/**
 	 * 昵称格式校验正则表达式
 	 */
 	private static final String REGX_NICKNAME = "(^[a-zA-Z]{1}([a-zA-Z0-9_]){4,14}|" 
@@ -46,6 +50,34 @@ public class VerifyUtil
 	 * 搜索关键词格式校验正则表达式
 	 */
 	private static final String REGX_SEARCH_KEYWORD = "^.{1,100}$";
+	
+	/**
+	 * 统计字符数，计算是否超过上限值（可选）
+	 * @param content 要统计字符数的内容
+	 * @param max 字符数上限值，不限制则设为0
+	 * @return 字符数，有上限且超过上限时，返回-1
+	 */
+	public static final int countWord(String content, int max)
+	{
+        int result=0;
+        for(int i=0; i<content.length(); i++){
+        	String b = Character.toString(content.charAt(i));
+        	if(b.matches(REGX_DOUBLE_BYTE))
+        	{
+        		result += 2;
+        	}
+        	else
+        	{
+        		result++;
+        	}
+        	if(max!=0 && result>max)
+        	{
+        		return -1;
+        	}
+        }
+        
+        return result;
+	}
 	
 	/**
 	 * 检查密码格式
@@ -139,7 +171,7 @@ public class VerifyUtil
 	 */
 	public static final boolean checkSelfIntro(String selfintro)
 	{
-		if(selfintro.length() <= 200)
+		if(countWord(selfintro, 400) > 0) // 字数不超过上限400个字符时
 		{
 			return true;
 		}
@@ -153,7 +185,7 @@ public class VerifyUtil
 	 */
 	public static final boolean checkMsgContent(String content)
 	{
-		if(content.matches(REGX_MSG_CONTENT))
+		if(countWord(content, 600) > 0) // 字数不超过600个字符时content.matches(REGX_MSG_CONTENT))
 		{
 			return true;
 		}
@@ -167,7 +199,8 @@ public class VerifyUtil
 	 */
 	public static final boolean checkWeiboContent(String content)
 	{
-		if(content.matches(REGX_WEIBO_CONTENT))
+		
+		if(countWord(content, 280) > 0) // 字数不超过280个字符时，content.matches(REGX_WEIBO_CONTENT))
 		{
 			return true;
 		}
@@ -181,7 +214,7 @@ public class VerifyUtil
 	 */
 	public static final boolean checkRemark(String remark)
 	{
-		if(remark.matches(REGX_FOLLOW_REMARK))
+		if(countWord(remark, 20) > 0) // 字数不超过20个字符时 remark.matches(REGX_FOLLOW_REMARK))
 		{
 			return true;
 		}
@@ -195,7 +228,7 @@ public class VerifyUtil
 	 */
 	public static final boolean checkReportReason(String reason)
 	{
-		if(reason.matches(REGX_REPORT_REASON))
+		if(countWord(reason, 200) > 0) // 字数不超过200个字符时 reason.matches(REGX_REPORT_REASON))
 		{
 			return true;
 		}
@@ -209,7 +242,7 @@ public class VerifyUtil
 	 */
 	public static final boolean checkSearchKeyword(String keyword)
 	{
-		if(keyword.matches(REGX_SEARCH_KEYWORD))
+		if(countWord(keyword, 200) > 0) // 字数不超过200个字符时 keyword.matches(REGX_SEARCH_KEYWORD))
 		{
 			return true;
 		}

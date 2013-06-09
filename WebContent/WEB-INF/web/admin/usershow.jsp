@@ -29,7 +29,8 @@
 				</tr>
 				<tr>
 					<td><strong>绑定学号：</strong></td>
-					<td><s:text name="user.studentnum" /></td>
+					<td><s:if test="#request.user.studentnum==''"><i>未绑定</i></s:if>
+					<s:else><s:text name="user.studentnum" /></s:else></td>
 				</tr>
 				<tr>
 					<td><strong>用户状态：</strong></td>
